@@ -1,0 +1,2 @@
+410: Objeto ou operação inválido(a)
+411: Email ou senha incorretos

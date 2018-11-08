@@ -52,6 +52,8 @@ module.exports = {
 	},
 
 	data: function(data){
+		if(data == null || data === "")
+			return false;
 		var regex = /\d{2}-\d{2}-\d{4}/;
 		if(data.match(regex))
 			return true;
@@ -59,6 +61,8 @@ module.exports = {
 	}
 
 	dataHora: function(data){
+		if(data == null || data === "")
+			return false;
 		var regex = /\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}/;
 		if(data.match(regex))
 			return true;
