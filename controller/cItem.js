@@ -66,7 +66,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBItem", item, function(codRes){
+		require('./controller.js').inserir("Item", item, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -77,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBItem", item, function(codRes){
+		require('./controller.js').alterar("Item", item, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -87,19 +87,19 @@ module.exports = {
 			cb(400);
 		else if(!item.id)
 			cb(400);
-		require('./controller.js').excluir("TBItem", item, function(codRes){
+		require('./controller.js').excluir("Item", item, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBItem", function(res){
+		require('./controller.js').listar("Item", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBItem", argumentos, function(res){
+		require('./controller.js').buscar("Item", argumentos, function(res){
 			cb(res);
 		});		
 	}

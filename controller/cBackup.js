@@ -67,7 +67,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBBackup", backup, function(codRes){
+		require('./controller.js').inserir("Backup", backup, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -78,7 +78,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBBackup", backup, function(codRes){
+		require('./controller.js').alterar("Backup", backup, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -88,19 +88,19 @@ module.exports = {
 			cb(400);
 		else if(!backup.id)
 			cb(400);
-		require('./controller.js').excluir("TBBackup", backup, function(codRes){
+		require('./controller.js').excluir("Backup", backup, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBBackup", function(res){
+		require('./controller.js').listar("Backup", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBBackup", argumentos, function(res){
+		require('./controller.js').buscar("Backup", argumentos, function(res){
 			cb(res);
 		});		
 	}

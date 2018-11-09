@@ -56,5 +56,9 @@ module.exports = {
 			req.write(texto);
 		}
 		req.end();
+	},
+
+	anexaModais: function(){//Anexa os modais de logout, sucesso e erro
+		
 	}
 };

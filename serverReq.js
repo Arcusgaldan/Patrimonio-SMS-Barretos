@@ -42,54 +42,75 @@ http.createServer(function(req, res) {
     		jsonRqs = JSON.parse(msgRqs); //Se houver texto, transforma em JSON	
     	}
 
-        if(req.headers['objeto'] == "Token"){
+        if(req.headers['objeto'] == "Token"){ //Para operações relacionadas ao token é necessária a execução neste módulo para que os dados existam até o término da execução do servidor
             switch(req.headers['operacao']){
-                case 'CRIAR':
-                    require('./controller/controller.js').buscar("TBUsuario", {where: "email = " + jsonRqs.email + " AND senha = " + jsonRqs.senha}, function(resposta){
-                        if(resposta.length > 0){
-                            var token = tokenAleatorio();
-                            vetorTokens[token] = resposta[0];
-                            res.statusCode = 200;
-                            res.write(token);
-                            res.end();
-                        }else{
-                            res.statusCode(411);
-                            res.end();
-                        }
-                    });
+                case 'CRIAR': //Se a operação for criação de token, entra aqui
+                    if(!jsonRqs){ //Se não houver um corpo da requisição, retorna erro de login ou senha inválidos.
+                        res.statusCode(411);
+                        res.end();
+                        return;
+                    }else if(!jsonRqs.email || !jsonRqs.senha){ //Se não houver email ou senha no corpo da requisição, retorna erro de login ou senha inválidos.
+                        res.statusCode(411);
+                        res.end();
+                        return;
+                    }else{ //Se existir email e senha, verifica validade
+                        require('./controller/controller.js').buscar("Usuario", {where: "email = '" + jsonRqs.email + "' AND senha = '" + jsonRqs.senha + "'"}, function(resposta){ //Busca algum usuário com esta senha e email
+                            if(!resposta){ //Se não houver resposta, retorna erro de login ou senha inválidos.
+                                res.statusCode = 411;
+                                res.end();
+                                return;
+                            }else if(resposta.length > 0){ //Se houver resposta, entra aqui
+                                var token;
+                                while(true){ //Gera o token para o usuário; o laço garante que não haverão dois tokens iguais ao mesmo tempo
+                                    token = tokenAleatorio();
+                                    if(!vetorTokens[token])
+                                        break;
+                                }
+                                vetorTokens[token] = resposta[0];
+                                res.statusCode = 200;
+                                res.write(token);
+                                res.end();
+                                return;
+                            }else{ //Se não houver resposta, retorna erro de login ou senha inválidos.
+                                res.statusCode = 411;
+                                res.end();
+                                return;
+                            }
+                        });
+                    }
                     break;
 
-                case 'EXCLUIR':
-                    if(jsonRqs && jsonRqs.token){
-                        if(vetorTokens[jsonRqs.token]){
+                case 'EXCLUIR': //Se a operação for exclusão de token, entra aqui
+                    if(jsonRqs && jsonRqs.token){ //Verifica se há um corpo de requisição e se nesse corpo existe um campo token
+                        if(vetorTokens[jsonRqs.token]){ //Verifica se o token recebido está registrado no vetor e o apaga
                             vetorTokens[jsonRqs.token] = null;
                             res.statusCode = 200;
                             res.end();
-                        }else{
+                        }else{ //Se não estiver registrado, retorna erro
                             res.statusCode = 400;
                             res.end();
                         }
-                    }else{
+                    }else{ //Se o corpo estiver incorreto, retorna erro
                         res.statusCode = 400;
                         res.end();
                     }
                     break;
 
-                case 'VALIDAR':
-                    if(jsonRqs && jsonRqs.token){
-                        if(vetorTokens[jsonRqs.token]){
+                case 'VALIDAR': //Se a operação for validação de token, entra aqui
+                    if(jsonRqs && jsonRqs.token){ //Verifica se há um corpo de requisição e se nesse corpo existe um campo token
+                        if(vetorTokens[jsonRqs.token]){ //Verifica se o token recebido está registrado no vetor e se sim, retorna sucesso
                             res.statusCode = 200;
                             res.end();
-                        }else{
+                        }else{ //Se não estiver registrado, retorna erro
                             res.statusCode = 400;
                             res.end();
                         }
-                    }else{
+                    }else{ //Se o corpo estiver incorreto, retorna erro
                         res.statusCode = 400;
                         res.end();
                     }
 
-                default:
+                default: //Se não foi nenhuma das operações acima, retorna erro de operação ou objeto inválidos.
                     res.statusCode = 410;
                     res.end();
                     break;
@@ -97,19 +118,25 @@ http.createServer(function(req, res) {
             return;
         }else{
             var usuario;
-            if(jsonRqs){
+            if(jsonRqs && jsonRqs.token){ //Se houver corpo de requisição e um campo token neste corpo, puxa o usuário no vetor
                 usuario = vetorTokens[jsonRqs.token];
-            }else{
+            }else{ //Se não houver corpo e/ou campo token, passa null no parâmetro usuario
                 usuario = null;
             }
-        	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs, function(resposta){ //Puxa a ação relativa ao objeto e operação
-        		console.log("Acabou a execução do trataOperacao!");
-        		res.statusCode = resposta.codigo;
-        		if(resposta.msg){
-        			res.write(resposta.msg);
-        		}
-        		res.end();
-        	});
+            if(!require('fs').existsSync('/controller/c' + req.headers['objeto'] + '.js')){ //Verifica se existe um controller pro objeto requisitado e se não houver, retorna erro de objeto ou operação inválidos
+                res.statusCode = 410;
+                res.end();
+                return;
+            }else{
+            	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs, function(resposta){ //Puxa a ação relativa ao objeto e operação
+            		console.log("Acabou a execução do trataOperacao!");
+            		res.statusCode = resposta.codigo;
+            		if(resposta.msg){
+            			res.write(resposta.msg);
+            		}
+            		res.end();
+            	});
+            }
         }
     });
 }).listen(8080);

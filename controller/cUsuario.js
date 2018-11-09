@@ -67,7 +67,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBUsuario", usuario, function(codRes){
+		require('./controller.js').inserir("Usuario", usuario, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -78,7 +78,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBUsuario", usuario, function(codRes){
+		require('./controller.js').alterar("Usuario", usuario, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -88,19 +88,19 @@ module.exports = {
 			cb(400);
 		else if(!usuario.id)
 			cb(400);
-		require('./controller.js').excluir("TBUsuario", usuario, function(codRes){
+		require('./controller.js').excluir("Usuario", usuario, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBUsuario", function(res){
+		require('./controller.js').listar("Usuario", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBUsuario", argumentos, function(res){
+		require('./controller.js').buscar("Usuario", argumentos, function(res){
 			cb(res);
 		});		
 	}

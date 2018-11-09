@@ -4,7 +4,8 @@ var fs = require('fs');
 var paginas = {
 	"/": "frontEnd/index.html",
 	"/index": "frontEnd/index.html",
-	"/login": "frontEnd/login.html"
+	"/login": "frontEnd/login.html",
+	"/usuarios": "frontEnd/cadastroUsuario.html"
 };
 
 var agrupamentos = {

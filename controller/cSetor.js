@@ -66,7 +66,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBSetor", setor, function(codRes){
+		require('./controller.js').inserir("Setor", setor, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -77,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBSetor", setor, function(codRes){
+		require('./controller.js').alterar("Setor", setor, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -87,19 +87,19 @@ module.exports = {
 			cb(400);
 		else if(!setor.id)
 			cb(400);
-		require('./controller.js').excluir("TBSetor", setor, function(codRes){
+		require('./controller.js').excluir("Setor", setor, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBSetor", function(res){
+		require('./controller.js').listar("Setor", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBSetor", argumentos, function(res){
+		require('./controller.js').buscar("Setor", argumentos, function(res){
 			cb(res);
 		});		
 	}

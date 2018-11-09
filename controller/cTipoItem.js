@@ -66,7 +66,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBTipoItem", tipoItem, function(codRes){
+		require('./controller.js').inserir("TipoItem", tipoItem, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -77,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBTipoItem", tipoItem, function(codRes){
+		require('./controller.js').alterar("TipoItem", tipoItem, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -87,19 +87,19 @@ module.exports = {
 			cb(400);
 		else if(!tipoItem.id)
 			cb(400);
-		require('./controller.js').excluir("TBTipoItem", tipoItem, function(codRes){
+		require('./controller.js').excluir("TipoItem", tipoItem, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBTipoItem", function(res){
+		require('./controller.js').listar("TipoItem", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBTipoItem", argumentos, function(res){
+		require('./controller.js').buscar("TipoItem", argumentos, function(res){
 			cb(res);
 		});		
 	}

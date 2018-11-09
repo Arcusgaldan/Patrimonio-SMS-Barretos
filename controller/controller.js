@@ -1,8 +1,8 @@
 module.exports = {
-	inserir: function(tabela, objeto, cb){ //Insere as informações passadas pelo servidor
+	inserir: function(alvo, objeto, cb){ //Insere as informações passadas pelo servidor
 
 		objeto.id = 0;
-		var sql = "INSERT INTO " + tabela + " ("; //Inicializa string de comando SQL
+		var sql = "INSERT INTO TB" + alvo + " ("; //Inicializa string de comando SQL
 		var campos = "";
 		var valores = "";
 		for(var key in objeto){
@@ -16,7 +16,7 @@ module.exports = {
 			}
 			//Acima concatenou os nomes dos campos
 
-			var modelo = require('./../model/mBackup.js');
+			var modelo = require('./../model/m' + alvo + '.js');
 			var aux = "";
 
 			if(modelo.isString(key)){
@@ -40,19 +40,19 @@ module.exports = {
 		});
 	},
 
-	alterar: function(tabela, objeto, cb){ //Altera as informações passadas por servidor
+	alterar: function(alvo, objeto, cb){ //Altera as informações passadas por servidor
 		if(!this.validar(objeto)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(400);
 			return;
 		}
 
-		var sql = "UPDATE " + tabela + " SET "; //Inicializa string de comando SQL
+		var sql = "UPDATE TB" + alvo + " SET "; //Inicializa string de comando SQL
 		var campos = "";
 		for(var key in objeto){
 			if(key == 'id') //Pula o campo ID pois o ID nunca será alterado
 				continue;
 
-			var modelo = require('./../modelo/mBackup.js');
+			var modelo = require('./../modelo/m ' + alvo + ' .js');
 			var aux = "";
 
 			if(modelo.isString(key)){
@@ -76,23 +76,23 @@ module.exports = {
 		});
 	},
 
-	excluir: function(tabela, objeto, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
-		var sql = "DELETE FROM " + tabela + " WHERE id = " + objeto.id + ";";
+	excluir: function(alvo, objeto, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
+		var sql = "DELETE FROM TB" + alvo + " WHERE id = " + objeto.id + ";";
 		var dao = require('./../dao.js');
 		dao.inserir(dao.criaConexao(), sql, function(codRes){
 			cb(codRes);
 		});
 	},
 
-	listar: function(tabela, cb){ //Lista todos os registros da tabela;
-		var sql = "SELECT * FROM " + tabela + ";";
+	listar: function(alvo, cb){ //Lista todos os registros da tabela;
+		var sql = "SELECT * FROM " + alvo + ";";
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			cb(resultado);
 		});
 	},
 
-	buscar: function(tabela, argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
+	buscar: function(alvo, argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
 		var sql = "SELECT ";		
 		var selectCampos = "";
 		var comparacoes = "";
@@ -110,7 +110,7 @@ module.exports = {
 			selectCampos = "*";
 		}
 
-		sql += selectCampos + " FROM " + tabela + " ";
+		sql += selectCampos + " FROM TB" + alvo + " ";
 
 		if(argumentos.joins){
 			for(let i = 0; i < argumentos.joins.length; i++){

@@ -66,7 +66,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBProcedimento", procedimento, function(codRes){
+		require('./controller.js').inserir("Procedimento", procedimento, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -77,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBProcedimento", procedimento, function(codRes){
+		require('./controller.js').alterar("Procedimento", procedimento, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -87,19 +87,19 @@ module.exports = {
 			cb(400);
 		else if(!procedimento.id)
 			cb(400);
-		require('./controller.js').excluir("TBProcedimento", procedimento, function(codRes){
+		require('./controller.js').excluir("Procedimento", procedimento, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBProcedimento", function(res){
+		require('./controller.js').listar("Procedimento", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBProcedimento", argumentos, function(res){
+		require('./controller.js').buscar("Procedimento", argumentos, function(res){
 			cb(res);
 		});		
 	}

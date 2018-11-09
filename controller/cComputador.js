@@ -66,7 +66,7 @@ module.exports = {
 			cb(400);
 			return;
 		}
-		require('./controller.js').inserir("TBComputador", computador, function(codRes){
+		require('./controller.js').inserir("Computador", computador, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -77,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		require('./controller.js').alterar("TBComputador", computador, function(codRes){
+		require('./controller.js').alterar("Computador", computador, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -87,19 +87,19 @@ module.exports = {
 			cb(400);
 		else if(!computador.id)
 			cb(400);
-		require('./controller.js').excluir("TBComputador", computador, function(codRes){
+		require('./controller.js').excluir("Computador", computador, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("TBComputador", function(res){
+		require('./controller.js').listar("Computador", function(res){
 			cb(res);
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("TBComputador", argumentos, function(res){
+		require('./controller.js').buscar("Computador", argumentos, function(res){
 			cb(res);
 		});		
 	}

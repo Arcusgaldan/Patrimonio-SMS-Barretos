@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBBackup` (
   `data` DATE NOT NULL,
   `local` VARCHAR(80) NOT NULL,
   `nomePasta` VARCHAR(80) NOT NULL,
-  `tamanho` INT NULL,
+  `tamanho` FLOAT NULL,
   `codComputador` INT NOT NULL,
   PRIMARY KEY (`id`, `codComputador`),
   INDEX `fk_TBBackup_TBComputador1_idx` (`codComputador` ASC),
@@ -154,6 +154,24 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcedimento` (
     REFERENCES `DBPatrimonioSMS`.`TBComputador` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBUsuario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBUsuario` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `cpf` CHAR(14) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `senha` CHAR(64) NOT NULL,
+  `senhaExpirada` TINYINT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC),
+  UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC))
 ENGINE = InnoDB;
 
 
