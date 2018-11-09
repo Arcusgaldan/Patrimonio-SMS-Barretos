@@ -58,7 +58,7 @@ module.exports = {
 		if(data.match(regex))
 			return true;
 		return false;
-	}
+	},
 
 	dataHora: function(data){
 		if(data == null || data === "")

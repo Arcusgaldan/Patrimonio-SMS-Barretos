@@ -24680,20 +24680,35 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
-if(!localStorage.token){
-	location.href = "/login";	
-}else{
+document.getElementById('btnExcluir').addEventListener('click', exclui, false);
+
+function exclui(){
 	var utils = require('./../../utilsCliente.js');
 
-	utils.enviaRequisicao("Token", "VALIDAR", {token: localStorage.token}, function(res){
-		if(res.statusCode == 400){
-			document.getElementById("msgErroModal").innerHTML = 'Algo deu errado com sua autenticação. Por favor, faça login novamente.';			
-			$('#erroModal').modal('show');
-			$('#erroModal').on('hide.bs.modal', function(){location.href = "/login";});
-			localStorage.removeItem('token');
+	utils.enviaRequisicao('Usuario', 'EXCLUIR', {token: localStorage.token, msg: {id: document.getElementById('idUsuarioExcluir').value}}, function(res){
+		if(res.statusCode == 200){
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	    	setTimeout(function(){location.reload();} , 2000);
+		}else if(res.statusCode == 413){
+			document.getElementById('msgErroModal').innerHTML = "Você não possui privilégios para excluir usuários!";
+			$("#erroModal").modal('show');
+			return;
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
 		}
 	});
 }
+
+
+
+
+
+
+
+
 },{"./../../utilsCliente.js":168}],168:[function(require,module,exports){
 (function (Buffer){
 module.exports = {

@@ -1,20 +1,32 @@
 module.exports = {
-	trataOperacao: function(permissao, operacao, msg, cb){ //Encaminha a execução para a operação passada pelo servidor (esta função também é responsável por fazer o controle de acesso às funções restritas apenas a usuários logados)
+	trataOperacao: function(usuario, operacao, msg, cb){ //Encaminha a execução para a operação passada pelo servidor (esta função também é responsável por fazer o controle de acesso às funções restritas apenas a usuários logados)
 		var resposta = {};
 		switch(operacao){
 			case 'INSERIR':
+				if(!usuario){
+					resposta.codigo = 413;
+					cb(resposta);
+				}
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
 					cb(resposta);
 				});
 				break;
 			case 'ALTERAR':
+				if(!usuario){
+					resposta.codigo = 413;
+					cb(resposta);
+				}
 				this.alterar(msg, function(codRes){
 					resposta.codigo = codRes;
 					cb(resposta);
 				});
 				break;
 			case 'EXCLUIR':
+				if(!usuario){
+					resposta.codigo = 413;
+					cb(resposta);
+				}
 				this.excluir(msg, function(codRes){
 					resposta.codigo = codRes;
 					cb(resposta);
@@ -64,7 +76,7 @@ module.exports = {
 
 	inserir: function(backup, cb){ //Insere as informações passadas pelo servidor
 		if(!this.validar(backup)){ //Se os dados não forem válidos, para a execução e retorna código de erro
-			cb(400);
+			cb(412);
 			return;
 		}
 		require('./controller.js').inserir("Backup", backup, function(codRes){
@@ -74,7 +86,7 @@ module.exports = {
 
 	alterar: function(backup, cb){ //Altera as informações passadas por servidor
 		if(!this.validar(backup)){ //Se os dados não forem válidos, para a execução e retorna código de erro
-			cb(400);
+			cb(412);
 			return;
 		}
 
@@ -85,9 +97,9 @@ module.exports = {
 
 	excluir: function(backup, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
 		if(!backup)
-			cb(400);
+			cb(412);
 		else if(!backup.id)
-			cb(400);
+			cb(412);
 		require('./controller.js').excluir("Backup", backup, function(codRes){
 			cb(codRes);
 		});

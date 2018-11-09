@@ -44,7 +44,7 @@ $("body").append('<div class="modal fade" id="erroModal" tabindex="-1" role="dia
       </div>\
       <div class="modal-body"><p id="msgErroModal" style="color: #000">Erro ao realizar a operação!</p></div>\
       <div class="modal-footer">\
-        <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>\
+        <button class="btn btn-secundary" type="button" data-dismiss="modal">OK</button>\
       </div>\
     </div>\
   </div>\

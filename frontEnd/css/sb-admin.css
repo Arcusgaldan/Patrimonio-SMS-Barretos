@@ -373,3 +373,13 @@ body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
 }
+
+.mostraLista{
+  margin-top:20px;
+  /*width: 135%;*/
+  /*margin-left: -35.4%;*/
+}
+
+.card p{
+  color:#000!important;
+}

@@ -176,13 +176,110 @@
 
             </form>
             <div class="modal-footer">
-              <button class="btn btn-success" type="button" id="btnCadastro">Cadastrar</button>
+              <button class="btn btn-success" type="button" id="btnCadastrar">Cadastrar</button>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- /CADASTRA MODAL -->
+
+    <!-- ALTERA MODAL -->
+    <div class="modal fade" id="alteraModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Alterar usuário</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <p>
+              Neste formulário serão inseridas as informações para o cadastro de usuários
+            </p>
+            <form id="formAlteraUsuario" action='' method="post" encType="multipart/form-data">
+              <div class="form-group">
+                <div class="form-row">
+
+                  <div class="col-md-6">
+                    <div class="form-label-group">
+                      <input type="text" id="nomeUsuarioAlterar" class="form-control" name="nomeAlterar"  placeholder="Nome Completo" required="required" autofocus="autofocus">
+                      <label for="nomeUsuarioAlterar">Nome Completo</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-label-group">
+                      <input type="text" id="cpfUsuarioAlterar" class="form-control" name="prontuarioAlterar" placeholder="Prontuário" required="required">
+                      <label for="cpfUsuarioAlterar">CPF</label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="email" id="emailUsuarioAlterar" class="form-control" name="emailAlterar" placeholder="Email" required="required">
+                  <label for="emailUsuarioAlterar">Email</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <input type="password" class="form-control" id="senhaUsuarioAlterar" placeholder="Senha">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <input type="password" class="form-control" id="confirmaSenhaUsuarioAlterar" placeholder="Confirme a senha">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" id="senhaExpiradaUsuarioAlterar" class="form-check-input" name="senhaExpiradaUsuarioAlterar" checked="true">
+                <label class="form-check-label" for="senhaExpiradaUsuarioAlterar">Exigir troca de senha no próximo acesso</label>
+              </div>
+              <div style="display: none;" id="idUsuarioAlterar"></div>
+              <div style="display: none;" id="senhaAntigaUsuarioAlterar"></div>
+            </form>                   
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-alert" id="btnAlterar" type="button">Alterar</button>
+            
+          </div>
+        </div>
+      </div>
+    </div>    
+    <!-- /ALTERA MODAL -->
+
+    <!-- EXCLUIR MODAL-->
+      <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id=""></h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o usuário <span id="nomeUsuarioExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idUsuarioExcluir"></div>
+            <div class="modal-footer">
+              <button class="btn btn-success" id="btnExcluir">SIM</button>
+              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div>   
+      <!-- /EXCLUIR MODAL  -->
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -207,9 +304,13 @@
     <script type="text/javascript" src="/js/anexaModais.js"></script>
     <script type="text/javascript" src="/js/anexaSidebar.js"></script>
     <script type="text/javascript">
-      document.getElementById('btnSidebarIndex').classList.add('active');
+      document.getElementById('btnSidebarUsuario').classList.add('active');
     </script>
     <script type="text/javascript" src="/js/logoutFront.js"></script>
+    <script type="text/javascript" src="/js/listaUsuarioFront.js"></script>
+    <script type="text/javascript" src="/js/cadastraUsuarioFront.js"></script>
+    <script type="text/javascript" src="/js/alteraUsuarioFront.js"></script>
+    <script type="text/javascript" src="/js/excluiUsuarioFront.js"></script>
 
   </body>
 

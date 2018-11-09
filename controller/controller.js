@@ -41,18 +41,14 @@ module.exports = {
 	},
 
 	alterar: function(alvo, objeto, cb){ //Altera as informações passadas por servidor
-		if(!this.validar(objeto)){ //Se os dados não forem válidos, para a execução e retorna código de erro
-			cb(400);
-			return;
-		}
-
+		
 		var sql = "UPDATE TB" + alvo + " SET "; //Inicializa string de comando SQL
 		var campos = "";
 		for(var key in objeto){
 			if(key == 'id') //Pula o campo ID pois o ID nunca será alterado
 				continue;
 
-			var modelo = require('./../modelo/m ' + alvo + ' .js');
+			var modelo = require('./../model/m' + alvo + '.js');
 			var aux = "";
 
 			if(modelo.isString(key)){
@@ -85,7 +81,7 @@ module.exports = {
 	},
 
 	listar: function(alvo, cb){ //Lista todos os registros da tabela;
-		var sql = "SELECT * FROM " + alvo + ";";
+		var sql = "SELECT * FROM TB" + alvo + ";";
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			cb(resultado);

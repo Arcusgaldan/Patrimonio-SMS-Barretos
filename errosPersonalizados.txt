@@ -1,2 +1,4 @@
 410: Objeto ou operação inválido(a)
 411: Email ou senha incorretos
+412: Dados não validados
+413: Falta de privilégio

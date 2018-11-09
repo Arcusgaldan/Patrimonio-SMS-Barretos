@@ -123,12 +123,13 @@ http.createServer(function(req, res) {
             }else{ //Se não houver corpo e/ou campo token, passa null no parâmetro usuario
                 usuario = null;
             }
-            if(!require('fs').existsSync('/controller/c' + req.headers['objeto'] + '.js')){ //Verifica se existe um controller pro objeto requisitado e se não houver, retorna erro de objeto ou operação inválidos
+            if(!require('fs').existsSync('controller/c' + req.headers['objeto'] + '.js')){ //Verifica se existe um controller pro objeto requisitado e se não houver, retorna erro de objeto ou operação inválidos
+                console.log("Não existe o controller do objeto requisitado (" + req.headers['objeto'] + ")");
                 res.statusCode = 410;
                 res.end();
                 return;
             }else{
-            	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs, function(resposta){ //Puxa a ação relativa ao objeto e operação
+            	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs.msg, function(resposta){ //Puxa a ação relativa ao objeto e operação
             		console.log("Acabou a execução do trataOperacao!");
             		res.statusCode = resposta.codigo;
             		if(resposta.msg){

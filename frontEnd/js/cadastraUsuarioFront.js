@@ -24680,21 +24680,68 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
-if(!localStorage.token){
-	location.href = "/login";	
-}else{
-	var utils = require('./../../utilsCliente.js');
+document.getElementById('btnCadastrar').addEventListener('click', cadastra, false);
 
-	utils.enviaRequisicao("Token", "VALIDAR", {token: localStorage.token}, function(res){
-		if(res.statusCode == 400){
-			document.getElementById("msgErroModal").innerHTML = 'Algo deu errado com sua autenticação. Por favor, faça login novamente.';			
-			$('#erroModal').modal('show');
-			$('#erroModal').on('hide.bs.modal', function(){location.href = "/login";});
-			localStorage.removeItem('token');
+function cadastra(){
+
+	var utils = require('./../../utilsCliente.js');
+	var modelo = require('./../../model/mUsuario.js').novo();
+
+	modelo.nome = document.getElementById('nomeUsuarioCadastrar').value;
+	modelo.cpf = document.getElementById('cpfUsuarioCadastrar').value;
+	modelo.email = document.getElementById('emailUsuarioCadastrar').value;
+
+	if(document.getElementById('senhaUsuarioCadastrar').value !== document.getElementById('confirmaSenhaUsuarioCadastrar').value){
+		document.getElementById('msgErroModal').innerHTML = "Senhas não conferem";
+		$("#erroModal").modal('show');
+		return;
+	}else{
+		modelo.senha = utils.senhaHash(document.getElementById('senhaUsuarioCadastrar').value);
+	}
+
+	if(senhaExpiradaUsuarioCadastrar.checked){
+		modelo.senhaExpirada = 1;
+	}
+
+	utils.enviaRequisicao("Usuario", "INSERIR", {token: localStorage.token, msg: modelo}, function(res){
+		if(res.statusCode == 200){
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	    	setTimeout(function(){location.reload();} , 2000);
+		}else if(res.statusCode == 412){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+			$("#erroModal").modal('show');
+			return;
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
 		}
 	});
 }
-},{"./../../utilsCliente.js":168}],168:[function(require,module,exports){
+},{"./../../model/mUsuario.js":168,"./../../utilsCliente.js":169}],168:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.nome = '';
+		final.cpf = '';
+		final.email = '';
+		final.senha = '';
+		final.senhaExpirada = 0;
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['nome', 'cpf', 'email', 'senha'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	}
+}
+},{}],169:[function(require,module,exports){
 (function (Buffer){
 module.exports = {
 	senhaHash: function(senha){
