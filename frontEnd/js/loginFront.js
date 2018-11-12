@@ -24697,9 +24697,10 @@ function login(){
 			});
 			res.on('end', function(){
 				localStorage.token = msg;
-				$("#sucessoModal").modal('show');
-				$('#sucessoModal').on('hide.bs.modal', function(){location.href = "/index";});
-		    	setTimeout(function(){location.href = "/index";} , 2000);
+		    	var form = document.getElementById('formLogin');
+		    	form.method = "POST";
+		    	form.action = "/index";
+		    	form.submit();
 			});
 		}else if(res.statusCode == 411){
 			document.getElementById('msgErroModal').innerHTML = 'Email ou senha inválidos!';
@@ -24771,6 +24772,10 @@ module.exports = {
 			req.write(texto);
 		}
 		req.end();
+	},
+
+	anexaModais: function(){//Anexa os modais de logout, sucesso e erro
+		
 	}
 };
 }).call(this,require("buffer").Buffer)

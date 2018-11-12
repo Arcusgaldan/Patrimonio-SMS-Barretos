@@ -30,6 +30,7 @@ function altera(){
 			$("#sucessoModal").modal('show');
 			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
 	    	setTimeout(function(){location.reload();} , 2000);
+			
 		}else if(res.statusCode == 412){
 			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
 			$("#erroModal").modal('show');

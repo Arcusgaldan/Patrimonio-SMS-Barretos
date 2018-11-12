@@ -93,6 +93,8 @@ module.exports = {
 		var selectCampos = "";
 		var comparacoes = "";
 		var joins = "";
+		var orderCampos = "id";
+		var orderSentido = "ASC";
 
 		if(argumentos.selectCampos){
 			for(let i = 0; i < argumentos.selectCampos.length; i++){
@@ -118,9 +120,17 @@ module.exports = {
 			cb(null);
 		}
 
-		sql += joins + "WHERE " + argumentos.where + ";";
+		if(argumentos.orderBy){
+			if(argumentos.orderBy.campos){
+				orderCampos = argumentos.orderBy.campos;
+			}
 
-		console.log("Na busca, sql ficou: " + sql);
+			if(argumentos.orderBy.sentido && (sentido == "ASC" || sentido == "DESC")){
+				orderSentido = argumentos.orderBy.sentido
+			}
+		}
+
+		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
 
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){

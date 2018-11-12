@@ -109,6 +109,39 @@ http.createServer(function(req, res) {
                         res.statusCode = 400;
                         res.end();
                     }
+                    break;
+
+                case 'BUSCAR': //Se a operação for buscar usuário pelo token, entra aqui
+                    if(jsonRqs && jsonRqs.token){
+                            if(vetorTokens[jsonRqs.token]){ //Verifica se o token recebido está registrado no vetor e se sim, retorna sucesso
+                            res.statusCode = 200;
+                            res.write(JSON.stringify(vetorTokens[jsonRqs.token]));
+                            res.end();
+                        }else{ //Se não estiver registrado, retorna erro
+                            res.statusCode = 400;
+                            res.end();
+                        }
+                    }else{ //Se o corpo estiver incorreto, retorna erro
+                        res.statusCode = 400;
+                        res.end();
+                    }
+                    break;
+
+                case 'ALTERAR': //Se a operação for alterar o usuário atrelado ao token, entra aqui
+                    if(jsonRqs && jsonRqs.token && jsonRqs.msg){
+                        cUsuario = require('./controller/cUsuario.js');
+                        if(cUsuario.validar(jsonRqs.msg)){
+                            vetorTokens[jsonRqs.token] = jsonRqs.msg;
+                            res.statusCode = 200;
+                            res.end();
+                        }else{
+                            res.statusCode = 412;
+                            res.end();
+                        }
+                    }else{
+                        res.statusCode = 412;
+                        res.end();
+                    }
 
                 default: //Se não foi nenhuma das operações acima, retorna erro de operação ou objeto inválidos.
                     res.statusCode = 410;

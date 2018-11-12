@@ -21,6 +21,13 @@ function cadastra(){
 		modelo.senhaExpirada = 1;
 	}
 
+	var controller = require('./../../controller/cUsuario.js');
+	if(!controller.validar(modelo)){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+		$("#erroModal").modal('show');
+		return;
+	}
+
 	utils.enviaRequisicao("Usuario", "INSERIR", {token: localStorage.token, msg: modelo}, function(res){
 		if(res.statusCode == 200){
 			$("#sucessoModal").modal('show');
