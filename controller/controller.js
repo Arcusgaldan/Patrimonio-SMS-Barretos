@@ -80,8 +80,8 @@ module.exports = {
 		});
 	},
 
-	listar: function(alvo, cb){ //Lista todos os registros da tabela;
-		var sql = "SELECT * FROM TB" + alvo + ";";
+	listar: function(alvo, cb, join){ //Lista todos os registros da tabela;
+		var sql = "SELECT * FROM TB" + alvo;
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			cb(resultado);
