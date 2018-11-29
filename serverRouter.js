@@ -7,7 +7,8 @@ var paginas = {
 	"/login": "frontEnd/login.html",
 	"/usuarios": "frontEnd/cadastroUsuario.html",
 	"/senhaExpirada": "frontEnd/senhaExpirada.html",
-	"/setores": "frontEnd/cadastroSetor.html"
+	"/setores": "frontEnd/cadastroSetor.html",
+	"/itens": "frontEnd/cadastroItem.html"
 };
 
 var agrupamentos = {

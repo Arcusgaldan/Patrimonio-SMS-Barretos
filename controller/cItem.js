@@ -107,7 +107,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
-		});
+		}, {campos: "TBItem.*, ti.nome tipoNome", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

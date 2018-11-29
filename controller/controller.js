@@ -80,8 +80,33 @@ module.exports = {
 		});
 	},
 
-	listar: function(alvo, cb, join){ //Lista todos os registros da tabela;
-		var sql = "SELECT * FROM TB" + alvo;
+	listar: function(alvo, cb, argumentos){ //Lista todos os registros da tabela;
+		var sql;
+		if(!argumentos)
+			sql = "SELECT * FROM TB" + alvo;
+		else{
+			if(argumentos.campos && argumentos.joins){
+				sql = "SELECT " + argumentos.campos + " FROM TB" + alvo;
+				for(let i = 0; i < argumentos.joins.length; i++){
+					sql += " JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on;
+				}
+			}else
+				sql = "SELECT * FROM TB" + alvo;
+
+			if(argumentos.orderBy){
+				if(argumentos.orderBy.campos){
+					sql += " ORDER BY " + argumentos.orderBy.campos;
+				}else{
+					sql += " ORDER BY id";
+				}
+
+				if(argumentos.orderBy.sentido){
+					sql += " " + sentido + ";";
+				}else{
+					sql += " ASC;";
+				}
+			}
+		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			cb(resultado);

@@ -150,9 +150,21 @@
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <textarea id="descricaoItemCadastrar" rows="4" class="form-control" name="descricaoItemCadastrar" placeholder="Descrição" required="required"> </textarea>
-                  <label for="descricaoItemCadastrar">Descrição</label>
+                  <textarea id="descricaoItemCadastrar" rows="4" class="form-control" name="descricaoItemCadastrar" required="required"> </textarea>
+                  <label for="descricaoItemCadastrar">Descricao</label>
                 </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="tipoItemCadastrar" class="form-control" name="tipoItemCadastrar" placeholder="Tipo"></select>
+                  <label for="tipoItemCadastrar">Tipo</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button class="btn btn-success float-right" type="button" data-toggle="modal" data-target="#cadastraTipoModal"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-warning float-right" type="button" data-toggle="modal" data-target="#editaTipoModal"><i class="fas fa-edit"></i></button>
               </div>
 
 
@@ -178,7 +190,7 @@
           </div>
           <div class="modal-body">
              <p>
-              Neste formulário serão inseridas as informações para a alteração de itemes
+              Neste formulário serão inseridas as informações para a alteração de itens
             </p>
             <form id="formAlteraItem" action='' method="post" encType="multipart/form-data">
                <div class="form-group">
@@ -203,9 +215,29 @@
               </div>
 
               <div class="form-group">
-                <div class="form-label-group">
-                  <textarea id="descricaoItemAlterar" rows="4" class="form-control" name="descricaoItemAlterar" placeholder="Descrição" required="required"> </textarea>
-                  <label for="descricaoItemAlterar">Descrição</label>
+                <label for="descricaoItemAlterar">Descrição</label>
+                <textarea id="descricaoItemAlterar" rows="4" class="form-control" name="descricaoItemAlterar" placeholder="Descrição" required="required"> </textarea>
+              </div>
+
+              <!-- <div class="form-group">
+                  <label for="descricaoItemCadastrar">Descrição</label>
+                  <textarea id="descricaoItemCadastrar" rows="4" class="form-control" name="descricaoItemCadastrar" placeholder="Descrição" required="required"> </textarea>
+              </div> -->
+
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col-md-10">
+                    <div class="form-label-group">
+                      <select id="tipoItemAlterar" class="form-control" name="tipoItemAlterar" placeholder="Tipo"></select>
+                      <label for="tipoItemAlterar">Tipo</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-label-group">
+                      <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraTipoModal"><i class="fas fa-plus"></i></button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -233,7 +265,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o item <span id="nomeItemExcluir" style="color: #000"></span>?</p></div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o item <span id="patrimonioItemExcluir" style="color: #000"></span>?</p></div>
             <div style="display: none;" id="idItemExcluir"></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnExcluir">SIM</button>
@@ -243,6 +275,64 @@
         </div>
       </div>   
       <!-- /EXCLUIR MODAL  -->
+
+      <!-- CADASTRA tipo modal -->
+        <div class="modal fade" id="cadastraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Cadastrar Tipo de Item</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="nomeTipoCadastrar" class="form-control" name="nomeTipoCadastrar" placeholder="Nome">
+                    <label for="nomeTipoCadastrar">Nome</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+            <div class="modal-footer">
+              <button class="btn btn-success" type="button" id="btnCadastrarTipo">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <!-- /CADASTRA tipo modal -->
+
+      <!-- ALTERA tipo modal -->
+        <div class="modal fade" id="alteraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Alterar Tipo de Item</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-row">
+                    <div class="form-label-group">                        
+                        <input type="text" name="nomeTipo" id="nomeTipoCadastrar">
+                        <label for="nomeTipoCadastrar">Tipo</label>
+                    </div>
+                  </div>
+              </form>
+            
+            <div class="modal-footer">
+              <button class="btn btn-success" type="button" id="btnCadastrarTipo">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <!-- /ALTERA tipo modal -->
 
 
     <!-- Bootstrap core JavaScript-->
