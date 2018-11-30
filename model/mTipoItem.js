@@ -3,6 +3,7 @@ module.exports = {
 		var final = {};
 		final.id = 0;
 		final.nome = '';
+		return final;
 	},
 
 	isString: function(atributo){

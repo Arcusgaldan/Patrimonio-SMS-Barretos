@@ -10,6 +10,8 @@ module.exports = {
 		final.codItem = 0;
 		final.reserva = 0;
 		final.aposentado = 0;
+		final.codProcessador = 0;
+		final.codSO = 0;
 		return final;
 	},
 

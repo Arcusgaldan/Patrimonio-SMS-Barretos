@@ -93,6 +93,10 @@ module.exports = {
 			}else
 				sql = "SELECT * FROM TB" + alvo;
 
+			if(argumentos.where){
+				sql += " WHERE " + argumentos.where;
+			}
+
 			if(argumentos.orderBy){
 				if(argumentos.orderBy.campos){
 					sql += " ORDER BY " + argumentos.orderBy.campos;
@@ -101,11 +105,12 @@ module.exports = {
 				}
 
 				if(argumentos.orderBy.sentido){
-					sql += " " + sentido + ";";
+					sql += " " + argumentos.orderBy.sentido + ";";
 				}else{
 					sql += " ASC;";
 				}
 			}
+			console.log("SQL em controller:listar = " + sql);
 		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){

@@ -38,14 +38,14 @@
 
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto ml-md-0">        
-        <li class="nav-item dropdown no-arrow">
+        <li class="nav-computador dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-user-circle fa-fw"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">Configurações de Conta</a>
+            <a class="dropdown-computador" href="#">Configurações de Conta</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            <a class="dropdown-computador" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
           </div>
         </li>
       </ul>
@@ -65,8 +65,8 @@
 
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
-              <div class="card-header">Gerenciamento de Item 
-                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Item</button>
+              <div class="card-header">Gerenciamento de Computador 
+                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Computador</button>
               </div>
               <div class="card-body">
                 <p>
@@ -76,7 +76,7 @@
                 <table class="table table-bordered table-dark text-center">
 
 
-                  <tbody id="tabelaItem">
+                  <tbody id="tabelaComputador">
 
 
 
@@ -115,7 +115,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalCadastrar">Cadastrar Item</h5>
+            <h5 class="modal-title" id="tituloModalCadastrar">Cadastrar Computador</h5>
             <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -123,49 +123,41 @@
 
           <div class="modal-body">
             <p>
-              Neste formulário serão inseridas as informações para o cadastro de item.
+              Neste formulário serão inseridas as informações para o cadastro de computador.
             </p>
 
-            <form id="formCadastroItem" action='' method="post" encType="multipart/form-data">
+            <form id="formCadastroComputador" action='' method="post" encType="multipart/form-data">
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="patrimonioItemCadastrar" class="form-control" name="patrimonioCadastrar" placeholder="patrimonio" maxlength="6">
-                  <label for="patrimonioItemCadastrar">Patrimônio</label>
+                  <input type="text" id="patrimonioComputadorCadastrar" class="form-control" name="patrimonioCadastrar" placeholder="patrimonio" maxlength="6">
+                  <label for="patrimonioComputadorCadastrar">Patrimônio</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="marcaItemCadastrar" class="form-control" name="marcaCadastrar" placeholder="Marca">
-                  <label for="marcaItemCadastrar">Marca</label>
+                  <input type="text" id="marcaComputadorCadastrar" class="form-control" name="marcaCadastrar" placeholder="Marca">
+                  <label for="marcaComputadorCadastrar">Marca</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="modeloItemCadastrar" class="form-control" name="modeloCadastrar" placeholder="Modelo">
-                  <label for="modeloItemCadastrar">Modelo</label>
+                  <input type="text" id="modeloComputadorCadastrar" class="form-control" name="modeloCadastrar" placeholder="Modelo">
+                  <label for="modeloComputadorCadastrar">Modelo</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <textarea id="descricaoItemCadastrar" rows="4" class="form-control" name="descricaoItemCadastrar" required="required"> </textarea>
-                  <label for="descricaoItemCadastrar">Descricao</label>
+                  <textarea id="descricaoComputadorCadastrar" rows="4" class="form-control" name="descricaoComputadorCadastrar" required="required"> </textarea>
+                  <label for="descricaoComputadorCadastrar">Descricao</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <select id="setorItemCadastrar" class="form-control" name="setorItemCadastrar" placeholder="Setor">
-                    <option value="0">Setor</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="tipoItemCadastrar" class="form-control" name="tipoItemCadastrar" placeholder="Tipo">
+                  <select id="tipoComputadorCadastrar" class="form-control" name="tipoComputadorCadastrar" placeholder="Tipo">
                     <option value="0">Tipo</option>
                   </select>
                 </div>
@@ -192,7 +184,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Alterar Item</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Alterar Computador</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -201,41 +193,41 @@
              <p>
               Neste formulário serão inseridas as informações para a alteração de itens
             </p>
-            <form id="formAlteraItem" action='' method="post" encType="multipart/form-data">
+            <form id="formAlteraComputador" action='' method="post" encType="multipart/form-data">
                <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="patrimonioItemAlterar" class="form-control" name="patrimonioAlterar" placeholder="patrimonio" maxlength="6">
-                  <label for="patrimonioItemAlterar">Patrimônio</label>
+                  <input type="text" id="patrimonioComputadorAlterar" class="form-control" name="patrimonioAlterar" placeholder="patrimonio" maxlength="6">
+                  <label for="patrimonioComputadorAlterar">Patrimônio</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="marcaItemAlterar" class="form-control" name="marcaAlterar" placeholder="Marca">
-                  <label for="marcaItemAlterar">Marca</label>
+                  <input type="text" id="marcaComputadorAlterar" class="form-control" name="marcaAlterar" placeholder="Marca">
+                  <label for="marcaComputadorAlterar">Marca</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="modeloItemAlterar" class="form-control" name="modeloAlterar" placeholder="Modelo">
-                  <label for="modeloItemAlterar">Modelo</label>
+                  <input type="text" id="modeloComputadorAlterar" class="form-control" name="modeloAlterar" placeholder="Modelo">
+                  <label for="modeloComputadorAlterar">Modelo</label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="descricaoItemAlterar">Descrição</label>
-                <textarea id="descricaoItemAlterar" rows="4" class="form-control" name="descricaoItemAlterar" placeholder="Descrição" required="required"> </textarea>
+                <label for="descricaoComputadorAlterar">Descrição</label>
+                <textarea id="descricaoComputadorAlterar" rows="4" class="form-control" name="descricaoComputadorAlterar" placeholder="Descrição" required="required"> </textarea>
               </div>
 
               <!-- <div class="form-group">
-                  <label for="descricaoItemCadastrar">Descrição</label>
-                  <textarea id="descricaoItemCadastrar" rows="4" class="form-control" name="descricaoItemCadastrar" placeholder="Descrição" required="required"> </textarea>
+                  <label for="descricaoComputadorCadastrar">Descrição</label>
+                  <textarea id="descricaoComputadorCadastrar" rows="4" class="form-control" name="descricaoComputadorCadastrar" placeholder="Descrição" required="required"> </textarea>
               </div> -->
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <select id="tipoItemAlterar" class="form-control" name="tipoItemAlterar" placeholder="Tipo">
+                  <select id="tipoComputadorAlterar" class="form-control" name="tipoComputadorAlterar" placeholder="Tipo">
                     <option value="0">Tipo</option>
                   </select>
                 </div>
@@ -246,7 +238,7 @@
                 <button class="btn btn-warning float-right" type="button" data-toggle="modal" data-target="#alteraTipoModal"><i class="fas fa-edit"></i></button>
               </div>
 
-              <div style="display: none;" id="idItemAlterar"></div>
+              <div style="display: none;" id="idComputadorAlterar"></div>
             </form>                   
 
           </div>
@@ -269,8 +261,8 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o item <span id="patrimonioItemExcluir" style="color: #000"></span>?</p></div>
-            <div style="display: none;" id="idItemExcluir"></div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o computador <span id="patrimonioComputadorExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idComputadorExcluir"></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnExcluir">SIM</button>
               <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
@@ -285,7 +277,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Cadastrar Tipo de Item</h5>
+              <h5 class="modal-title" id="">Cadastrar Tipo de Computador</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -314,7 +306,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Alterar Tipo de Item</h5>
+              <h5 class="modal-title" id="">Alterar Tipo de Computador</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -363,8 +355,8 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o tipo de item <span id="nomeTipoItemExcluir" style="color: #000"></span>?</p></div>
-            <div style="display: none;" id="idTipoItemExcluir"></div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o tipo de computador <span id="nomeTipoComputadorExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idTipoComputadorExcluir"></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnExcluirTipo">SIM</button>
               <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
@@ -398,13 +390,13 @@
     <script type="text/javascript" src="/js/anexaModais.js"></script>
     <script type="text/javascript" src="/js/anexaSidebar.js"></script>
     <script type="text/javascript">
-      document.getElementById('btnSidebarItem').classList.add('active');
+      document.getElementById('btnSidebarComputador').classList.add('active');
     </script>
     <script type="text/javascript" src="/js/logoutFront.js"></script>
-    <script type="text/javascript" src="/js/listaItemFront.js"></script>
-    <script type="text/javascript" src="/js/cadastraItemFront.js"></script>
-    <script type="text/javascript" src="/js/alteraItemFront.js"></script>
-    <script type="text/javascript" src="/js/excluiItemFront.js"></script>
+    <!-- <script type="text/javascript" src="/js/listaComputadorFront.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/cadastraComputadorFront.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/alteraComputadorFront.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/excluiComputadorFront.js"></script> -->
 
   </body>
 

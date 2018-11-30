@@ -2,11 +2,11 @@ module.exports = {
 	trataOperacao: function(usuario, operacao, msg, cb){ //Encaminha a execução para a operação passada pelo servidor (esta função também é responsável por fazer o controle de acesso às funções restritas apenas a usuários logados)
 		var resposta = {};
 		switch(operacao){
+			case 'INSERIR':
 				if(!usuario){
 					resposta.codigo = 413;
 					cb(resposta);
 				}
-			case 'INSERIR':
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
 					cb(resposta);
@@ -94,11 +94,16 @@ module.exports = {
 		});
 	},
 
-	excluir: function(tipoItem, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
+	excluir: function(tipoItem, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor		
 		if(!tipoItem)
-			cb(412);
+			cb(412);		
 		else if(!tipoItem.id)
 			cb(412);
+
+		if(tipoItem.id == 1){
+			cb(414);
+		}
+		
 		require('./controller.js').excluir("TipoItem", tipoItem, function(codRes){
 			cb(codRes);
 		});

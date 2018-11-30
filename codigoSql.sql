@@ -64,6 +64,34 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBProcessador`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBProcessador` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcessador` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBSistemaOperacional`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `DBPatrimonioSMS`.`TBComputador`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBComputador` ;
@@ -78,11 +106,25 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBComputador` (
   `codItem` INT NOT NULL,
   `reserva` TINYINT NOT NULL,
   `aposentado` TINYINT NOT NULL,
+  `codProcessador` INT NULL,
+  `codSO` INT NULL,
   PRIMARY KEY (`id`, `codItem`),
   INDEX `fk_TBComputador_TBItem1_idx` (`codItem` ASC),
+  INDEX `fk_TBComputador_TBProcessador1_idx` (`codProcessador` ASC),
+  INDEX `fk_TBComputador_TBSistemaOperacional1_idx` (`codSO` ASC),
   CONSTRAINT `fk_TBComputador_TBItem1`
     FOREIGN KEY (`codItem`)
     REFERENCES `DBPatrimonioSMS`.`TBItem` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TBComputador_TBProcessador1`
+    FOREIGN KEY (`codProcessador`)
+    REFERENCES `DBPatrimonioSMS`.`TBProcessador` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TBComputador_TBSistemaOperacional1`
+    FOREIGN KEY (`codSO`)
+    REFERENCES `DBPatrimonioSMS`.`TBSistemaOperacional` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -98,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLogTransferencia` (
   `data` DATETIME NOT NULL,
   `codSetor` INT NOT NULL,
   `codItem` INT NOT NULL,
+  `atual` TINYINT NOT NULL,
   PRIMARY KEY (`id`, `codSetor`, `codItem`),
   INDEX `fk_TBLogTransferencia_TBSetor1_idx` (`codSetor` ASC),
   INDEX `fk_TBLogTransferencia_TBItem1_idx` (`codItem` ASC),
@@ -178,3 +221,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+INSERT INTO TBUsuario VALUES (0, "Administrador", "123.456.789-10", "admin@email.com", "bd7822c76f3ca74cd699115b8128cbcb2c908ae53f2078bce4b5abd901401818", 0);
+INSERT INTO TBTipoItem (id, nome) VALUES (1, "PC");

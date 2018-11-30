@@ -5,6 +5,7 @@ module.exports = {
 		final.data = '';
 		final.codSetor = 0;
 		final.codItem = 0;
+		final.atual = 0;
 		return final;
 	},
 

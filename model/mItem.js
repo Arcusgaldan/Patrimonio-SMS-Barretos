@@ -4,13 +4,14 @@ module.exports = {
 		final.id = 0;
 		final.patrimonio = '';
 		final.marca = '';
+		final.modelo = '';
 		final.descricao = '';
 		final.codTipoItem = 0;
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['patrimonio', 'marca', 'descricao'];
+		var strings = ['patrimonio', 'marca', 'descricao', 'modelo'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;

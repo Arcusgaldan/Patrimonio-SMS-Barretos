@@ -33116,8 +33116,38 @@ module.exports = {
 		});
 	},
 
-	listar: function(alvo, cb){ //Lista todos os registros da tabela;
-		var sql = "SELECT * FROM TB" + alvo + ";";
+	listar: function(alvo, cb, argumentos){ //Lista todos os registros da tabela;
+		var sql;
+		if(!argumentos)
+			sql = "SELECT * FROM TB" + alvo;
+		else{
+			if(argumentos.campos && argumentos.joins){
+				sql = "SELECT " + argumentos.campos + " FROM TB" + alvo;
+				for(let i = 0; i < argumentos.joins.length; i++){
+					sql += " JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on;
+				}
+			}else
+				sql = "SELECT * FROM TB" + alvo;
+
+			if(argumentos.where){
+				sql += " WHERE " + argumentos.where;
+			}
+
+			if(argumentos.orderBy){
+				if(argumentos.orderBy.campos){
+					sql += " ORDER BY " + argumentos.orderBy.campos;
+				}else{
+					sql += " ORDER BY id";
+				}
+
+				if(argumentos.orderBy.sentido){
+					sql += " " + argumentos.orderBy.sentido + ";";
+				}else{
+					sql += " ASC;";
+				}
+			}
+			console.log("SQL em controller:listar = " + sql);
+		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			cb(resultado);
@@ -33129,6 +33159,8 @@ module.exports = {
 		var selectCampos = "";
 		var comparacoes = "";
 		var joins = "";
+		var orderCampos = "id";
+		var orderSentido = "ASC";
 
 		if(argumentos.selectCampos){
 			for(let i = 0; i < argumentos.selectCampos.length; i++){
@@ -33154,7 +33186,17 @@ module.exports = {
 			cb(null);
 		}
 
-		sql += joins + "WHERE " + argumentos.where + ";";
+		if(argumentos.orderBy){
+			if(argumentos.orderBy.campos){
+				orderCampos = argumentos.orderBy.campos;
+			}
+
+			if(argumentos.orderBy.sentido && (sentido == "ASC" || sentido == "DESC")){
+				orderSentido = argumentos.orderBy.sentido
+			}
+		}
+
+		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
 
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -57064,7 +57106,7 @@ module.exports = {
 	dataHora: function(data){
 		if(data == null || data === "")
 			return false;
-		var regex = /\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}/;
+		var regex = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
 		if(data.match(regex))
 			return true;
 		return false;

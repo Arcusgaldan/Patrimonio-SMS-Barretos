@@ -66,7 +66,10 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(logTransferencia.id) || !validates.dataHora(logTransferencia.data)){
+		if(!validates.req(logTransferencia.id) || !validates.dataHora(logTransferencia.data) || 
+			!validates.req(logTransferencia.codSetor) || !validates.req(logTransferencia.codItem) || 
+			!validates.req(logTransferencia.atual)){
+			console.log("Validar em cLogTransferencia: data teve resultado " + validates.dataHora(logTransferencia.data));
 			return false;
 		}else{
 			return true;
@@ -75,6 +78,7 @@ module.exports = {
 
 	inserir: function(logTransferencia, cb){ //Insere as informações passadas pelo servidor
 		if(!this.validar(logTransferencia)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+			console.log("Não passou na validação de cLogTransferencia::inserir com logTransferencia = " + JSON.stringify(logTransferencia));
 			cb(412);
 			return;
 		}

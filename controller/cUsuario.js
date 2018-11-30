@@ -23,6 +23,10 @@ module.exports = {
 				});
 				break;
 			case 'EXCLUIR':
+				if(msg.id == 1){
+					resposta.codigo = 414;
+					cb(resposta);
+				}
 				if(!usuario){
 					resposta.codigo = 413;
 					cb(resposta);
