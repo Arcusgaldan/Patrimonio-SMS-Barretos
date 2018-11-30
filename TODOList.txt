@@ -1,2 +1,3 @@
 [-] Considerar criar uma tabela de locais para setor
 [-] Considerar criar um campo "motivo" em TBLogTransferencia
+![-] Fazer transferência de patrimônio entre setores

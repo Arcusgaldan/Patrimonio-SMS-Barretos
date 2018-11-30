@@ -24716,7 +24716,7 @@ function preencheTabela(listaItem){
 			document.getElementById('modeloItemDados' + i).innerHTML = listaItem[i].modelo;
 		else
 			document.getElementById('modeloItemDados' + i).innerHTML = "-";
-		if(listaItem[i].descricao)
+		if(listaItem[i].descricao != " " && listaItem[i].descricao != "")
 			document.getElementById('descricaoItemDados' + i).innerHTML = listaItem[i].descricao;
 		else
 			document.getElementById('descricaoItemDados' + i).innerHTML = "-";

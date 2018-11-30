@@ -98,11 +98,9 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBComputador` ;
 
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBComputador` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `processador` VARCHAR(100) NULL,
   `qtdMemoria` INT NULL,
   `tipoMemoria` CHAR(4) NULL,
   `armazenamento` INT NULL,
-  `SO` VARCHAR(45) NULL,
   `codItem` INT NOT NULL,
   `reserva` TINYINT NOT NULL,
   `aposentado` TINYINT NOT NULL,
@@ -221,7 +219,6 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 INSERT INTO TBUsuario VALUES (0, "Administrador", "123.456.789-10", "admin@email.com", "bd7822c76f3ca74cd699115b8128cbcb2c908ae53f2078bce4b5abd901401818", 0);
 INSERT INTO TBTipoItem (id, nome) VALUES (1, "PC");

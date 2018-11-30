@@ -59,59 +59,59 @@ module.exports = {
 		}
 	},
 
-	validar: function(computador){ //Valida os campos necessários em seu formato ideal
-		if(!computador){
+	validar: function(sistemaOperacional){ //Valida os campos necessários em seu formato ideal
+		if(!sistemaOperacional){
 			return false;
 		}
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(computador.id) || !validates.req(computador.codItem) || !validates.req(computador.reserva) || !validates.req(computador.aposentado)){
+		if(!validates.req(sistemaOperacional.id) || !validates.req(sistemaOperacional.nome)){
 			return false;
 		}else{
 			return true;
 		}
 	},
 
-	inserir: function(computador, cb){ //Insere as informações passadas pelo servidor
-		if(!this.validar(computador)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+	inserir: function(sistemaOperacional, cb){ //Insere as informações passadas pelo servidor
+		if(!this.validar(sistemaOperacional)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
 		}
-		require('./controller.js').inserir("Computador", computador, function(codRes){
+		require('./controller.js').inserir("SistemaOperacional", sistemaOperacional, function(codRes){
 			cb(codRes);
 		});
 	},
 
-	alterar: function(computador, cb){ //Altera as informações passadas por servidor
-		if(!this.validar(computador)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+	alterar: function(sistemaOperacional, cb){ //Altera as informações passadas por servidor
+		if(!this.validar(sistemaOperacional)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
 		}
 
-		require('./controller.js').alterar("Computador", computador, function(codRes){
+		require('./controller.js').alterar("SistemaOperacional", sistemaOperacional, function(codRes){
 			cb(codRes);
 		});
 	},
 
-	excluir: function(computador, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
-		if(!computador)
+	excluir: function(sistemaOperacional, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
+		if(!sistemaOperacional)
 			cb(412);
-		else if(!computador.id)
+		else if(!sistemaOperacional.id)
 			cb(412);
-		require('./controller.js').excluir("Computador", computador, function(codRes){
+		require('./controller.js').excluir("SistemaOperacional", sistemaOperacional, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("Computador", function(res){
+		require('./controller.js').listar("SistemaOperacional", function(res){
 			cb(res);
-		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, s.local setorLocal", joins: [{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, {tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, {tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1"});
+		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("Computador", argumentos, function(res){
+		require('./controller.js').buscar("SistemaOperacional", argumentos, function(res){
 			cb(res);
 		});		
 	}
