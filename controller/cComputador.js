@@ -107,7 +107,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Computador", function(res){
 			cb(res);
-		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, s.local setorLocal", joins: [{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, {tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, {tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1"});
+		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, s.local setorLocal", joins: [{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, {tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, {tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1", orderBy: {campos: "i.patrimonio"}});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

@@ -136,11 +136,18 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="processadorComputadorCadastrar" class="form-control" name="processadorComputadorCadastrar" placeholder="Processador">
-                    <option value="0">Processador</option>
-                  </select>
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="processadorComputadorCadastrar" class="form-control" name="processadorComputadorCadastrar" placeholder="Processador">
+                      <option value="0">Processador</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraProcessadorModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraProcessadorModal"><i class="fas fa-edit"></i></button>
                 </div>
               </div>
 
@@ -169,11 +176,18 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="sistemaComputadorCadastrar" class="form-control" name="sistemaComputadorCadastrar" placeholder="Sistema Operacional">
-                    <option value="0">Sistema Operacional</option>
-                  </select>
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="sistemaComputadorCadastrar" class="form-control" name="sistemaComputadorCadastrar" placeholder="Sistema Operacional">
+                      <option value="0">Sistema Operacional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraSOModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraSOModal"><i class="fas fa-edit"></i></button>
                 </div>
               </div>
 
@@ -220,51 +234,92 @@
           </div>
           <div class="modal-body">
              <p>
-              Neste formulário serão inseridas as informações para a alteração de itens
+              Neste formulário serão inseridas as informações para a alteração de computadores
             </p>
             <form id="formAlteraComputador" action='' method="post" encType="multipart/form-data">
                <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="patrimonioComputadorAlterar" class="form-control" name="patrimonioAlterar" placeholder="patrimonio" maxlength="6">
-                  <label for="patrimonioComputadorAlterar">Patrimônio</label>
+                  <select id="patrimonioComputadorAlterar" class="form-control" name="patrimonioComputadorAlterar" placeholder="Patrimonio">
+                    <option value="0">Patrimônio</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="processadorComputadorAlterar" class="form-control" name="processadorComputadorAlterar" placeholder="Processador">
+                      <option value="0">Processador</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraProcessadorModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraProcessadorModal"><i class="fas fa-edit"></i></button>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="marcaComputadorAlterar" class="form-control" name="marcaAlterar" placeholder="Marca">
-                  <label for="marcaComputadorAlterar">Marca</label>
+                  <input type="number" id="qtdMemoriaComputadorAlterar" class="form-control" name="qtdMemoriaComputadorAlterar" placeholder="patrimonio" maxlength="2">
+                  <label for="qtdMemoriaComputadorAlterar">Qtd. de Memória (GB)</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="modeloComputadorAlterar" class="form-control" name="modeloAlterar" placeholder="Modelo">
-                  <label for="modeloComputadorAlterar">Modelo</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="descricaoComputadorAlterar">Descrição</label>
-                <textarea id="descricaoComputadorAlterar" rows="4" class="form-control" name="descricaoComputadorAlterar" placeholder="Descrição" required="required"> </textarea>
-              </div>
-
-              <!-- <div class="form-group">
-                  <label for="descricaoComputadorCadastrar">Descrição</label>
-                  <textarea id="descricaoComputadorCadastrar" rows="4" class="form-control" name="descricaoComputadorCadastrar" placeholder="Descrição" required="required"> </textarea>
-              </div> -->
-
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="tipoComputadorAlterar" class="form-control" name="tipoComputadorAlterar" placeholder="Tipo">
-                    <option value="0">Tipo</option>
+                  <select id="tipoMemoriaComputadorAlterar" class="form-control" name="tipoMemoriaComputadorAlterar" placeholder="Tipo de Memória">
+                    <option value="0">Tipo de Memória</option>
+                    <option value="DDR2">DDR2</option>
+                    <option value="DDR3">DDR3</option>
+                    <option value="DDR4">DDR4</option>
                   </select>
                 </div>
               </div>
 
               <div class="form-group">
-                <button class="btn btn-success float-right" type="button" data-toggle="modal" data-target="#cadastraTipoModal"><i class="fas fa-plus"></i></button>
-                <button class="btn btn-warning float-right" type="button" data-toggle="modal" data-target="#alteraTipoModal"><i class="fas fa-edit"></i></button>
+                <div class="form-label-group">
+                  <input type="number" id="armazenamentoComputadorAlterar" class="form-control" name="armazenamentoComputadorAlterar" placeholder="Armazenamento">
+                  <label for="armazenamentoComputadorAlterar">Armazenamento (GB)</label>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="sistemaComputadorAlterar" class="form-control" name="sistemaComputadorAlterar" placeholder="Sistema Operacional">
+                      <option value="0">Sistema Operacional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraSOModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraSOModal"><i class="fas fa-edit"></i></button>
+                </div>
+              </div>
+
+              <div class="form-row">                
+                
+                <div class="form-group col-md-6">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="reservaComputadorAlterar">
+                      Reserva
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6 text-right">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="aposentadoComputadorAlterar">
+                      Aposentado
+                    </label>
+                  </div>
+                </div>
+
               </div>
 
               <div style="display: none;" id="idComputadorAlterar"></div>
@@ -301,12 +356,12 @@
       </div>   
       <!-- /EXCLUIR MODAL  -->
 
-      <!-- CADASTRA tipo modal -->
-        <div class="modal fade" id="cadastraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- CADASTRA processador modal -->
+        <div class="modal fade" id="cadastraProcessadorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Cadastrar Tipo de Computador</h5>
+              <h5 class="modal-title" id="">Cadastrar Processador</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -315,27 +370,121 @@
               <form>
                 <div class="form-group">
                   <div class="form-label-group">
-                    <input type="text" id="nomeTipoCadastrar" class="form-control" name="nomeTipoCadastrar" placeholder="Nome">
-                    <label for="nomeTipoCadastrar">Nome</label>
+                    <input type="text" id="nomeProcessadorCadastrar" class="form-control" name="nomeProcessadorCadastrar" placeholder="Nome">
+                    <label for="nomeProcessadorCadastrar">Nome</label>
                   </div>
                 </div>
               </form>
             </div>
             
             <div class="modal-footer">
-              <button class="btn btn-success" type="button" id="btnCadastrarTipo">Cadastrar</button>
+              <button class="btn btn-success" type="button" id="btnCadastrarProcessador">Cadastrar</button>
             </div>
           </div>
         </div>
       </div>  
-      <!-- /CADASTRA tipo modal -->
+      <!-- /CADASTRA processador modal -->
 
-      <!-- ALTERA tipo modal -->
-        <div class="modal fade" id="alteraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- ALTERA processador modal -->
+        <div class="modal fade" id="alteraProcessadorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">Alterar Processador</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+
+                  <div class="form-group">
+                    <div class="form-row">
+                      <div class="form-label-group col-md-11">                        
+                        <select id="selectProcessadorAlterar" class="form-control">
+                          <option value="0">Processador</option>
+                        </select>
+                      </div>
+
+                      <div class="form-label-group col-md-1">
+                        <button class="btn btn-danger" id="btnModalProcessadorExcluir" type="button"><i class="fas fa-times"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <input type="text" id="nomeProcessadorAlterar" class="form-control" name="nomeTipoAlterar" placeholder="Nome">
+                      <label for="nomeProcessadorAlterar">Nome</label>
+                    </div>
+                  </div>              
+                </form>
+              
+                <div class="modal-footer">
+                  <button class="btn btn-warning" type="button" id="btnAlterarProcessador">Alterar</button>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+      <!-- /ALTERA processador modal -->
+
+      <!-- EXCLUI processador modal -->
+      <div class="modal fade" id="excluirProcessadorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="">Alterar Tipo de Computador</h5>
+              <h5 class="modal-title" id=""></h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o processador <span id="nomeProcessadorExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idProcessadorExcluir"></div>
+            <div class="modal-footer">
+              <button class="btn btn-success" id="btnExcluirProcessador">SIM</button>
+              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <!-- /EXCLUI processador modal -->
+
+      <!-- CADASTRA SO modal -->
+      <div class="modal fade" id="cadastraSOModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Cadastrar SO</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="nomeSOCadastrar" class="form-control" name="nomeSOCadastrar" placeholder="Nome">
+                    <label for="nomeSOCadastrar">Nome</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+            <div class="modal-footer">
+              <button class="btn btn-success" type="button" id="btnCadastrarSO">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <!-- /CADASTRA processador modal -->
+
+      <!-- ALTERA processador modal -->
+        <div class="modal fade" id="alteraSOModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Alterar SO</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -346,36 +495,36 @@
                 <div class="form-group">
                   <div class="form-row">
                     <div class="form-label-group col-md-11">                        
-                      <select id="selectTipoAlterar" class="form-control">
-                        <option value="0">Tipo</option>
+                      <select id="selectSOAlterar" class="form-control">
+                        <option value="0">Sistema Operacional</option>
                       </select>
                     </div>
 
                     <div class="form-label-group col-md-1">
-                      <button class="btn btn-danger" id="btnModalExcluir" type="button"><i class="fas fa-times"></i></button>      
+                      <button class="btn btn-danger" id="btnModalSOExcluir" type="button"><i class="fas fa-times"></i></button>
                     </div>
                   </div>
                 </div>
                 
                 <div class="form-group">
                   <div class="form-label-group">
-                    <input type="text" id="nomeTipoAlterar" class="form-control" name="nomeTipoAlterar" placeholder="Nome">
-                    <label for="nomeTipoAlterar">Nome</label>
+                    <input type="text" id="nomeSOAlterar" class="form-control" name="nomeTipoAlterar" placeholder="Nome">
+                    <label for="nomeSOAlterar">Nome</label>
                   </div>
                 </div>
               
               </form>
             
             <div class="modal-footer">
-              <button class="btn btn-warning" type="button" id="btnAlterarTipo">Alterar</button>
+              <button class="btn btn-warning" type="button" id="btnAlterarSO">Alterar</button>
             </div>
           </div>
         </div>
       </div>  
-      <!-- /ALTERA tipo modal -->
+      <!-- /ALTERA processador modal -->
 
-      <!-- EXCLUI tipo modal -->
-      <div class="modal fade" id="excluirTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- EXCLUI processador modal -->
+      <div class="modal fade" id="excluirSOModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -384,16 +533,16 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o tipo de computador <span id="nomeTipoComputadorExcluir" style="color: #000"></span>?</p></div>
-            <div style="display: none;" id="idTipoComputadorExcluir"></div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o SO <span id="nomeSOExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idSOExcluir"></div>
             <div class="modal-footer">
-              <button class="btn btn-success" id="btnExcluirTipo">SIM</button>
+              <button class="btn btn-success" id="btnExcluirSO">SIM</button>
               <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
             </div>
           </div>
         </div>
       </div> 
-      <!-- /EXCLUI tipo modal -->
+      <!-- /EXCLUI processador modal -->
 
 
     <!-- Bootstrap core JavaScript-->
@@ -422,7 +571,7 @@
       document.getElementById('btnSidebarComputador').classList.add('active');
     </script>
     <script type="text/javascript" src="/js/logoutFront.js"></script>
-    <!-- <script type="text/javascript" src="/js/listaComputadorFront.js"></script> -->
+    <script type="text/javascript" src="/js/listaComputadorFront.js"></script>
     <!-- <script type="text/javascript" src="/js/cadastraComputadorFront.js"></script> -->
     <!-- <script type="text/javascript" src="/js/alteraComputadorFront.js"></script> -->
     <!-- <script type="text/javascript" src="/js/excluiComputadorFront.js"></script> -->
