@@ -57128,7 +57128,8 @@ module.exports = {
 	dataHora: function(data){
 		if(data == null || data === "")
 			return false;
-		var regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
+		var regexFront = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
+		var regexBanco = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2,3}Z/;
 		if(data.match(regex))
 			return true;
 		return false;

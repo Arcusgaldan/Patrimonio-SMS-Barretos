@@ -13,7 +13,7 @@ var paginas = {
 };
 
 var agrupamentos = {
-	
+	"backup": "frontEnd/cadastroBackup.html"
 };
 
 function mimeType(arquivo){

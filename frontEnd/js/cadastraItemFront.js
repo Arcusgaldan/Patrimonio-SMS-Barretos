@@ -33024,7 +33024,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
-		}, {campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1", orderBy: {campos: "patrimonio"}});
+		}, {campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome, s.id setorId", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1", orderBy: {campos: "patrimonio"}});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
@@ -57414,7 +57414,8 @@ module.exports = {
 	dataHora: function(data){
 		if(data == null || data === "")
 			return false;
-		var regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
+		var regexFront = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
+		var regexBanco = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2,3}Z/;
 		if(data.match(regex))
 			return true;
 		return false;

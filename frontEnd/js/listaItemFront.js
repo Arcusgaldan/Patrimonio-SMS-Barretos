@@ -24761,7 +24761,7 @@ function buscar(){
 	}else{
 		//console.log("O where da busca é: " + where);
 		var argumentos = {
-			selectCampos: ["TBItem.*", "ti.nome tipoNome", "s.local setorLocal", "s.nome setorNome"], 
+			selectCampos: ["TBItem.*", "ti.nome tipoNome", "s.local setorLocal", "s.nome setorNome", "s.id setorId"], 
 			joins: [
 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
@@ -24872,6 +24872,9 @@ function preencheModalExcluir(item){
 function preencheModalTransferencia(item){
 	document.getElementById('patrimonioItemTransferir').value = item.patrimonio;
 	document.getElementById('setorItemTransferir').value = item.setorId;
+	document.getElementById('idItemTransferir').value = item.id;
+	document.getElementById('setorAntigoItemTransferir').value = item.setorLocal + " - " + item.setorNome;
+	document.getElementById('idSetorAntigoItemTransferir').value = item.setorId;
 }
 
 function preencheTipo(){

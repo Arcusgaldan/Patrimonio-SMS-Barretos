@@ -172,11 +172,17 @@ function preencheTabela(listaComputador){
 				    <p><strong>Sistema Operacional: </strong> <span id='sistemaOperacionalComputadorDados"+i+"'></span></p>\
 				    <p><strong>Reserva: </strong> <span id='reservaComputadorDados"+i+"'></span></p>\
 				    <p><strong>Aposentado: </strong> <span id='aposentadoComputadorDados"+i+"'></span></p>\
+				    <br>\
+			    	<button class='btn btn-info mb-1' id='backupComputadorDados'>Gerenciar Backups</button>\
+			    	<button class='btn btn-info mb-1' id='procedimentoComputadorDados'>Gerenciar Procedimentos</button>\
 				  </div>\
 				</div>\
 		    </td>\
 		  </tr>\
 		");
+
+		document.getElementById('backupComputadorDados').addEventListener('click', function(){location.href = "/backup/" + listaComputador[i].itemPatrimonio;}, false);
+		document.getElementById('procedimentoComputadorDados').addEventListener('click', function(){location.href = "/procedimento/" + listaComputador[i].itemPatrimonio;}, false);
 
 		document.getElementById('patrimonioComputadorLista' + i).innerHTML = listaComputador[i].itemPatrimonio;
 		document.getElementById('patrimonioComputadorDados' + i).innerHTML = listaComputador[i].itemPatrimonio;

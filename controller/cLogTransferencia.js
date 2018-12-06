@@ -77,11 +77,18 @@ module.exports = {
 	},
 
 	inserir: function(logTransferencia, cb){ //Insere as informações passadas pelo servidor
+		if(!logTransferencia)
+			cb(412);
+		
+		logTransferencia.data = require('./cData.js').dataHoraAtual();
+		logTransferencia.atual = 1;
+
 		if(!this.validar(logTransferencia)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			console.log("Não passou na validação de cLogTransferencia::inserir com logTransferencia = " + JSON.stringify(logTransferencia));
 			cb(412);
 			return;
-		}
+		}		
+		
 		require('./controller.js').inserir("LogTransferencia", logTransferencia, function(codRes){
 			cb(codRes);
 		});
