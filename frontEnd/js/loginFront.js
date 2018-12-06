@@ -24774,8 +24774,23 @@ module.exports = {
 		req.end();
 	},
 
-	anexaModais: function(){//Anexa os modais de logout, sucesso e erro
-		
+	enumOperador: function(cod){
+		switch(cod){
+			case '0':
+				return '=';
+			case '1':
+				return '<>';
+			case '2':
+				return '<';
+			case '3':
+				return '<=';
+			case '4':
+				return '>';
+			case '5':
+				return '>=';
+			default:
+				return '';
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)

@@ -66,7 +66,9 @@
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">Gerenciamento de Item 
-                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Item</button>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
+                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
               </div>
               <div class="card-body">
                 <p>
@@ -163,29 +165,20 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="tipoItemCadastrar" class="form-control" name="tipoItemCadastrar" placeholder="Tipo">
-                    <option value="0">Tipo</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- <div class="form-row">
-                <div class="form-group col-md-2 offset-md-6">
-                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraTipoModal"><i class="fas fa-plus"></i></button>
-                </div>
-                <div class="form-group col-md-2 offset-md-8">
-                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraTipoModal"><i class="fas fa-edit"></i></button>
-                </div>
-              </div> -->
-
               <div class="form-row">
-                <div class="form-group col-md-3 offset-md-9 text-right">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="tipoItemCadastrar" class="form-control" name="tipoItemCadastrar" placeholder="Tipo">
+                      <option value="0">Tipo</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
                   <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraTipoModal"><i class="fas fa-plus"></i></button>
                   <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraTipoModal"><i class="fas fa-edit"></i></button>
                 </div>
-              </div>
+              </div>  
 
 
             </form>
@@ -292,7 +285,7 @@
       <!-- /EXCLUIR MODAL  -->
 
       <!-- CADASTRA tipo modal -->
-        <div class="modal fade" id="cadastraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="cadastraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -321,7 +314,7 @@
       <!-- /CADASTRA tipo modal -->
 
       <!-- ALTERA tipo modal -->
-        <div class="modal fade" id="alteraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="alteraTipoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -332,7 +325,6 @@
             </div>
             <div class="modal-body">
               <form>
-
                 <div class="form-group">
                   <div class="form-row">
                     <div class="form-label-group col-md-11">                        
@@ -356,12 +348,13 @@
               
               </form>
             
-            <div class="modal-footer">
-              <button class="btn btn-warning" type="button" id="btnAlterarTipo">Alterar</button>
+              <div class="modal-footer">
+                <button class="btn btn-warning" type="button" id="btnAlterarTipo">Alterar</button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>  
+        </div>  
+      </div>
       <!-- /ALTERA tipo modal -->
 
       <!-- EXCLUI tipo modal -->
@@ -384,6 +377,105 @@
         </div>
       </div> 
       <!-- /EXCLUI tipo modal -->
+
+      <!-- BUSCA MODAL -->
+      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tituloModalBuscar">Buscar Itens</h5>
+            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              Insira os dados para buscar itens
+            </p>
+
+            <form id="formBuscarItem">
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="patrimonioItemBuscar" class="form-control" name="patrimonioBuscar" placeholder="Patrimonio" maxlength='6'>
+                  <label for="patrimonioItemBuscar">Patrimônio</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="marcaItemBuscar" class="form-control" name="marcaBuscar" placeholder="Marca">
+                  <label for="marcaItemBuscar">Marca</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="modeloItemBuscar" class="form-control" name="modeloBuscar" placeholder="Modelo">
+                  <label for="modeloItemBuscar">Modelo</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="setorItemBuscar" class="form-control" name="setorItemBuscar" placeholder="Setor">
+                    <option value="0">Setor</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-label-group">
+                <select id="tipoItemBuscar" class="form-control" name="tipoItemBuscar" placeholder="Tipo">
+                  <option value="0">Tipo</option>
+                </select>
+              </div>
+
+            </form>
+            <div class="modal-footer">
+              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
+              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- /BUSCA MODAL -->
+
+      <!-- TRANSFERE MODAL -->
+      <div class="modal fade" id="transfereModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tituloModalBuscar">Transferência de Item</h5>
+              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioItemTransferir" class="form-control" placeholder="Patrimônio" disabled="true">
+                    <label for="patrimonioItemTransferir">Patrimônio</label>
+                  </div>
+                </div>
+
+                <div class="form-label-group">
+                  <select id="setorItemTransferir" class="form-control"></select>
+                </div>
+              </form>
+              <div id="idItemTransferir" style="display: none;"></div>
+              <div id="setorAntigoItemTransferir" style="display: none;"></div>
+              <div class="modal-footer">
+                <button class="btn btn-success" type="button" id="btnModalTransferencia">Transferir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /BUSCA MODAL -->
+      <!-- /TRANSFERE MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->

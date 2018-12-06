@@ -33024,7 +33024,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
-		}, {campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1"});
+		}, {campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1", orderBy: {campos: "patrimonio"}});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
@@ -33285,6 +33285,7 @@ module.exports = {
 		var joins = "";
 		var orderCampos = "id";
 		var orderSentido = "ASC";
+		var aliasTabela = "";
 
 		if(argumentos.selectCampos){
 			for(let i = 0; i < argumentos.selectCampos.length; i++){
@@ -33298,7 +33299,11 @@ module.exports = {
 			selectCampos = "*";
 		}
 
-		sql += selectCampos + " FROM TB" + alvo + " ";
+		if(argumentos.aliasTabela){
+			aliasTabela = argumentos.aliasTabela;
+		}
+
+		sql += selectCampos + " FROM TB" + alvo + " " + aliasTabela + " ";
 
 		if(argumentos.joins){
 			for(let i = 0; i < argumentos.joins.length; i++){
@@ -33321,6 +33326,8 @@ module.exports = {
 		}
 
 		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
+
+		console.log("Em controller::buscar, SQL = " + sql);
 
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -33467,6 +33474,12 @@ function cadastrarItem(){
 	item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
 	while(item.patrimonio.length < 6){
 		item.patrimonio = "0" + item.patrimonio;
+	}
+	var regex = /\d{6}/;
+	if(!item.patrimonio.match(regex)){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+		$("#erroModal").modal('show');
+		return;
 	}
 	item.marca = document.getElementById('marcaItemCadastrar').value;
 	item.modelo = document.getElementById('modeloItemCadastrar').value;
@@ -57315,8 +57328,23 @@ module.exports = {
 		req.end();
 	},
 
-	anexaModais: function(){//Anexa os modais de logout, sucesso e erro
-		
+	enumOperador: function(cod){
+		switch(cod){
+			case '0':
+				return '=';
+			case '1':
+				return '<>';
+			case '2':
+				return '<';
+			case '3':
+				return '<=';
+			case '4':
+				return '>';
+			case '5':
+				return '>=';
+			default:
+				return '';
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)
@@ -57377,7 +57405,7 @@ module.exports = {
 	data: function(data){
 		if(data == null || data === "")
 			return false;
-		var regex = /\d{2}-\d{2}-\d{4}/;
+		var regex = /\d{4}-\d{2}-\d{2}/;
 		if(data.match(regex))
 			return true;
 		return false;
@@ -57386,7 +57414,7 @@ module.exports = {
 	dataHora: function(data){
 		if(data == null || data === "")
 			return false;
-		var regex = /\d{2}-\d{2}-\d{4}\s\d{2}:\d{2}:\d{2}/;
+		var regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
 		if(data.match(regex))
 			return true;
 		return false;

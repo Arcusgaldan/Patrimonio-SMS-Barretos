@@ -65,9 +65,11 @@
 
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
-              <div class="card-header">Gerenciamento de Usuário 
-                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Usuário</button>
-              </div>
+              <div class="card-header">Gerenciamento de Usuario
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
+                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
+              </div>  
               <div class="card-body">
                 <p>
 
@@ -139,7 +141,7 @@
 
                   <div class="col-md-6">
                     <div class="form-label-group">
-                      <input type="text" id="cpfUsuarioCadastrar" class="form-control" name="prontuarioCadastrar" placeholder="Prontuário" required="required">
+                      <input type="text" data-mask="000.000.000-00" id="cpfUsuarioCadastrar" class="form-control" name="prontuarioCadastrar" placeholder="CPF" required="required" maxlength="14">
                       <label for="cpfUsuarioCadastrar">CPF</label>
                     </div>
                   </div>
@@ -211,7 +213,7 @@
 
                   <div class="col-md-6">
                     <div class="form-label-group">
-                      <input type="text" id="cpfUsuarioAlterar" class="form-control" name="prontuarioAlterar" placeholder="Prontuário" required="required">
+                      <input type="text" id="cpfUsuarioAlterar" class="form-control" name="prontuarioAlterar" placeholder="Prontuário" required="required" maxlength="14">
                       <label for="cpfUsuarioAlterar">CPF</label>
                     </div>
                   </div>
@@ -279,6 +281,60 @@
         </div>
       </div>   
       <!-- /EXCLUIR MODAL  -->
+
+      <!-- BUSCAR MODAL -->
+      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tituloModalCadastrar">Buscar Usuários</h5>
+            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              Insira os dados para buscar usuários
+            </p>
+
+            <form id="formBuscarUsuario">
+              <div class="form-group">
+                <div class="form-row">
+
+                  <div class="col-md-6">
+                    <div class="form-label-group">
+                      <input type="text" id="nomeUsuarioBuscar" class="form-control" name="nomeBuscar"  placeholder="Nome Completo" required="required" autofocus="autofocus">
+                      <label for="nomeUsuarioBuscar">Nome Completo</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-label-group">
+                      <input type="text" id="cpfUsuarioBuscar" class="form-control" name="cpfBuscar" placeholder="CPF" required="required" maxlength="14">
+                      <label for="cpfUsuarioBuscar">CPF</label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="email" id="emailUsuarioBuscar" class="form-control" name="emailBuscar" placeholder="Email" required="required">
+                  <label for="emailUsuarioBuscar">Email</label>
+                </div>
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button> 
+              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- /BUSCAR MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->

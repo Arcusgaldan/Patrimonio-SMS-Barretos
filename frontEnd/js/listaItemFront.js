@@ -24680,18 +24680,133 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
+document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+document.getElementById('btnLimparBusca').addEventListener('click', function(){
+	document.getElementById('formBuscarItem').reset();
+}, false);
+
+function buscar(){
+	var utils = require('./../../utilsCliente.js');
+	var where = "";
+
+	if(document.getElementById('patrimonioItemBuscar').value != ""){
+		let patrimonio = document.getElementById('patrimonioItemBuscar').value;
+
+		while(patrimonio.length < 6){
+			patrimonio = "0" + patrimonio;
+		}
+
+		if(where != "")
+			where += " AND ";
+
+		where += "patrimonio = '" + patrimonio + "'";
+	}
+
+	if(document.getElementById('marcaItemBuscar').value != ""){
+		let marca = document.getElementById('marcaItemBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "marca LIKE '%" + marca + "%'";
+	}
+
+	if(document.getElementById('modeloItemBuscar').value != ""){
+		let modelo = document.getElementById('modeloItemBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "modelo LIKE '%" + modelo + "%'";
+	}
+
+	if(document.getElementById('setorItemBuscar').value != '0'){
+		let setor = document.getElementById('setorItemBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "codSetor = " + setor;
+	}
+
+	if(document.getElementById('tipoItemBuscar').value != '0'){
+		let tipo = document.getElementById('tipoItemBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "codTipoItem = " + tipo;
+	}
+
+	if(where == ""){
+		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaItem = JSON.parse(msg);
+					preencheTabela(listaItem);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaItem").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}else{
+		//console.log("O where da busca é: " + where);
+		var argumentos = {
+			selectCampos: ["TBItem.*", "ti.nome tipoNome", "s.local setorLocal", "s.nome setorNome"], 
+			joins: [
+				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
+				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+			], 
+			where: "lt.atual = 1 AND " + where, 
+			orderBy: {campos: "patrimonio"}
+		};
+		
+		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaItem = JSON.parse(msg);
+					preencheTabela(listaItem);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaItem").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}
+}
+
 function preencheTabela(listaItem){	
 	if(!listaItem){
 		return;
 	}
+	$("#tabelaItem").empty();
 	for(let i = 0; i < listaItem.length; i++){
 		$("#tabelaItem").append("\
 		<tr>\
 		    <th id='patrimonioItemLista"+ i +"'></th>\
 		    <td>\
-				<button class='btn btn-info' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarItemLista"+ i +"' class='btn btn-warning' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
-				<button id='excluirItemLista"+ i +"' class='btn btn-danger' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
+				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
+				<button id='alterarItemLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
+				<button id='excluirItemLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
+				<button id='transferirItemLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
 				<div id='collapseItemLista"+ i +"' class='collapse mostraLista' >\
 				  <div class='card card-body'>\
 				    <p><strong>Patrimônio: </strong><span id='patrimonioItemDados"+i+"'></span></p>\
@@ -24733,6 +24848,9 @@ function preencheTabela(listaItem){
 			document.getElementById("excluirItemLista"+ i).addEventListener("click", function(){
 				preencheModalExcluir(item);
 			}, false);
+			document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
+				preencheModalTransferencia(item);
+			}, false);
 		}());
 	}	
 }
@@ -24751,6 +24869,11 @@ function preencheModalExcluir(item){
 	document.getElementById('idItemExcluir').value = item.id;
 }
 
+function preencheModalTransferencia(item){
+	document.getElementById('patrimonioItemTransferir').value = item.patrimonio;
+	document.getElementById('setorItemTransferir').value = item.setorId;
+}
+
 function preencheTipo(){
 	var utils = require('./../../utilsCliente.js');
 	utils.enviaRequisicao("TipoItem", "LISTAR", {token: localStorage.token}, function(res){
@@ -24764,14 +24887,19 @@ function preencheTipo(){
 				$("#tipoItemCadastrar > option").remove();
 				$("#tipoItemAlterar > option").remove();
 				$("#selectTipoAlterar > option").remove();
+				$("#tipoItemBuscar > option").remove();
 
 				$("#tipoItemCadastrar").append("<option value='0'>Tipo</option");
 				$("#tipoItemAlterar").append("<option value='0'>Tipo</option");
 				$("#selectTipoAlterar").append("<option value='0'>Selecione o tipo a ser alterado/excluído</option");
+				$("#tipoItemBuscar").append("<option value='0'>Tipo</option");
+
+
 				for(let i = 0; i < vetorTipo.length; i++){
 					$("#tipoItemCadastrar").append("<option value='"+vetorTipo[i].id+"'>"+vetorTipo[i].nome+"</option");
 					$("#tipoItemAlterar").append("<option value='"+vetorTipo[i].id+"'>"+vetorTipo[i].nome+"</option");
 					$("#selectTipoAlterar").append("<option value='"+vetorTipo[i].id+"'>"+vetorTipo[i].nome+"</option");
+					$("#tipoItemBuscar").append("<option value='"+vetorTipo[i].id+"'>"+vetorTipo[i].nome+"</option");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -24793,10 +24921,17 @@ function preencheSetor(){
 			res.on('end', function(){
 				var vetorSetor = JSON.parse(msg);
 				$("#setorItemCadastrar > option").remove();
+				$("#setorItemBuscar > option").remove();
+				$("#setorItemTransferir > option").remove();
+				
 				$("#setorItemCadastrar").append("<option value='0'>Setor</option");
+				$("#setorItemBuscar").append("<option value='0'>Setor</option");
+
 
 				for(let i = 0; i < vetorSetor.length; i++){
 					$("#setorItemCadastrar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
+					$("#setorItemBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
+					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -24818,6 +24953,9 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 		});
 		res.on('end', function(){
 			var vetorItem = JSON.parse(msg);
+			(function(){
+				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
+			}());
 			preencheTabela(vetorItem);
 		});
 	}else if(res.statusCode != 747){
@@ -24888,8 +25026,23 @@ module.exports = {
 		req.end();
 	},
 
-	anexaModais: function(){//Anexa os modais de logout, sucesso e erro
-		
+	enumOperador: function(cod){
+		switch(cod){
+			case '0':
+				return '=';
+			case '1':
+				return '<>';
+			case '2':
+				return '<';
+			case '3':
+				return '<=';
+			case '4':
+				return '>';
+			case '5':
+				return '>=';
+			default:
+				return '';
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)

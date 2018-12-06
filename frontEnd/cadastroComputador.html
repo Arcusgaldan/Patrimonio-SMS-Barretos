@@ -66,7 +66,9 @@
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">Gerenciamento de Computador 
-                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Computador</button>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
+                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
               </div>
               <div class="card-body">
                 <p>
@@ -461,7 +463,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form> 
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="text" id="nomeSOCadastrar" class="form-control" name="nomeSOCadastrar" placeholder="Nome">
@@ -481,46 +483,47 @@
 
       <!-- ALTERA processador modal -->
         <div class="modal fade" id="alteraSOModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="">Alterar SO</h5>
-              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">Alterar SO</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
 
-                <div class="form-group">
-                  <div class="form-row">
-                    <div class="form-label-group col-md-11">                        
-                      <select id="selectSOAlterar" class="form-control">
-                        <option value="0">Sistema Operacional</option>
-                      </select>
-                    </div>
+                  <div class="form-group">
+                    <div class="form-row">
+                      <div class="form-label-group col-md-11">                        
+                        <select id="selectSOAlterar" class="form-control">
+                          <option value="0">Sistema Operacional</option>
+                        </select>
+                      </div>
 
-                    <div class="form-label-group col-md-1">
-                      <button class="btn btn-danger" id="btnModalSOExcluir" type="button"><i class="fas fa-times"></i></button>
+                      <div class="form-label-group col-md-1">
+                        <button class="btn btn-danger" id="btnModalSOExcluir" type="button"><i class="fas fa-times"></i></button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                  
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <input type="text" id="nomeSOAlterar" class="form-control" name="nomeTipoAlterar" placeholder="Nome">
+                      <label for="nomeSOAlterar">Nome</label>
+                    </div>
+                  </div>
                 
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <input type="text" id="nomeSOAlterar" class="form-control" name="nomeTipoAlterar" placeholder="Nome">
-                    <label for="nomeSOAlterar">Nome</label>
-                  </div>
-                </div>
+                </form>
               
-              </form>
-            
-            <div class="modal-footer">
-              <button class="btn btn-warning" type="button" id="btnAlterarSO">Alterar</button>
+                <div class="modal-footer">
+                  <button class="btn btn-warning" type="button" id="btnAlterarSO">Alterar</button>
+                </div>
+              </div>
             </div>
-          </div>
+          </div>  
         </div>
-      </div>  
       <!-- /ALTERA processador modal -->
 
       <!-- EXCLUI processador modal -->
@@ -543,6 +546,127 @@
         </div>
       </div> 
       <!-- /EXCLUI processador modal -->
+
+      <!-- BUSCA MODAL -->
+      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tituloModalBuscar">Buscar Computadores</h5>
+            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              Insira os dados para buscar computadores
+            </p>
+
+            <form id="formBuscarComputador">
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" pattern="\d{6}" maxlength="6" id="patrimonioComputadorBuscar" class="form-control" name="patrimonioComputadorBuscar" placeholder="Patrimonio">
+                  <label for="patrimonioComputadorBuscar">Patrimônio</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="processadorComputadorBuscar" class="form-control" name="processadorComputadorBuscar" placeholder="Processador">
+                    <option value="0">Processador</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <select class="form-control" id="argumentoQtdMemoriaComputadorBuscar">
+                    <option value="0">Igual a</option>
+                    <option value="1">Diferente de</option>
+                    <option value="2">Menor que</option>
+                    <option value="3">Menor ou igual a</option>
+                    <option value="4">Maior que</option>
+                    <option value="5">Maior ou igual a</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="number" id="qtdMemoriaComputadorBuscar" class="form-control" name="qtdMemoriaComputadorBuscar" placeholder="Marca" maxlength="2">
+                    <label for="qtdMemoriaComputadorBuscar">Qtd. de Memória (GB)</label>
+                  </div>
+                </div>
+              </div>             
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="tipoMemoriaComputadorBuscar" class="form-control" name="tipoMemoriaComputadorBuscar" placeholder="Tipo de Memória">
+                    <option value="0">Tipo de Memória</option>
+                    <option value="DDR2">DDR2</option>
+                    <option value="DDR3">DDR3</option>
+                    <option value="DDR4">DDR4</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <select class="form-control" id="argumentoArmazenamentoComputadorBuscar">
+                    <option value="0">Igual a</option>
+                    <option value="1">Diferente de</option>
+                    <option value="2">Menor que</option>
+                    <option value="3">Menor ou igual a</option>
+                    <option value="4">Maior que</option>
+                    <option value="5">Maior ou igual a</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="number" id="armazenamentoComputadorBuscar" class="form-control" name="armazenamentoComputadorBuscar" placeholder="Marca">
+                    <label for="armazenamentoComputadorBuscar">Armazenamento (GB)</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="sistemaComputadorBuscar" class="form-control" name="sistemaComputadorBuscar" placeholder="Sistema Operacional">
+                    <option value="0">Sistema Operacional</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <div class="form-label-group">
+                    <select id="reservaComputadorBuscar" class="form-control" name="reservaComputadorBuscar" placeholder="Reserva">
+                      <option value="0">Reserva?</option>
+                      <option value="1">Apenas Reservas</option>
+                      <option value="2">Apenas Ativos</option>
+                    </select>  
+                  </div>
+                </div>
+               
+                <div class="form-group col-md-6">
+                  <div class="form-label-group">
+                    <select id="aposentadoComputadorBuscar" class="form-control" name="aposentadoComputadorBuscar" placeholder="Aposentado">
+                      <option value="0">Aposentado?</option>
+                      <option value="1">Apenas Aposentados</option>
+                      <option value="2">Apenas Ativos</option>
+                    </select>   
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>
+              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- /BUSCA MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->

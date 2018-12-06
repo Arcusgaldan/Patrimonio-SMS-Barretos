@@ -40,6 +40,12 @@ function alterar(){
 	while(item.patrimonio.length < 6){
 		item.patrimonio = "0" + item.patrimonio;
 	}
+	var regex = /\d{6}/;
+	if(!item.patrimonio.match(regex)){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+		$("#erroModal").modal('show');
+		return;
+	}
 	item.marca = document.getElementById('marcaItemAlterar').value;
 	item.modelo = document.getElementById('modeloItemAlterar').value;
 	item.descricao = document.getElementById('descricaoItemAlterar').value;

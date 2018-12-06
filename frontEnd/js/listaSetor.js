@@ -1,7 +1,90 @@
+document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+document.getElementById('btnLimparBusca').addEventListener('click', function(){
+	document.getElementById('formBuscarSetor').reset();
+}, false);
+
+function buscar(){
+	var utils = require('./../../utilsCliente.js');
+	var where = "";
+
+	if(document.getElementById('nomeSetorBuscar').value != ""){
+		let nome = document.getElementById('nomeSetorBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "nome LIKE '%" + nome + "%'";
+	}
+
+	if(document.getElementById('localSetorBuscar').value != ""){
+		let local = document.getElementById('localSetorBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "local LIKE '%" + local + "%'";
+	}
+
+	if(document.getElementById('siglaSetorBuscar').value != ""){
+		let sigla = document.getElementById('siglaSetorBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "sigla LIKE '%" + sigla + "%'";
+	}
+
+	if(where == ""){
+		utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaSetor = JSON.parse(msg);
+					preencheTabela(listaSetor);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaSetor").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}else{
+		var argumentos = {};
+		argumentos.where = where;
+
+		utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaSetor = JSON.parse(msg);
+					preencheTabela(listaSetor);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaSetor").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}
+}
+
 function preencheTabela(listaSetor){
 	if(!listaSetor){
 		return;
 	}
+	$("#tabelaSetor").empty();
 	for(let i = 0; i < listaSetor.length; i++){
 		$("#tabelaSetor").append("\
 		<tr>\
@@ -62,6 +145,9 @@ utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(r
 		});
 		res.on('end', function(){
 			var vetorSetor = JSON.parse(msg);
+			(function(){
+				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorSetor)}, false);
+			}());
 			preencheTabela(vetorSetor);
 		});
 	}else if(res.statusCode != 747){

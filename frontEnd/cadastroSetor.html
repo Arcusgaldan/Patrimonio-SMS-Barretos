@@ -66,7 +66,9 @@
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">Gerenciamento de Setor 
-                <button class="btn btn-success float-right" data-toggle="modal" data-target="#cadastraModal">Cadastrar Setor</button>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
+                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
+                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
               </div>
               <div class="card-body">
                 <p>
@@ -226,6 +228,53 @@
       </div>   
       <!-- /EXCLUIR MODAL  -->
 
+      <!-- BUSCA MODAL -->
+      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tituloModalCadastrar">Buscar Setores</h5>
+            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              Insira os dados para buscar setores
+            </p>
+
+            <form id="formBuscarSetor">
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="nomeSetorBuscar" class="form-control" name="nomeBuscar" placeholder="Nome">
+                  <label for="nomeSetorBuscar">Nome</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="localSetorBuscar" class="form-control" name="localBuscar" placeholder="Local">
+                  <label for="localSetorBuscar">Local</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="siglaSetorBuscar" class="form-control" name="siglaBuscar" placeholder="Sigla">
+                  <label for="siglaSetorBuscar">Sigla</label>
+                </div>
+              </div>              
+            </form>
+            <div class="modal-footer">
+              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
+              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- /BUSCA MODAL -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>

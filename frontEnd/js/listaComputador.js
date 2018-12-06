@@ -1,7 +1,159 @@
+document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+document.getElementById('btnLimparBusca').addEventListener('click', function(){
+	document.getElementById('formBuscarComputador').reset();
+}, false);
+
+function buscar(){
+	var utils = require('./../../utilsCliente.js');
+	var where = "";
+	if(document.getElementById('patrimonioComputadorBuscar').value != ""){
+		let patrimonio = document.getElementById('patrimonioComputadorBuscar').value;
+		while(patrimonio.length < 6){
+			patrimonio = "0" + patrimonio;
+		}
+		where = "i.patrimonio = '" + patrimonio + "'";
+	}
+
+	if(document.getElementById('processadorComputadorBuscar').value != "0"){
+		let codProcessador = document.getElementById('processadorComputadorBuscar').value;
+		if(where == ""){
+			where = "codProcessador = " + codProcessador;
+		}else{
+			where += " AND codProcessador = " + codProcessador;
+		}
+	}
+
+	if(document.getElementById('qtdMemoriaComputadorBuscar').value != ""){
+		let qtdMemoria = document.getElementById('qtdMemoriaComputadorBuscar').value;
+		let operador = utils.enumOperador(document.getElementById('argumentoQtdMemoriaComputadorBuscar').value);
+
+		if(where == ""){
+			where = "qtdMemoria " +  operador + " " + qtdMemoria;
+		}else{
+			where += " AND qtdMemoria " +  operador + " " + qtdMemoria;
+		}
+	}
+
+	if(document.getElementById('tipoMemoriaComputadorBuscar').value != "0"){
+		let tipoMemoria = document.getElementById('tipoMemoriaComputadorBuscar').value;
+
+		if(where == ""){
+			where = "tipoMemoria = '" + tipoMemoria + "'";
+		}else{
+			where += " AND tipoMemoria = '" + tipoMemoria + "'";
+		}
+	}
+
+	if(document.getElementById('armazenamentoComputadorBuscar').value != ""){
+		let armazenamento = document.getElementById('armazenamentoComputadorBuscar').value;
+		let operador = utils.enumOperador(document.getElementById('argumentoArmazenamentoComputadorBuscar').value);
+
+		if(where == ""){
+			where = "armazenamento " + operador + " " + armazenamento;
+		}else{
+			where += " AND armazenamento" + operador + " " + armazenamento;
+		}
+	}
+
+	if(document.getElementById('sistemaComputadorBuscar').value != '0'){
+		let codSO = document.getElementById('sistemaComputadorBuscar').value;
+
+		if(where == ""){
+			where = "codSO = " + codSO;
+		}else{
+			where += " AND codSO = " + codSO;
+		}
+	}
+
+	if(document.getElementById('reservaComputadorBuscar').value != '0'){
+		let reserva = document.getElementById('reservaComputadorBuscar').value;
+
+		if(where != ""){
+			where += " AND ";
+		}
+
+		if(reserva == '1'){
+			where += "reserva = 1";
+		}else{
+			where += "reserva = 0";
+		}
+	}
+
+	if(document.getElementById('aposentadoComputadorBuscar').value != '0'){
+		let aposentado = document.getElementById('aposentadoComputadorBuscar').value;
+
+		if(where != ""){
+			where += " AND ";
+		}
+
+		if(aposentado == '1'){
+			where += "aposentado = 1";
+		}else{
+			where += "aposentado = 0";
+		}
+	}
+
+	if(where == ""){
+		utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaComputador = JSON.parse(msg);
+					preencheTabela(listaComputador);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaComputador").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar computadores";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}else{
+		//console.log("O where do buscar ficou assim: " + where);
+		var argumentos = {
+			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "s.local setorLocal"], 
+			joins: [
+				{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, 
+				{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, 
+				{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
+				{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], 
+			where: "lt.atual = 1 AND " + where, 
+			orderBy: {campos: "i.patrimonio"}
+		};
+
+		utils.enviaRequisicao("Computador", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					let listaComputador = JSON.parse(msg);
+					preencheTabela(listaComputador);
+				});
+			}else if(res.statusCode == 747){
+				$("#tabelaComputador").empty();
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar computadores";
+				$("#erroModal").modal('show');
+				return;
+			}
+			$("#buscaModal").modal('toggle');
+		});
+	}
+}
+
 function preencheTabela(listaComputador){	
 	if(!listaComputador){
 		return;
 	}
+	$("#tabelaComputador").empty();
 	for(let i = 0; i < listaComputador.length; i++){
 		$("#tabelaComputador").append("\
 		<tr>\
@@ -145,15 +297,18 @@ function preencheProcessador(){
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
+				$("#processadorComputadorBuscar > option").remove();
 
 				$("#processadorComputadorCadastrar").append("<option value='0'>Processador</option>");
 				$("#processadorComputadorAlterar").append("<option value='0'>Processador</option>");
 				$("#selectProcessadorAlterar").append("<option value='0'>Selecione um processador para alterar</option>");
+				$("#processadorComputadorBuscar").append("<option value='0'>Processador</option>");
 
 				for(let i = 0; i < vetorProcessador.length; i++){
 					$("#processadorComputadorCadastrar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 					$("#processadorComputadorAlterar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 					$("#selectProcessadorAlterar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
+					$("#processadorComputadorBuscar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -176,15 +331,18 @@ function preencheSO(){
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();
+				$("#sistemaComputadorBuscar > option").remove();
 
 				$("#sistemaComputadorCadastrar").append("<option value='0'>Sistema Operacional</option>");
 				$("#sistemaComputadorAlterar").append("<option value='0'>Sistema Operacional</option>");
 				$("#selectSOAlterar").append("<option value='0'>Selecione um SO para alterar</option>");
+				$("#sistemaComputadorBuscar").append("<option value='0'>Sistema Operacional</option>");				
 
 				for(let i = 0; i < vetorSO.length; i++){
 					$("#sistemaComputadorCadastrar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
 					$("#sistemaComputadorAlterar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
 					$("#selectSOAlterar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
+					$("#sistemaComputadorBuscar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");					
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -207,6 +365,9 @@ utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, funct
 		});
 		res.on('end', function(){
 			var vetorComputador = JSON.parse(msg);
+			(function(){
+				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorComputador)}, false);
+			}());
 			preencheTabela(vetorComputador);
 		});
 	}else if(res.statusCode != 747){
