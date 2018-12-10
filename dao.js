@@ -13,7 +13,7 @@ module.exports = {
 
 	inserir: function(con, comando, cb){
 		con.connect(function(err){
-			if(err) throw err;
+			if(err){console.log(err); cb(400); return;}
 			console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){ console.log("Erro: " + err); cb(400); return;}				

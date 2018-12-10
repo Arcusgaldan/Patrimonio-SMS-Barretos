@@ -93,6 +93,16 @@ function buscar(){
 		}
 	}
 
+	if(document.getElementById('setorComputadorBuscar').value != '0'){
+		let setor = document.getElementById('setorComputadorBuscar').value;
+
+		if(where == ""){
+			where = "s.id = " + setor;
+		}else{
+			where += " AND s.id = " + setor;
+		}
+	}
+
 	if(where == ""){
 		utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, function(res){
 			if(res.statusCode == 200){
@@ -116,7 +126,7 @@ function buscar(){
 	}else{
 		//console.log("O where do buscar ficou assim: " + where);
 		var argumentos = {
-			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "s.local setorLocal"], 
+			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "s.local setorLocal", "s.id setorId"], 
 			joins: [
 				{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, 
 				{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, 
@@ -149,6 +159,36 @@ function buscar(){
 	}
 }
 
+function preencheSetor(){
+	var utils = require('./../../utilsCliente.js');
+	utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var vetorSetor = JSON.parse(msg);
+				$("#setorComputadorBuscar > option").remove();
+				$("#setorItemTransferir > option").remove();
+								
+				$("#setorItemTransferir").append("<option value='0'>Setor</option");
+				$("#setorComputadorBuscar").append("<option value='0'>Setor</option");
+
+
+				for(let i = 0; i < vetorSetor.length; i++){					
+					$("#setorComputadorBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
+					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");					
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
 function preencheTabela(listaComputador){	
 	if(!listaComputador){
 		return;
@@ -159,9 +199,10 @@ function preencheTabela(listaComputador){
 		<tr>\
 		    <th id='patrimonioComputadorLista"+ i +"'></th>\
 		    <td>\
-				<button class='btn btn-info' scope='row' data-toggle='collapse' href='#collapseComputadorLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarComputadorLista"+ i +"' class='btn btn-warning' data-toggle='modal' data-target='#alteraModal' >Alterar Computador</button>\
-				<button id='excluirComputadorLista"+ i +"' class='btn btn-danger' data-toggle='modal' data-target='#excluirModal'>Excluir Computador</button>\
+				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseComputadorLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
+				<button id='alterarComputadorLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Computador</button>\
+				<button id='excluirComputadorLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Computador</button>\
+				<button id='transferirComputadorLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
 				<div id='collapseComputadorLista"+ i +"' class='collapse mostraLista' >\
 				  <div class='card card-body'>\
 				    <p><strong>Patrimônio: </strong><span id='patrimonioComputadorDados"+i+"'></span></p>\
@@ -172,6 +213,7 @@ function preencheTabela(listaComputador){
 				    <p><strong>Sistema Operacional: </strong> <span id='sistemaOperacionalComputadorDados"+i+"'></span></p>\
 				    <p><strong>Reserva: </strong> <span id='reservaComputadorDados"+i+"'></span></p>\
 				    <p><strong>Aposentado: </strong> <span id='aposentadoComputadorDados"+i+"'></span></p>\
+				    <p><strong>Setor: </strong> <span id='setorComputadorDados"+i+"'></span></p>\
 				    <br>\
 			    	<button class='btn btn-info mb-1' id='backupComputadorDados'>Gerenciar Backups</button>\
 			    	<button class='btn btn-info mb-1' id='procedimentoComputadorDados'>Gerenciar Procedimentos</button>\
@@ -221,6 +263,8 @@ function preencheTabela(listaComputador){
 		else
 			document.getElementById('aposentadoComputadorDados' + i).innerHTML = "Não";		
 
+		document.getElementById('setorComputadorDados' + i).innerHTML = listaComputador[i].setorLocal + " - " + listaComputador[i].setorNome;
+
 		(function(){
 			var computador = listaComputador[i];		
 			document.getElementById("alterarComputadorLista"+ i).addEventListener("click", function(){
@@ -229,6 +273,9 @@ function preencheTabela(listaComputador){
 			document.getElementById("excluirComputadorLista"+ i).addEventListener("click", function(){
 				preencheModalExcluir(computador);
 			}, false);
+			document.getElementById("transferirComputadorLista"+ i).addEventListener("click", function(){
+				preencheModalTransferencia(computador);
+			})
 		}());
 	}	
 }
@@ -259,6 +306,14 @@ function preencheModalExcluir(computador){
 	document.getElementById('idComputadorExcluir').value = computador.id;
 }
 
+function preencheModalTransferencia(computador){
+	document.getElementById('patrimonioItemTransferir').value = computador.itemPatrimonio;
+	document.getElementById('setorItemTransferir').value = computador.setorId;
+	document.getElementById('idItemTransferir').value = computador.codItem;
+	document.getElementById('setorAntigoItemTransferir').value = computador.setorLocal + " - " + computador.setorNome;
+	document.getElementById('idSetorAntigoItemTransferir').value = computador.setorId;
+}
+
 function preenchePatrimonio(){
 	var argumentos = {};
 	argumentos.aliasTabela = "i";
@@ -273,14 +328,11 @@ function preenchePatrimonio(){
 			res.on('end', function(){
 				var vetorItens = JSON.parse(msg);
 				$("#patrimonioComputadorCadastrar > option").remove();
-				$("#patrimonioComputadorAlterar > option").remove();
 
 				$("#patrimonioComputadorCadastrar").append("<option value='0'>Patrimônio</option>");
-				$("#patrimonioComputadorAlterar").append("<option value='0'>Patrimônio</option>");
 
 				for(let i = 0; i < vetorItens.length; i++){
 					$("#patrimonioComputadorCadastrar").append("<option value='" + vetorItens[i].id + "'>" + vetorItens[i].patrimonio + "</option>");
-					$("#patrimonioComputadorAlterar").append("<option value='" + vetorItens[i].id + "'>" + vetorItens[i].patrimonio + "</option>");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -362,6 +414,7 @@ function preencheSO(){
 preenchePatrimonio();
 preencheProcessador();
 preencheSO();
+preencheSetor();
 var utils = require('./../../utilsCliente.js');
 utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, function(res){
 	if(res.statusCode == 200){

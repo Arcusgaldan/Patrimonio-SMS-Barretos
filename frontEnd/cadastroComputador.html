@@ -549,124 +549,188 @@
 
       <!-- BUSCA MODAL -->
       <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalBuscar">Buscar Computadores</h5>
-            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tituloModalBuscar">Buscar Computadores</h5>
+              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
 
-          <div class="modal-body">
-            <p>
-              Insira os dados para buscar computadores
-            </p>
+            <div class="modal-body">
+              <p>
+                Insira os dados para buscar computadores
+              </p>
 
-            <form id="formBuscarComputador">
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="text" pattern="\d{6}" maxlength="6" id="patrimonioComputadorBuscar" class="form-control" name="patrimonioComputadorBuscar" placeholder="Patrimonio">
-                  <label for="patrimonioComputadorBuscar">Patrimônio</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="processadorComputadorBuscar" class="form-control" name="processadorComputadorBuscar" placeholder="Processador">
-                    <option value="0">Processador</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group col-md-4">
-                  <select class="form-control" id="argumentoQtdMemoriaComputadorBuscar">
-                    <option value="0">Igual a</option>
-                    <option value="1">Diferente de</option>
-                    <option value="2">Menor que</option>
-                    <option value="3">Menor ou igual a</option>
-                    <option value="4">Maior que</option>
-                    <option value="5">Maior ou igual a</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-8">
+              <form id="formBuscarComputador">
+                <div class="form-group">
                   <div class="form-label-group">
-                    <input type="number" id="qtdMemoriaComputadorBuscar" class="form-control" name="qtdMemoriaComputadorBuscar" placeholder="Marca" maxlength="2">
-                    <label for="qtdMemoriaComputadorBuscar">Qtd. de Memória (GB)</label>
+                    <input type="text" pattern="\d{6}" maxlength="6" id="patrimonioComputadorBuscar" class="form-control" name="patrimonioComputadorBuscar" placeholder="Patrimonio">
+                    <label for="patrimonioComputadorBuscar">Patrimônio</label>
                   </div>
                 </div>
-              </div>             
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="tipoMemoriaComputadorBuscar" class="form-control" name="tipoMemoriaComputadorBuscar" placeholder="Tipo de Memória">
-                    <option value="0">Tipo de Memória</option>
-                    <option value="DDR2">DDR2</option>
-                    <option value="DDR3">DDR3</option>
-                    <option value="DDR4">DDR4</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group col-md-4">
-                  <select class="form-control" id="argumentoArmazenamentoComputadorBuscar">
-                    <option value="0">Igual a</option>
-                    <option value="1">Diferente de</option>
-                    <option value="2">Menor que</option>
-                    <option value="3">Menor ou igual a</option>
-                    <option value="4">Maior que</option>
-                    <option value="5">Maior ou igual a</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-8">
+                <div class="form-group">
                   <div class="form-label-group">
-                    <input type="number" id="armazenamentoComputadorBuscar" class="form-control" name="armazenamentoComputadorBuscar" placeholder="Marca">
-                    <label for="armazenamentoComputadorBuscar">Armazenamento (GB)</label>
+                    <select id="processadorComputadorBuscar" class="form-control" name="processadorComputadorBuscar" placeholder="Processador">
+                      <option value="0">Processador</option>
+                    </select>
                   </div>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="sistemaComputadorBuscar" class="form-control" name="sistemaComputadorBuscar" placeholder="Sistema Operacional">
-                    <option value="0">Sistema Operacional</option>
-                  </select>
-                </div>
-              </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <select class="form-control" id="argumentoQtdMemoriaComputadorBuscar">
+                      <option value="0">Igual a</option>
+                      <option value="1">Diferente de</option>
+                      <option value="2">Menor que</option>
+                      <option value="3">Menor ou igual a</option>
+                      <option value="4">Maior que</option>
+                      <option value="5">Maior ou igual a</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="form-label-group">
+                      <input type="number" id="qtdMemoriaComputadorBuscar" class="form-control" name="qtdMemoriaComputadorBuscar" placeholder="Marca" maxlength="2">
+                      <label for="qtdMemoriaComputadorBuscar">Qtd. de Memória (GB)</label>
+                    </div>
+                  </div>
+                </div>             
 
-              <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group">
                   <div class="form-label-group">
-                    <select id="reservaComputadorBuscar" class="form-control" name="reservaComputadorBuscar" placeholder="Reserva">
-                      <option value="0">Reserva?</option>
-                      <option value="1">Apenas Reservas</option>
-                      <option value="2">Apenas Ativos</option>
-                    </select>  
+                    <select id="tipoMemoriaComputadorBuscar" class="form-control" name="tipoMemoriaComputadorBuscar" placeholder="Tipo de Memória">
+                      <option value="0">Tipo de Memória</option>
+                      <option value="DDR2">DDR2</option>
+                      <option value="DDR3">DDR3</option>
+                      <option value="DDR4">DDR4</option>
+                    </select>
                   </div>
                 </div>
-               
-                <div class="form-group col-md-6">
-                  <div class="form-label-group">
-                    <select id="aposentadoComputadorBuscar" class="form-control" name="aposentadoComputadorBuscar" placeholder="Aposentado">
-                      <option value="0">Aposentado?</option>
-                      <option value="1">Apenas Aposentados</option>
-                      <option value="2">Apenas Ativos</option>
-                    </select>   
+
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <select class="form-control" id="argumentoArmazenamentoComputadorBuscar">
+                      <option value="0">Igual a</option>
+                      <option value="1">Diferente de</option>
+                      <option value="2">Menor que</option>
+                      <option value="3">Menor ou igual a</option>
+                      <option value="4">Maior que</option>
+                      <option value="5">Maior ou igual a</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="form-label-group">
+                      <input type="number" id="armazenamentoComputadorBuscar" class="form-control" name="armazenamentoComputadorBuscar" placeholder="Marca">
+                      <label for="armazenamentoComputadorBuscar">Armazenamento (GB)</label>
+                    </div>
                   </div>
                 </div>
+
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <select id="sistemaComputadorBuscar" class="form-control" name="sistemaComputadorBuscar" placeholder="Sistema Operacional">
+                      <option value="0">Sistema Operacional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <div class="form-label-group">
+                      <select id="reservaComputadorBuscar" class="form-control" name="reservaComputadorBuscar" placeholder="Reserva">
+                        <option value="0">Reserva?</option>
+                        <option value="1">Apenas Reservas</option>
+                        <option value="2">Apenas Ativos</option>
+                      </select>  
+                    </div>
+                  </div>
+                 
+                  <div class="form-group col-md-6">
+                    <div class="form-label-group">
+                      <select id="aposentadoComputadorBuscar" class="form-control" name="aposentadoComputadorBuscar" placeholder="Aposentado">
+                        <option value="0">Aposentado?</option>
+                        <option value="1">Apenas Aposentados</option>
+                        <option value="2">Apenas Ativos</option>
+                      </select>   
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <select id="setorComputadorBuscar" class="form-control" name="setorItemBuscar" placeholder="Setor">
+                      <option value="0">Setor</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+              <div class="modal-footer">
+                <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>
+                <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
               </div>
-            </form>
-            <div class="modal-footer">
-              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>
-              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
       <!-- /BUSCA MODAL -->
+
+      <!-- TRANSFERE MODAL -->
+      <div class="modal fade" id="transfereModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tituloModalBuscar">Transferência de Item</h5>
+              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioItemTransferir" class="form-control" placeholder="Patrimônio" disabled="true">
+                    <label for="patrimonioItemTransferir">Patrimônio</label>
+                  </div>
+                </div>
+
+                <div class="form-label-group">
+                  <select id="setorItemTransferir" class="form-control"></select>
+                </div>
+              </form>
+              <div id="idItemTransferir" style="display: none;"></div>
+              <div id="setorAntigoItemTransferir" style="display: none;"></div>
+              <div id="idSetorAntigoItemTransferir" style="display: none;"></div>
+              <div class="modal-footer">
+                <button class="btn btn-success" type="button" id="btnModalTransferencia">Transferir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /TRANSFERE MODAL -->
+
+      <!-- CONFIRMA TRANSFERENCIA MODAL -->
+      <div class="modal fade" id="confirmaTransferenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Transferência entre setores</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body"><p style="color: #000">Patrimônio do Item: <strong><span id="patrimonioItemConfirmaTransferencia"></span></strong> <br> Setor de Origem: <strong><span id="setorAntigoItemConfirmaTransferencia"></span></strong><br>Setor de Destino: <strong><span id="setorNovoItemConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
+            <div class="modal-footer">
+              <button class="btn btn-success" id="btnTransferir">SIM</button>
+              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <!-- /CONFIRMA TRANSFERENCIA MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->
@@ -697,7 +761,8 @@
     <script type="text/javascript" src="/js/logoutFront.js"></script>
     <script type="text/javascript" src="/js/listaComputadorFront.js"></script>
     <script type="text/javascript" src="/js/cadastraComputadorFront.js"></script>
-    <!-- <script type="text/javascript" src="/js/alteraComputadorFront.js"></script> -->
+    <script type="text/javascript" src="/js/alteraComputadorFront.js"></script>
+    <script type="text/javascript" src="/js/transfereItemFront.js"></script>
     <!-- <script type="text/javascript" src="/js/excluiComputadorFront.js"></script> -->
 
   </body>

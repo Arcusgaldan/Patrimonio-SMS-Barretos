@@ -33231,7 +33231,7 @@ module.exports = {
 
 	inserir: function(con, comando, cb){
 		con.connect(function(err){
-			if(err) throw err;
+			if(err){console.log(err); cb(400); return;}
 			console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){ console.log("Erro: " + err); cb(400); return;}				
@@ -56997,7 +56997,7 @@ module.exports = {
 
 	opcoesHTTP: function(texto){
 		var retorno = {
-			hostname: "localhost",
+			hostname: "172.17.17.15",
 		    port: 8080,
 		    //mode: 'no-cors',
 		    //Access-Control-Allow-Origin: "http://localhost",
@@ -57128,8 +57128,7 @@ module.exports = {
 	dataHora: function(data){
 		if(data == null || data === "")
 			return false;
-		var regexFront = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
-		var regexBanco = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2,3}Z/;
+		var regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2,3}/;
 		if(data.match(regex))
 			return true;
 		return false;
