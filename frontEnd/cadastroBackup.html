@@ -117,7 +117,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalCadastrar">Cadastrar Backup</h5>
+            <h5 class="modal-title" id="tituloModalBuscar">Buscar Backup</h5>
             <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -131,27 +131,50 @@
             <form id="formCadastroBackup">
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="computadorBackupCadastrar" class="form-control" name="patrimonio" placeholder="Patrimônio" disabled="true">
-                  <label for="computadorBackupCadastrar">Patrimônio</label>
+                  <input type="datetime-local" id="dataBackupBuscar" class="form-control" name="data" placeholder="Data">
+                  <label for="dataBackupBuscar">Data</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="datetime-local" id="dataBackupCadastrar" class="form-control" name="data" placeholder="Data">
-                  <label for="dataBackupCadastrar">Data</label>
+                  <input type="text" id="nomePastaBackupBuscar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
+                  <label for="nomePastaBackupBuscar">Nome da Pasta</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="siglaBackupCadastrar" class="form-control" name="" placeholder="Sigla">
-                  <label for="siglaBackupCadastrar">Sigla</label>
+                  <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
+                  <label for="tamanhoBackupBuscar">Tamanho</label>
                 </div>
-              </div>              
+              </div> 
+
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="discoBackupBuscar" class="form-control" name="disco" placeholder="Disco de Backup">
+                      <option value="0">Disco de Backup</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraDiscoModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraDiscoModal"><i class="fas fa-edit"></i></button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <textarea id="observacaoBackupCadastrar" rows="4" class="form-control" name="observacao" required="required"> </textarea>
+                  <label for="observacaoBackupCadastrar">Observação</label>
+                </div>
+              </div>
+
             </form>
             <div class="modal-footer">
-              <button class="btn btn-success" type="button" id="btnCadastrar">Cadastrar</button>
+              <button class="btn btn-success" type="button" id="btnBuscar">Buscar</button>
             </div>
           </div>
         </div>
@@ -171,31 +194,54 @@
           </div>
           <div class="modal-body">
              <p>
-              Neste formulário serão inseridas as informações para o cadastro de backups
+              Neste formulário serão inseridas as informações para a alteração de backups
             </p>
-            <form id="formAlteraBackup" action='' method="post" encType="multipart/form-data">
+            <form id="formAlteraBackup">
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="nomeBackupAlterar" class="form-control" name="nomeAlterar" placeholder="Nome">
-                  <label for="nomeBackupAlterar">Nome</label>
+                  <input type="datetime-local" id="dataBackupAlterar" class="form-control" name="data" placeholder="Data">
+                  <label for="dataBackupAlterar">Data</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="localBackupAlterar" class="form-control" name="localAlterar" placeholder="Local">
-                  <label for="localBackupAlterar">Local</label>
+                  <input type="text" id="nomePastaBackupAlterar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
+                  <label for="nomePastaBackupAlterar">Nome da Pasta</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="siglaBackupAlterar" class="form-control" name="siglaAlterar" placeholder="Sigla">
-                  <label for="siglaBackupAlterar">Sigla</label>
+                  <input type="number" id="tamanhoBackupAlterar" class="form-control" name="tamanho" placeholder="Tamanho">
+                  <label for="tamanhoBackupAlterar">Tamanho</label>
+                </div>
+              </div> 
+
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="form-label-group">
+                    <select id="discoBackupAlterar" class="form-control" name="disco" placeholder="Disco de Backup">
+                      <option value="0">Disco de Backup</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-3 text-right">
+                  <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraDiscoModal"><i class="fas fa-plus"></i></button>
+                  <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraDiscoModal"><i class="fas fa-edit"></i></button>
+                </div>
+              </div>       
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <textarea id="observacaoBackupAlterar" rows="4" class="form-control" name="observacao" required="required"> </textarea>
+                  <label for="observacaoBackupAlterar">Observação</label>
                 </div>
               </div>
-              <div style="display: none;" id="idBackupAlterar"></div>
             </form>                   
+            <div style="display: none;" id="idBackupAlterar"></div>   
+            <div style="display: none;" id="computadorBackupAlterar"></div>   
 
           </div>
           <div class="modal-footer">
@@ -217,7 +263,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o backup <span id="nomeBackupExcluir" style="color: #000"></span>?</p></div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o backup de <span id="dataBackupExcluir" style="color: #000"></span>?</p></div>
             <div style="display: none;" id="idBackupExcluir"></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnExcluir">SIM</button>
@@ -233,7 +279,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalCadastrar">Buscar Backupes</h5>
+            <h5 class="modal-title" id="tituloModalBuscar">Buscar Backupes</h5>
             <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -244,27 +290,36 @@
               Insira os dados para buscar backups
             </p>
 
-            <form id="formBuscarBackup">
+            <form id="formBuscaBackup">
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="nomeBackupBuscar" class="form-control" name="nomeBuscar" placeholder="Nome">
-                  <label for="nomeBackupBuscar">Nome</label>
+                  <input type="datetime-local" id="dataBackupBuscar" class="form-control" name="data" placeholder="Data">
+                  <label for="dataBackupBuscar">Data</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="localBackupBuscar" class="form-control" name="localBuscar" placeholder="Local">
-                  <label for="localBackupBuscar">Local</label>
+                  <input type="text" id="nomePastaBackupBuscar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
+                  <label for="nomePastaBackupBuscar">Nome da Pasta</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="siglaBackupBuscar" class="form-control" name="siglaBuscar" placeholder="Sigla">
-                  <label for="siglaBackupBuscar">Sigla</label>
+                  <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
+                  <label for="tamanhoBackupBuscar">Tamanho</label>
                 </div>
-              </div>              
+              </div> 
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="discoBackupBuscar" class="form-control" name="disco" placeholder="Disco de Backup">
+                    <option value="0">Disco de Backup</option>
+                  </select>
+                </div>
+              </div>
+          
             </form>
             <div class="modal-footer">
               <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
@@ -299,13 +354,13 @@
     <script type="text/javascript" src="/js/anexaModais.js"></script>
     <script type="text/javascript" src="/js/anexaSidebar.js"></script>
     <script type="text/javascript">
-      document.getElementById('btnSidebarBackup').classList.add('active');
+      document.getElementById('btnSidebarComputador').classList.add('active');
     </script>
     <script type="text/javascript" src="/js/logoutFront.js"></script>
     <script type="text/javascript" src="/js/listaBackupFront.js"></script>
-    <script type="text/javascript" src="/js/cadastraBackupFront.js"></script>
-    <script type="text/javascript" src="/js/alteraBackupFront.js"></script>
-    <script type="text/javascript" src="/js/excluiBackupFront.js"></script>
+    <!-- <script type="text/javascript" src="/js/cadastraBackupFront.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/alteraBackupFront.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/excluiBackupFront.js"></script> -->
 
   </body>
 

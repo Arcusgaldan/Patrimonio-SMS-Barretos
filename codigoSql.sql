@@ -156,6 +156,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBDiscoBackup`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBDiscoBackup` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBDiscoBackup` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `local` VARCHAR(100) NOT NULL,
+  `tamanho` FLOAT NOT NULL,
+  `observacao` TEXT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `DBPatrimonioSMS`.`TBBackup`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBBackup` ;
@@ -163,15 +179,22 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBBackup` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBBackup` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `data` DATETIME NOT NULL,
-  `local` VARCHAR(80) NOT NULL,
   `nomePasta` VARCHAR(80) NOT NULL,
-  `tamanho` FLOAT NULL,
+  `tamanho` FLOAT NOT NULL,
   `codComputador` INT NOT NULL,
-  PRIMARY KEY (`id`, `codComputador`),
+  `codDisco` INT NOT NULL,
+  `observacao` TEXT NULL,
+  PRIMARY KEY (`id`, `codComputador`, `codDisco`),
   INDEX `fk_TBBackup_TBComputador1_idx` (`codComputador` ASC),
+  INDEX `fk_TBBackup_TBDiscoBackup1_idx` (`codDisco` ASC),
   CONSTRAINT `fk_TBBackup_TBComputador1`
     FOREIGN KEY (`codComputador`)
     REFERENCES `DBPatrimonioSMS`.`TBComputador` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TBBackup_TBDiscoBackup1`
+    FOREIGN KEY (`codDisco`)
+    REFERENCES `DBPatrimonioSMS`.`TBDiscoBackup` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -219,6 +242,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 
 INSERT INTO TBUsuario VALUES (0, "Administrador", "123.456.789-10", "admin@email.com", "bd7822c76f3ca74cd699115b8128cbcb2c908ae53f2078bce4b5abd901401818", 0);

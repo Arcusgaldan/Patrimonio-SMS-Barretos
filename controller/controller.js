@@ -88,6 +88,9 @@ module.exports = {
 			if(argumentos.campos && argumentos.joins){
 				sql = "SELECT " + argumentos.campos + " FROM TB" + alvo;
 				for(let i = 0; i < argumentos.joins.length; i++){
+					if(argumentos.joins[i].tipo){
+						sql += " " + argumentos.joins[i].tipo;
+					}
 					sql += " JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on;
 				}
 			}else
@@ -141,12 +144,18 @@ module.exports = {
 
 		if(argumentos.aliasTabela){
 			aliasTabela = argumentos.aliasTabela;
+			orderCampos = aliasTabela + ".id";
 		}
 
 		sql += selectCampos + " FROM TB" + alvo + " " + aliasTabela + " ";
 
 		if(argumentos.joins){
 			for(let i = 0; i < argumentos.joins.length; i++){
+				// console.log("Em controller:buscar, joins[i] = " + JSON.stringify(argumentos.joins[i]));
+				if(argumentos.joins[i].tipo){
+					joins += argumentos.joins[i].tipo + " ";
+					//console.log("Havia um tipo de join: " + argumentos.joins[i].tipo);
+				}
 				joins += "JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on + " ";
 			}
 		}
@@ -160,7 +169,7 @@ module.exports = {
 				orderCampos = argumentos.orderBy.campos;
 			}
 
-			if(argumentos.orderBy.sentido && (sentido == "ASC" || sentido == "DESC")){
+			if(argumentos.orderBy.sentido && (argumentos.orderBy.sentido == "ASC" || argumentos.orderBy.sentido == "DESC")){
 				orderSentido = argumentos.orderBy.sentido
 			}
 		}

@@ -54,6 +54,16 @@ module.exports = {
 					cb(resposta);
 				});
 				break;
+			case 'LISTARCOMPUTADOR':
+				this.listarComputador(msg.idComputador, function(res){
+					if(res){
+						resposta.codigo = 200;
+						resposta.msg = JSON.stringify(res);
+					}else{
+						resposta.codigo = 400;
+					}
+					cb(resposta);
+				});
 			default:
 				cb(410);
 		}
@@ -66,8 +76,8 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(backup.id) || !validates.data(backup.data) || !validates.req(backup.local) || !validates.req(backup.nomePasta) || 
-			!validates.req(backup.codComputador)){
+		if(!validates.req(backup.id) || !validates.data(backup.data) || !validates.req(backup.codDisco) || !validates.req(backup.nomePasta) || 
+			!validates.req(backup.codComputador) || !validates.req(backup.tamanho)){
 			return false;
 		}else{
 			return true;
@@ -115,5 +125,22 @@ module.exports = {
 		require('./controller.js').buscar("Backup", argumentos, function(res){
 			cb(res);
 		});		
+	}, 
+
+	listarComputador: function(idComputador, cb){
+		var argumentos = {};
+		argumentos.where = "codComputador = " + idComputador;
+		argumentos.orderBy = {campos: "b.data", sentido: "DESC"};
+		argumentos.aliasTabela = "b";
+		argumentos.selectCampos = ["b.*", "i.patrimonio patrimonioComputador", "d.nome discoNome"];
+		argumentos.joins = [
+			{tabela: "TBComputador c", on: "c.id = b.codComputador"},
+			{tabela: "TBItem i", on: "i.id = c.codItem"},
+			{tabela: "TBDiscoBackup d", on: "d.id = b.codDisco"}
+		];
+
+		require('./controller.js').buscar("Backup", argumentos, function(res){
+			cb(res);
+		});
 	}
 }

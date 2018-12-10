@@ -128,8 +128,8 @@ function buscar(){
 		var argumentos = {
 			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "s.local setorLocal", "s.id setorId"], 
 			joins: [
-				{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador"}, 
-				{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO"}, 
+				{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
+				{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 
 				{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
 				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], 
@@ -215,16 +215,16 @@ function preencheTabela(listaComputador){
 				    <p><strong>Aposentado: </strong> <span id='aposentadoComputadorDados"+i+"'></span></p>\
 				    <p><strong>Setor: </strong> <span id='setorComputadorDados"+i+"'></span></p>\
 				    <br>\
-			    	<button class='btn btn-info mb-1' id='backupComputadorDados'>Gerenciar Backups</button>\
-			    	<button class='btn btn-info mb-1' id='procedimentoComputadorDados'>Gerenciar Procedimentos</button>\
+			    	<button class='btn btn-info mb-1' id='backupComputadorDados"+i+"'>Gerenciar Backups</button>\
+			    	<button class='btn btn-info mb-1' id='procedimentoComputadorDados"+i+"'>Gerenciar Procedimentos</button>\
 				  </div>\
 				</div>\
 		    </td>\
 		  </tr>\
 		");
 
-		document.getElementById('backupComputadorDados').addEventListener('click', function(){location.href = "/backup/" + listaComputador[i].itemPatrimonio;}, false);
-		document.getElementById('procedimentoComputadorDados').addEventListener('click', function(){location.href = "/procedimento/" + listaComputador[i].itemPatrimonio;}, false);
+		document.getElementById('backupComputadorDados' + i).addEventListener('click', function(){location.href = "/backup/" + listaComputador[i].itemPatrimonio;}, false);
+		document.getElementById('procedimentoComputadorDados' + i).addEventListener('click', function(){location.href = "/procedimento/" + listaComputador[i].itemPatrimonio;}, false);
 
 		document.getElementById('patrimonioComputadorLista' + i).innerHTML = listaComputador[i].itemPatrimonio;
 		document.getElementById('patrimonioComputadorDados' + i).innerHTML = listaComputador[i].itemPatrimonio;
