@@ -1,16 +1,20 @@
 ﻿-- RESOLVIDOS
 ![V] Fazer busca em todos os CRUD
+[V] Considerar forma de adicionar backup e procedimento em computador (select com ações possiveis, botões direto no item da lista, collapse (?))
+[V] Considerar criar uma tabela para discos de backup (ex: o PC 123) para poder gerenciar espaço disponível, relatórios etc.
+[V] Fazer botão para limpar formulário (usando form.reset()) de busca
 
 -- PENDENTES
 [-] Considerar criar uma tabela de locais para setor
 [-] Considerar criar um campo "motivo" em TBLogTransferencia
 ![-] Fazer transferência de patrimônio entre setores
 [-] Colocar checkbox em todas as listas para facilitar ações em lote
-[-] Considerar forma de adicionar backup e procedimento em computador (select com ações possiveis, botões direto no item da lista, collapse (?))
 [-] Fazer validação campo-a-campo em todos os formulários
 [-] Considerar paginação para listagens
+[-] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco
+![-] Criar Model e Controller de TBDiscoBackup
+[-] Adicionar campo IP em computador
 
 -- EM ANDAMENTO
-[#] Fazer botão para limpar formulário (usando form.reset()) de busca
 
 -- ABORTADOS
