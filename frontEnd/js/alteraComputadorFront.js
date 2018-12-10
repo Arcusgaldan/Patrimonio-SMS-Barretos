@@ -24731,6 +24731,12 @@ function alterar(){
 		computador.aposentado = 0;
 	}
 
+	if(computador.reserva == 1 && computador.aposentado == 1){
+		document.getElementById('msgErroModal').innerHTML = "Computador não pode ser reserva e aposentado ao mesmo tempo.";
+		$("#erroModal").modal('show');
+		return;
+	}
+
 	console.log("Computador a ser alterado: " + JSON.stringify(computador));
 
 	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'ALTERAR', {token: localStorage.token, msg: computador}, function(res){

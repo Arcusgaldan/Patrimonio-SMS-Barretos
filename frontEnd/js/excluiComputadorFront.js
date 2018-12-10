@@ -24680,115 +24680,21 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
-document.getElementById('btnCadastrar').addEventListener('click', cadastrar, false);
-document.getElementById('btnCadastrarProcessador').addEventListener('click', cadastrarProcessador, false);
-document.getElementById('btnCadastrarSO').addEventListener('click', cadastrarSO, false);
+document.getElementById('btnExcluir').addEventListener('click', excluir, false);
 
-function cadastrar(){
-	var computador = require('./../../model/mComputador.js').novo();
-	computador.codItem = document.getElementById('patrimonioComputadorCadastrar').value;
-	if(computador.codItem == '0'){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio";
-		$("#erroModal").modal('show');
-		return;
-	}
-	
-	if(document.getElementById('processadorComputadorCadastrar').value == '0'){
-		computador.codProcessador = null;
-	}else{
-		computador.codProcessador = document.getElementById('processadorComputadorCadastrar').value;
-	}
+document.getElementById('btnModalProcessadorExcluir').addEventListener('click', function(){
+	document.getElementById('nomeProcessadorExcluir').innerHTML = $('#selectProcessadorAlterar').children("option:selected").text()
+	document.getElementById('idProcessadorExcluir').value = document.getElementById('selectProcessadorAlterar').value;
+	$("#excluirProcessadorModal").modal('show');
+}, false);
+document.getElementById('btnExcluirProcessador').addEventListener('click', excluirProcessador, false);
 
-	if(document.getElementById('qtdMemoriaComputadorCadastrar').value == "" || document.getElementById('qtdMemoriaComputadorCadastrar').value == " "){
-		computador.qtdMemoria = null;
-	}else{
-		computador.qtdMemoria = document.getElementById('qtdMemoriaComputadorCadastrar').value;
-	}
-
-	if(document.getElementById('tipoMemoriaComputadorCadastrar').value == '0'){
-		computador.tipoMemoria = null;
-	}else{
-		computador.tipoMemoria = document.getElementById('tipoMemoriaComputadorCadastrar').value;
-	}
-
-	if(document.getElementById('armazenamentoComputadorCadastrar').value == '')	{
-		computador.armazenamento = null;
-	}else{
-		computador.armazenamento = document.getElementById('armazenamentoComputadorCadastrar').value;
-	}
-
-	if(document.getElementById('sistemaComputadorCadastrar').value == '0'){
-		computador.codSO = null;
-	}else{
-		computador.codSO = document.getElementById('sistemaComputadorCadastrar').value;
-	}
-
-	if(document.getElementById('reservaComputadorCadastrar').checked){
-		computador.reserva = 1;
-	}else{
-		computador.reserva = 0;
-	}
-
-	if(document.getElementById('aposentadoComputadorCadastrar').checked){
-		computador.aposentado = 1;
-	}else{
-		computador.aposentado = 0;
-	}
-
-	if(computador.reserva == 1 && computador.aposentado == 1){
-		document.getElementById('msgErroModal').innerHTML = "Computador não pode ser reserva e aposentado ao mesmo tempo.";
-		$("#erroModal").modal('show');
-		return;
-	}
-
-	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'INSERIR', {token: localStorage.token, msg: computador}, function(res){
-		if(res.statusCode == 200){
-			$("#sucessoModal").modal('show');
-			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-	  		setTimeout(function(){location.reload();} , 2000);
-		}else{
-			document.getElementById('msgErroModal').innerHTML = "Não foi possível cadastrar o computador";
-			$("#erroModal").modal('show');
-			return;
-		}
-	});
-}
-
-function cadastrarProcessador(){
-	var processador = require('./../../model/mProcessador.js').novo();
-
-	processador.nome = document.getElementById('nomeProcessadorCadastrar').value;
-	if(processador.nome == ""){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um nome para o processador";
-		$("#erroModal").modal('show');
-		return;
-	}
-
-	require('./../../utilsCliente.js').enviaRequisicao('Processador', 'INSERIR', {token: localStorage.token, msg: processador}, function(res){
-		if(res.statusCode == 200){
-			$("#cadastraProcessadorModal").modal('toggle');
-			preencheProcessador();
-		}
-	});
-}
-
-function cadastrarSO(){
-	var SO = require('./../../model/mSistemaOperacional.js').novo();
-
-	SO.nome = document.getElementById('nomeSOCadastrar').value;
-	if(SO.nome == ""){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um nome para o Sistema Operacional";
-		$("#erroModal").modal('show');
-		return;
-	}
-
-	require('./../../utilsCliente.js').enviaRequisicao('SistemaOperacional', 'INSERIR', {token: localStorage.token, msg: SO}, function(res){
-		if(res.statusCode == 200){
-			$("#cadastraSOModal").modal('toggle');
-			preencheSO();
-		}
-	});
-}
+document.getElementById('btnModalSOExcluir').addEventListener('click', function(){
+	document.getElementById('nomeSOExcluir').innerHTML = $('#selectSOAlterar').children("option:selected").text()
+	document.getElementById('idSOExcluir').value = document.getElementById('selectSOAlterar').value;
+	$("#excluirSOModal").modal('show');
+}, false);
+document.getElementById('btnExcluirSO').addEventListener('click', excluirSO, false);
 
 function preencheProcessador(){
 	require('./../../utilsCliente.js').enviaRequisicao("Processador", "LISTAR", {token: localStorage.token}, function(res){
@@ -24802,15 +24708,18 @@ function preencheProcessador(){
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
+				$("#processadorComputadorBuscar > option").remove();
 
 				$("#processadorComputadorCadastrar").append("<option value='0'>Processador</option>");
 				$("#processadorComputadorAlterar").append("<option value='0'>Processador</option>");
 				$("#selectProcessadorAlterar").append("<option value='0'>Selecione um processador para alterar</option>");
+				$("#processadorComputadorBuscar").append("<option value='0'>Processador</option>");
 
 				for(let i = 0; i < vetorProcessador.length; i++){
 					$("#processadorComputadorCadastrar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 					$("#processadorComputadorAlterar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 					$("#selectProcessadorAlterar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
+					$("#processadorComputadorBuscar").append("<option value='" + vetorProcessador[i].id + "'>" + vetorProcessador[i].nome + "</option>");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -24833,15 +24742,18 @@ function preencheSO(){
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();
+				$("#sistemaComputadorBuscar > option").remove();
 
 				$("#sistemaComputadorCadastrar").append("<option value='0'>Sistema Operacional</option>");
 				$("#sistemaComputadorAlterar").append("<option value='0'>Sistema Operacional</option>");
 				$("#selectSOAlterar").append("<option value='0'>Selecione um SO para alterar</option>");
+				$("#sistemaComputadorBuscar").append("<option value='0'>Sistema Operacional</option>");				
 
 				for(let i = 0; i < vetorSO.length; i++){
 					$("#sistemaComputadorCadastrar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
 					$("#sistemaComputadorAlterar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
 					$("#selectSOAlterar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");
+					$("#sistemaComputadorBuscar").append("<option value='" + vetorSO[i].id + "'>" + vetorSO[i].nome + "</option>");					
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -24851,52 +24763,54 @@ function preencheSO(){
 		}
 	});
 }
-},{"./../../model/mComputador.js":168,"./../../model/mProcessador.js":169,"./../../model/mSistemaOperacional.js":170,"./../../utilsCliente.js":171}],168:[function(require,module,exports){
-module.exports = {
-	novo: function(){
-		var final = {};
-		final.id = 0;
-		final.qtdMemoria = 0;
-		final.tipoMemoria = '';
-		final.armazenamento = 0;
-		final.codItem = 0;
-		final.reserva = 0;
-		final.aposentado = 0;
-		final.codProcessador = 0;
-		final.codSO = 0;
-		return final;
-	},
 
-	isString: function(atributo){
-		var strings = ['processador', 'tipoMemoria', 'SO'];
-		for(let i = 0; i < strings.length; i++){
-			if(atributo == strings[i])
-				return true;
-		}
-		return false;
-	}
-}
-},{}],169:[function(require,module,exports){
-module.exports = {
-	novo: function(){
-		var final = {};
-		final.id = 0;
-		final.nome = '';
-		return final;
-	},
 
-	isString: function(atributo){
-		var strings = ['nome'];
-		for(let i = 0; i < strings.length; i++){
-			if(atributo == strings[i])
-				return true;
+function excluir(){
+	var idComputador = document.getElementById('idComputadorExcluir').value;
+
+	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'EXCLUIR', {token: localStorage.token, msg: {id: idComputador}}, function(res){
+		if(res.statusCode == 200){
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	    	setTimeout(function(){location.reload();} , 2000);
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
 		}
-		return false;
-	}
+	});
 }
-},{}],170:[function(require,module,exports){
-arguments[4][169][0].apply(exports,arguments)
-},{"dup":169}],171:[function(require,module,exports){
+
+function excluirProcessador(){
+	var idProcessador = document.getElementById('idProcessadorExcluir').value;
+
+	require('./../../utilsCliente.js').enviaRequisicao('Processador', 'EXCLUIR', {token: localStorage.token, msg: {id: idProcessador}}, function(res){
+		if(res.statusCode == 200){
+			preencheProcessador();
+			$("#excluirProcessadorModal").modal('toggle');
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function excluirSO(){
+	var idSO = document.getElementById('idSOExcluir').value;
+
+	require('./../../utilsCliente.js').enviaRequisicao('SistemaOperacional', 'EXCLUIR', {token: localStorage.token, msg: {id: idSO}}, function(res){
+		if(res.statusCode == 200){
+			preencheSO();
+			$("#excluirSOModal").modal('toggle');
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+},{"./../../utilsCliente.js":168}],168:[function(require,module,exports){
 (function (Buffer){
 module.exports = {
 	senhaHash: function(senha){

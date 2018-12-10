@@ -53,6 +53,12 @@ function cadastrar(){
 		computador.aposentado = 0;
 	}
 
+	if(computador.reserva == 1 && computador.aposentado == 1){
+		document.getElementById('msgErroModal').innerHTML = "Computador não pode ser reserva e aposentado ao mesmo tempo.";
+		$("#erroModal").modal('show');
+		return;
+	}
+
 	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'INSERIR', {token: localStorage.token, msg: computador}, function(res){
 		if(res.statusCode == 200){
 			$("#sucessoModal").modal('show');
