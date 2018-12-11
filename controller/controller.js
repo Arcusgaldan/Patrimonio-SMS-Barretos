@@ -113,7 +113,7 @@ module.exports = {
 					sql += " ASC;";
 				}
 			}
-			console.log("SQL em controller:listar = " + sql);
+			// console.log("SQL em controller:listar = " + sql);
 		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -176,7 +176,7 @@ module.exports = {
 
 		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
 
-		console.log("Em controller::buscar, SQL = " + sql);
+		console.log("Em controller::buscar, SQL:\n" + sql);
 
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){

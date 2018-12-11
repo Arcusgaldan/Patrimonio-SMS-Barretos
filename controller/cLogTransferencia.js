@@ -55,7 +55,8 @@ module.exports = {
 				});
 				break;
 			default:
-				cb(410);
+				resposta.codigo = 410;
+				cb(resposta);
 		}
 	},
 

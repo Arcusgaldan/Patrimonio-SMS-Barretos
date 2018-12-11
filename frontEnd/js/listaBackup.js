@@ -5,7 +5,7 @@ document.getElementById('btnLimparBusca').addEventListener('click', function(){
 
 function buscaComputador(cb){
 	var patrimonio = window.location.pathname.split("/")[2];
-	console.log("Em listaBackup::buscaComputador, patrimonio = " + patrimonio);
+	// console.log("Em listaBackup::buscaComputador, patrimonio = " + patrimonio);
 
 	var argumentos = {};
 
@@ -21,7 +21,7 @@ function buscaComputador(cb){
 			});
 			res.on('end', function(){
 				var computador = JSON.parse(msg)[0];
-				console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
+				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
 				cb(computador.id);
 			});
 		}else{
@@ -35,114 +35,154 @@ function buscar(){
 	var utils = require('./../../utilsCliente.js');
 	var where = "";
 
-	if(document.getElementById('patrimonioBackupBuscar').value != ""){
-		let patrimonio = document.getElementById('patrimonioBackupBuscar').value;
-
-		while(patrimonio.length < 6){
-			patrimonio = "0" + patrimonio;
-		}
+	if(document.getElementById('dataBackupBuscar').value != ""){
+		let data = document.getElementById('dataBackupBuscar').value;
+		let operador = utils.enumOperador(document.getElementById('argumentoDataBackupBuscar').value);
 
 		if(where != "")
 			where += " AND ";
 
-		where += "patrimonio = '" + patrimonio + "'";
+		where += "data " + operador + " '" + data + "'";
 	}
 
-	if(document.getElementById('marcaBackupBuscar').value != ""){
-		let marca = document.getElementById('marcaBackupBuscar').value;
+	if(document.getElementById('nomePastaBackupBuscar').value != ""){
+		let nomePasta = document.getElementById('nomePastaBackupBuscar').value;
 
 		if(where != "")
 			where += " AND ";
 
-		where += "marca LIKE '%" + marca + "%'";
+		where += "nomePasta LIKE '%" + nomePasta + "%'";
 	}
 
-	if(document.getElementById('modeloBackupBuscar').value != ""){
-		let modelo = document.getElementById('modeloBackupBuscar').value;
+	if(document.getElementById('tamanhoBackupBuscar').value != ""){
+		let tamanho = document.getElementById('tamanhoBackupBuscar').value;
+		let operador = utils.enumOperador(document.getElementById('argumentoTamanhoBackupBuscar').value);
 
 		if(where != "")
 			where += " AND ";
 
-		where += "modelo LIKE '%" + modelo + "%'";
+		where += "b.tamanho " + operador + " " + tamanho;
 	}
 
-	if(document.getElementById('setorBackupBuscar').value != '0'){
-		let setor = document.getElementById('setorBackupBuscar').value;
+	if(document.getElementById('discoBackupBuscar').value != '0'){
+		let disco = document.getElementById('discoBackupBuscar').value;
 
 		if(where != "")
 			where += " AND ";
 
-		where += "codSetor = " + setor;
-	}
-
-	if(document.getElementById('tipoBackupBuscar').value != '0'){
-		let tipo = document.getElementById('tipoBackupBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "codTipoBackup = " + tipo;
-	}
+		where += "codDisco = " + disco;
+	}	
 
 	if(where == ""){
-		utils.enviaRequisicao("Backup", "LISTAR", {token: localStorage.token}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaBackup = JSON.parse(msg);
-					preencheTabela(listaBackup);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaBackup").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+		buscaComputador(function(idComputador){
+			if(!idComputador){
+				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
 				$("#erroModal").modal('show');
 				return;
 			}
-			$("#buscaModal").modal('toggle');
+			utils.enviaRequisicao("Backup", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
+				if(res.statusCode == 200){
+					var msg = "";
+					res.on('data', function(chunk){
+						msg += chunk;
+					});
+					res.on('end', function(){
+						let listaBackup = JSON.parse(msg);
+						preencheTabela(listaBackup);
+					});
+				}else if(res.statusCode == 747){
+					$("#tabelaBackup").empty();
+				}else{
+					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar backups";
+					$("#erroModal").modal('show');
+					return;
+				}
+				$("#buscaModal").modal('toggle');
+			});
 		});
 	}else{
-		//console.log("O where da busca é: " + where);
-		var argumentos = {
-			selectCampos: ["TBBackup.*", "ti.nome tipoNome", "s.local setorLocal", "s.nome setorNome", "s.id setorId"], 
-			joins: [
-				{tabela: "TBTipoBackup ti", on: "ti.id = TBBackup.codTipoBackup"}, 
-				{tabela: "TBLogTransferencia lt", on: "lt.codBackup = TBBackup.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
-			], 
-			where: "lt.atual = 1 AND " + where, 
-			orderBy: {campos: "patrimonio"}
-		};
-		
-		utils.enviaRequisicao("Backup", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaBackup = JSON.parse(msg);
-					preencheTabela(listaBackup);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaBackup").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+		buscaComputador(function(idComputador){
+			if(!idComputador){
+				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
 				$("#erroModal").modal('show');
 				return;
 			}
-			$("#buscaModal").modal('toggle');
+			var argumentos = {};
+			argumentos.where = "codComputador = " + idComputador + " AND " + where;
+			argumentos.orderBy = {campos: "b.data", sentido: "DESC"};
+			argumentos.aliasTabela = "b";
+			argumentos.selectCampos = ["b.*", "i.patrimonio patrimonioComputador", "d.nome discoNome"];
+			argumentos.joins = [
+				{tabela: "TBComputador c", on: "c.id = b.codComputador"},
+				{tabela: "TBItem i", on: "i.id = c.codItem"},
+				{tabela: "TBDiscoBackup d", on: "d.id = b.codDisco"}
+			];
+			
+			utils.enviaRequisicao("Backup", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+				if(res.statusCode == 200){
+					var msg = "";
+					res.on('data', function(chunk){
+						msg += chunk;
+					});
+					res.on('end', function(){
+						let listaBackup = JSON.parse(msg);
+						preencheTabela(listaBackup);
+					});
+				}else if(res.statusCode == 747){
+					$("#tabelaBackup").empty();
+				}else{
+					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar backups";
+					$("#erroModal").modal('show');
+					return;
+				}
+				$("#buscaModal").modal('toggle');
+			});
 		});
 	}
+}
+
+function preencheDisco(){
+	require('./../../utilsCliente.js').enviaRequisicao("DiscoBackup", "LISTAR", {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var vetorDisco = JSON.parse(msg);
+
+				$("#discoBackupCadastrar > option").remove();
+				$("#discoBackupAlterar > option").remove();
+				$("#discoBackupBuscar > option").remove();
+				$("#selectDiscoAlterar > option").remove();
+
+				$("#discoBackupCadastrar").append("<option value='0'>Disco de Backup</option>");
+				$("#discoBackupBuscar").append("<option value='0'>Disco de Backup</option>");
+				$("#discoBackupAlterar").append("<option value='0'>Disco de Backup</option>");
+				$("#selectDiscoAlterar").append("<option value='0'>Selecione o disco a ser alterado</option>");
+
+				for(let i = 0; i < vetorDisco.length; i++){
+					$("#discoBackupCadastrar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
+					$("#discoBackupAlterar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
+					$("#discoBackupBuscar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
+					$("#selectDiscoAlterar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar discos de backup";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
 }
 
 function preencheTabela(listaBackup){	
 	if(!listaBackup){
 		return;
 	}
+	
+	var utils = require('./../../utilsCliente.js');
+
 	$("#tabelaBackup").empty();
 	for(let i = 0; i < listaBackup.length; i++){
 		$("#tabelaBackup").append("\
@@ -155,10 +195,10 @@ function preencheTabela(listaBackup){
 				<div id='collapseBackupLista"+ i +"' class='collapse mostraLista' >\
 				  <div class='card card-body'>\
 				    <p><strong>Data: </strong><span id='dataBackupDados"+i+"'></span></p>\
+				    <p><strong>Disco de Backup: </strong> <span id='discoBackupDados"+i+"'></span></p>\
 				    <p><strong>Nome da pasta: </strong> <span id='nomePastaBackupDados"+i+"'></span></p>\
 				    <p><strong>Tamanho: </strong> <span id='tamanhoBackupDados"+i+"'></span></p>\
 				    <p><strong>Computador: </strong> <span id='computadorBackupDados"+i+"'></span></p>\
-				    <p><strong>Disco de Backup: </strong> <span id='discoBackupDados"+i+"'></span></p>\
 				    <p><strong>Observação: </strong> <span id='observacaoBackupDados"+i+"'></span></p>\
 				  </div>\
 				</div>\
@@ -166,18 +206,18 @@ function preencheTabela(listaBackup){
 		  </tr>\
 		");
 
-		document.getElementById('dataBackupLista').innerHTML = listaBackup[i].data;
-		document.getElementById('dataBackupDados').innerHTML = listaBackup[i].data;
+		document.getElementById('dataBackupLista' + i).innerHTML = utils.formataDataHora(listaBackup[i].data);
+		document.getElementById('dataBackupDados' + i).innerHTML = utils.formataDataHora(listaBackup[i].data);
 
-		document.getElementById('nomePastaBackupDados').innerHTML = listaBackup[i].nomePasta;
-		document.getElementById('tamanhoBackupDados').innerHTML = listaBackup[i].tamanho;
-		document.getElementById('computadorBackupDados').innerHTML = listaBackup[i].patrimonioComputador;
-		document.getElementById('discoBackupDados').innerHTML = listaBackup[i].nomeDisco;
+		document.getElementById('nomePastaBackupDados' + i).innerHTML = listaBackup[i].nomePasta;
+		document.getElementById('tamanhoBackupDados' + i).innerHTML = listaBackup[i].tamanho + " MB";
+		document.getElementById('computadorBackupDados' + i).innerHTML = listaBackup[i].patrimonioComputador;
+		document.getElementById('discoBackupDados' + i).innerHTML = listaBackup[i].discoNome;
 
 		if(!listaBackup[i].observacao || listaBackup[i].observacao == ""){
-			document.getElementById('observacaoBackupDados').innerHTML = '-';
+			document.getElementById('observacaoBackupDados' + i).innerHTML = '-';
 		}else{
-			document.getElementById('observacaoBackupDados').innerHTML = listaBackup[i].observacao;			
+			document.getElementById('observacaoBackupDados' + i).innerHTML = listaBackup[i].observacao;			
 		}
 
 		(function(){
@@ -193,7 +233,7 @@ function preencheTabela(listaBackup){
 }
 
 function preencheModalAlterar(backup){
-	document.getElementById('dataBackupAlterar').value = backup.data;
+	document.getElementById('dataBackupAlterar').value = backup.data.substring(0, 16);
 	document.getElementById('nomePastaBackupAlterar').value = backup.nomePasta;
 	document.getElementById('tamanhoBackupAlterar').value = backup.tamanho;
 	document.getElementById('discoBackupAlterar').value = backup.codDisco;
@@ -206,6 +246,8 @@ function preencheModalExcluir(backup){
 	document.getElementById('idBackupExcluir').value = backup.id;
 }
 
+
+preencheDisco();
 var utils = require('./../../utilsCliente.js');
 buscaComputador(function(idComputador){
 	if(!idComputador){
@@ -213,7 +255,7 @@ buscaComputador(function(idComputador){
 		$("#erroModal").modal('show');
 		return;
 	}
-	console.log("O ID do computador buscado é: " + idComputador);
+	// console.log("O ID do computador buscado é: " + idComputador);
 	utils.enviaRequisicao("Backup", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";

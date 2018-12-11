@@ -131,21 +131,21 @@
             <form id="formCadastroBackup">
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="datetime-local" id="dataBackupBuscar" class="form-control" name="data" placeholder="Data">
+                  <input type="datetime-local" id="dataBackupCadastrar" class="form-control" name="data" placeholder="Data">
                   <label for="dataBackupBuscar">Data</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="text" id="nomePastaBackupBuscar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
+                  <input type="text" id="nomePastaBackupCadastrar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
                   <label for="nomePastaBackupBuscar">Nome da Pasta</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
+                  <input type="number" id="tamanhoBackupCadastrar" class="form-control" name="tamanho" placeholder="Tamanho">
                   <label for="tamanhoBackupBuscar">Tamanho</label>
                 </div>
               </div> 
@@ -153,7 +153,7 @@
               <div class="form-row">
                 <div class="form-group col-md-9">
                   <div class="form-label-group">
-                    <select id="discoBackupBuscar" class="form-control" name="disco" placeholder="Disco de Backup">
+                    <select id="discoBackupCadastrar" class="form-control" name="disco" placeholder="Disco de Backup">
                       <option value="0">Disco de Backup</option>
                     </select>
                   </div>
@@ -167,14 +167,14 @@
 
               <div class="form-group">
                 <div class="form-label-group">
-                  <textarea id="observacaoBackupCadastrar" rows="4" class="form-control" name="observacao" required="required"> </textarea>
+                  <textarea id="observacaoBackupCadastrar" rows="4" class="form-control" name="observacao"> </textarea>
                   <label for="observacaoBackupCadastrar">Observação</label>
                 </div>
               </div>
 
             </form>
             <div class="modal-footer">
-              <button class="btn btn-success" type="button" id="btnBuscar">Buscar</button>
+              <button class="btn btn-success" type="button" id="btnCadastrar">Cadastrar</button>
             </div>
           </div>
         </div>
@@ -279,7 +279,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalBuscar">Buscar Backupes</h5>
+            <h5 class="modal-title" id="tituloModalBuscar">Buscar Backups</h5>
             <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -290,12 +290,25 @@
               Insira os dados para buscar backups
             </p>
 
-            <form id="formBuscaBackup">
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="datetime-local" id="dataBackupBuscar" class="form-control" name="data" placeholder="Data">
-                  <label for="dataBackupBuscar">Data</label>
-                </div>
+            <form id="formBuscarBackup">
+
+              <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <select class="form-control" id="argumentoDataBackupBuscar">
+                      <option value="0">Igual a</option>
+                      <option value="1">Diferente de</option>
+                      <option value="2">Menor que</option>
+                      <option value="3">Menor ou igual a</option>
+                      <option value="4">Maior que</option>
+                      <option value="5">Maior ou igual a</option>
+                    </select>
+                  </div>
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="datetime-local" id="dataBackupBuscar" class="form-control" name="data" placeholder="Data">
+                    <label for="dataBackupBuscar">Data</label>
+                  </div>
+                </div>                  
               </div>
 
               <div class="form-group">
@@ -305,12 +318,24 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
-                  <label for="tamanhoBackupBuscar">Tamanho</label>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <select class="form-control" id="argumentoTamanhoBackupBuscar">
+                    <option value="0">Igual a</option>
+                    <option value="1">Diferente de</option>
+                    <option value="2">Menor que</option>
+                    <option value="3">Menor ou igual a</option>
+                    <option value="4">Maior que</option>
+                    <option value="5">Maior ou igual a</option>
+                  </select>
                 </div>
-              </div> 
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
+                    <label for="tamanhoBackupBuscar">Tamanho</label>
+                  </div>
+                </div>                                  
+              </div>
 
               <div class="form-group">
                 <div class="form-label-group">
@@ -330,6 +355,142 @@
       </div>
     </div>
       <!-- /BUSCA MODAL -->
+
+      <!-- CADASTRA disco modal -->
+        <div class="modal fade" id="cadastraDiscoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Cadastrar Disco</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="nomeDiscoCadastrar" class="form-control" name="nomeDiscoCadastrar" placeholder="Nome">
+                    <label for="nomeDiscoCadastrar">Nome</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="localDiscoCadastrar" class="form-control" name="localDiscoCadastrar" placeholder="Local">
+                    <label for="localDiscoCadastrar">Local</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="number" id="tamanhoDiscoCadastrar" class="form-control" name="tamanhoDiscoCadastrar" placeholder="Tamanho">
+                    <label for="tamanhoDiscoCadastrar">Tamanho</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <textarea id="observacaoDiscoCadastrar" rows="4" class="form-control" name="observacaoDiscoCadastrar"> </textarea>
+                    <label for="observacaoDiscoCadastrar">Observação</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+            <div class="modal-footer">
+              <button class="btn btn-success" type="button" id="btnCadastrarDisco">Cadastrar</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <!-- /CADASTRA disco modal -->
+
+      <!-- ALTERA disco modal -->
+        <div class="modal fade" id="alteraDiscoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">Alterar Disco</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+
+                  <div class="form-group">
+                    <div class="form-row">
+                      <div class="form-label-group col-md-11">                        
+                        <select id="selectDiscoAlterar" class="form-control">
+                          <option value="0">Disco</option>
+                        </select>
+                      </div>
+
+                      <div class="form-label-group col-md-1">
+                        <button class="btn btn-danger" id="btnModalDiscoExcluir" type="button"><i class="fas fa-times"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <input type="text" id="nomeDiscoAlterar" class="form-control" name="nomeDiscoAlterar" placeholder="Nome">
+                      <label for="nomeDiscoAlterar">Nome</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <input type="text" id="localDiscoAlterar" class="form-control" name="localDiscoAlterar" placeholder="Local">
+                      <label for="localDiscoAlterar">Local</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <input type="number" id="tamanhoDiscoAlterar" class="form-control" name="tamanhoDiscoAlterar" placeholder="Tamanho">
+                      <label for="tamanhoDiscoAlterar">Tamanho</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="form-label-group">
+                      <textarea id="observacaoDiscoAlterar" rows="4" class="form-control" name="observacaoDiscoAlterar"> </textarea>
+                      <label for="observacaoDiscoAlterar">Observação</label>
+                    </div>
+                  </div>            
+                </form>
+              
+                <div class="modal-footer">
+                  <button class="btn btn-warning" type="button" id="btnAlterarDisco">Alterar</button>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+      <!-- /ALTERA disco modal -->
+
+      <!-- EXCLUI disco modal -->
+      <div class="modal fade" id="excluirDiscoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id=""></h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o disco <span id="nomeDiscoExcluir" style="color: #000"></span>?</p></div>
+            <div style="display: none;" id="idDiscoExcluir"></div>
+            <div class="modal-footer">
+              <button class="btn btn-success" id="btnExcluirDisco">SIM</button>
+              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <!-- /EXCLUI disco modal -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -358,7 +519,7 @@
     </script>
     <script type="text/javascript" src="/js/logoutFront.js"></script>
     <script type="text/javascript" src="/js/listaBackupFront.js"></script>
-    <!-- <script type="text/javascript" src="/js/cadastraBackupFront.js"></script> -->
+    <script type="text/javascript" src="/js/cadastraBackupFront.js"></script>
     <!-- <script type="text/javascript" src="/js/alteraBackupFront.js"></script> -->
     <!-- <script type="text/javascript" src="/js/excluiBackupFront.js"></script> -->
 

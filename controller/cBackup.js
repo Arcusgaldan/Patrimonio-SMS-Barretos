@@ -55,17 +55,23 @@ module.exports = {
 				});
 				break;
 			case 'LISTARCOMPUTADOR':
+				//console.log("Entrei de fato no trataOperacao com LISTARCOMPUTADOR");
 				this.listarComputador(msg.idComputador, function(res){
+					// console.log("Entrei no Callback da função listarComputador com res = " + JSON.stringify(res));
 					if(res){
+						// console.log("Em cBackup::trataOperacao (listarComputador), houve resultado!");
 						resposta.codigo = 200;
 						resposta.msg = JSON.stringify(res);
 					}else{
+						// console.log("Em cBackup::trataOperacao (listarComputador), NÃO houve resultado!");
 						resposta.codigo = 400;
 					}
 					cb(resposta);
 				});
+				break;
 			default:
-				cb(410);
+				resposta.codigo = 410;
+				cb(resposta);
 		}
 	},
 
@@ -140,6 +146,7 @@ module.exports = {
 		];
 
 		require('./controller.js').buscar("Backup", argumentos, function(res){
+			// console.log("Em cBackup:::listarComputador, entrei no callback do controller::buscar com res = " + JSON.stringify(res));
 			cb(res);
 		});
 	}

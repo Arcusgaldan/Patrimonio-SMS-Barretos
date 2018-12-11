@@ -14,10 +14,10 @@ module.exports = {
 	inserir: function(con, comando, cb){
 		con.connect(function(err){
 			if(err){console.log(err); cb(400); return;}
-			console.log("Conectado ao banco!");
+			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){ console.log("Erro: " + err); cb(400); return;}				
-				console.log("Deu bom inserindo");
+				// console.log("Deu bom inserindo");
 				con.destroy();
 				cb(200);
 			});
@@ -27,10 +27,10 @@ module.exports = {
 	buscar: function(con, comando, cb){
 		con.connect(function(err){
 			if(err) throw err;
-			console.log("Conectado ao banco!");
+			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){console.log("Erro " + err); cb(null); return;}
-				console.log("Deu bom buscando");
+				// console.log("Deu bom buscando");
 				con.destroy();
 				cb(res);
 			});

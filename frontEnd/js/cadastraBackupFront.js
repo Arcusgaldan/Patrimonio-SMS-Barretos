@@ -24680,10 +24680,8 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
-document.getElementById('btnBuscar').addEventListener('click', buscar, false);
-document.getElementById('btnLimparBusca').addEventListener('click', function(){
-	document.getElementById('formBuscarBackup').reset();
-}, false);
+document.getElementById('btnCadastrar').addEventListener('click', cadastrar, false);
+document.getElementById('btnCadastrarDisco').addEventListener('click', cadastrarDisco, false);
 
 function buscaComputador(cb){
 	var patrimonio = window.location.pathname.split("/")[2];
@@ -24713,114 +24711,41 @@ function buscaComputador(cb){
 	});
 }
 
-function buscar(){
-	var utils = require('./../../utilsCliente.js');
-	var where = "";
+function cadastrar(){
+	var backup = require('./../../model/mBackup.js').novo();
 
-	if(document.getElementById('dataBackupBuscar').value != ""){
-		let data = document.getElementById('dataBackupBuscar').value;
-		let operador = utils.enumOperador(document.getElementById('argumentoDataBackupBuscar').value);
-
-		if(where != "")
-			where += " AND ";
-
-		where += "data " + operador + " '" + data + "'";
+	backup.data = document.getElementById('dataBackupCadastrar').value;
+	backup.nomePasta = document.getElementById('nomePastaBackupCadastrar').value;
+	backup.tamanho = document.getElementById('tamanhoBackupCadastrar').value;
+	backup.codDisco = document.getElementById('discoBackupCadastrar').value;
+	backup.observacao = document.getElementById('observacaoBackupCadastrar').value;
+	if(backup.observacao.trim() == ""){
+		backup.observacao = null;
 	}
+	buscaComputador(function(idComputador){
+		if(!idComputador){
+			document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
+			$("#erroModal").modal('show');
+			return;
+		}
+		backup.codComputador = idComputador;
 
-	if(document.getElementById('nomePastaBackupBuscar').value != ""){
-		let nomePasta = document.getElementById('nomePastaBackupBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "nomePasta LIKE '%" + nomePasta + "%'";
-	}
-
-	if(document.getElementById('tamanhoBackupBuscar').value != ""){
-		let tamanho = document.getElementById('tamanhoBackupBuscar').value;
-		let operador = utils.enumOperador(document.getElementById('argumentoTamanhoBackupBuscar').value);
-
-		if(where != "")
-			where += " AND ";
-
-		where += "b.tamanho " + operador + " " + tamanho;
-	}
-
-	if(document.getElementById('discoBackupBuscar').value != '0'){
-		let disco = document.getElementById('discoBackupBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "codDisco = " + disco;
-	}	
-
-	if(where == ""){
-		buscaComputador(function(idComputador){
-			if(!idComputador){
-				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
+		require('./../../utilsCliente.js').enviaRequisicao('Backup', 'INSERIR', {token: localStorage.token, msg: backup}, function(res){
+			if(res.statusCode == 200){
+				$("#sucessoModal").modal('show');
+				$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+		  		setTimeout(function(){location.reload();} , 2000);
+			}else if(res.statusCode == 412){
+				document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+				$("#erroModal").modal('show');
+				return;
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 				$("#erroModal").modal('show');
 				return;
 			}
-			utils.enviaRequisicao("Backup", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
-				if(res.statusCode == 200){
-					var msg = "";
-					res.on('data', function(chunk){
-						msg += chunk;
-					});
-					res.on('end', function(){
-						let listaBackup = JSON.parse(msg);
-						preencheTabela(listaBackup);
-					});
-				}else if(res.statusCode == 747){
-					$("#tabelaBackup").empty();
-				}else{
-					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar backups";
-					$("#erroModal").modal('show');
-					return;
-				}
-				$("#buscaModal").modal('toggle');
-			});
 		});
-	}else{
-		buscaComputador(function(idComputador){
-			if(!idComputador){
-				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
-				$("#erroModal").modal('show');
-				return;
-			}
-			var argumentos = {};
-			argumentos.where = "codComputador = " + idComputador + " AND " + where;
-			argumentos.orderBy = {campos: "b.data", sentido: "DESC"};
-			argumentos.aliasTabela = "b";
-			argumentos.selectCampos = ["b.*", "i.patrimonio patrimonioComputador", "d.nome discoNome"];
-			argumentos.joins = [
-				{tabela: "TBComputador c", on: "c.id = b.codComputador"},
-				{tabela: "TBItem i", on: "i.id = c.codItem"},
-				{tabela: "TBDiscoBackup d", on: "d.id = b.codDisco"}
-			];
-			
-			utils.enviaRequisicao("Backup", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-				if(res.statusCode == 200){
-					var msg = "";
-					res.on('data', function(chunk){
-						msg += chunk;
-					});
-					res.on('end', function(){
-						let listaBackup = JSON.parse(msg);
-						preencheTabela(listaBackup);
-					});
-				}else if(res.statusCode == 747){
-					$("#tabelaBackup").empty();
-				}else{
-					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar backups";
-					$("#erroModal").modal('show');
-					return;
-				}
-				$("#buscaModal").modal('toggle');
-			});
-		});
-	}
+	});
 }
 
 function preencheDisco(){
@@ -24858,107 +24783,79 @@ function preencheDisco(){
 	});
 }
 
-function preencheTabela(listaBackup){	
-	if(!listaBackup){
-		return;
+function cadastrarDisco(){
+	var disco = require('./../../model/mDiscoBackup.js').novo();
+
+	disco.nome = document.getElementById('nomeDiscoCadastrar').value;
+	disco.local = document.getElementById('localDiscoCadastrar').value;
+	disco.tamanho = document.getElementById('tamanhoDiscoCadastrar').value;
+	disco.observacao = document.getElementById('observacaoDiscoCadastrar').value;
+	if(disco.observacao.trim() == ""){
+		disco.observacao = null;
 	}
-	
-	var utils = require('./../../utilsCliente.js');
 
-	$("#tabelaBackup").empty();
-	for(let i = 0; i < listaBackup.length; i++){
-		$("#tabelaBackup").append("\
-		<tr>\
-		    <th id='dataBackupLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseBackupLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarBackupLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Backup</button>\
-				<button id='excluirBackupLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Backup</button>\
-				<div id='collapseBackupLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Data: </strong><span id='dataBackupDados"+i+"'></span></p>\
-				    <p><strong>Disco de Backup: </strong> <span id='discoBackupDados"+i+"'></span></p>\
-				    <p><strong>Nome da pasta: </strong> <span id='nomePastaBackupDados"+i+"'></span></p>\
-				    <p><strong>Tamanho: </strong> <span id='tamanhoBackupDados"+i+"'></span></p>\
-				    <p><strong>Computador: </strong> <span id='computadorBackupDados"+i+"'></span></p>\
-				    <p><strong>Observação: </strong> <span id='observacaoBackupDados"+i+"'></span></p>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
+	console.log("Este é o disco em cadastraBackup::cadastrarDisco: " + JSON.stringify(disco));
 
-		document.getElementById('dataBackupLista' + i).innerHTML = utils.formataDataHora(listaBackup[i].data);
-		document.getElementById('dataBackupDados' + i).innerHTML = utils.formataDataHora(listaBackup[i].data);
-
-		document.getElementById('nomePastaBackupDados' + i).innerHTML = listaBackup[i].nomePasta;
-		document.getElementById('tamanhoBackupDados' + i).innerHTML = listaBackup[i].tamanho + " MB";
-		document.getElementById('computadorBackupDados' + i).innerHTML = listaBackup[i].patrimonioComputador;
-		document.getElementById('discoBackupDados' + i).innerHTML = listaBackup[i].discoNome;
-
-		if(!listaBackup[i].observacao || listaBackup[i].observacao == ""){
-			document.getElementById('observacaoBackupDados' + i).innerHTML = '-';
-		}else{
-			document.getElementById('observacaoBackupDados' + i).innerHTML = listaBackup[i].observacao;			
-		}
-
-		(function(){
-			var backup = listaBackup[i];		
-			document.getElementById("alterarBackupLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(backup);
-			}, false);
-			document.getElementById("excluirBackupLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(backup);
-			}, false);
-		}());
-	}	
-}
-
-function preencheModalAlterar(backup){
-	document.getElementById('dataBackupAlterar').value = backup.data.substring(0, 16);
-	document.getElementById('nomePastaBackupAlterar').value = backup.nomePasta;
-	document.getElementById('tamanhoBackupAlterar').value = backup.tamanho;
-	document.getElementById('discoBackupAlterar').value = backup.codDisco;
-	document.getElementById('idBackupAlterar').value = backup.id;
-	document.getElementById('computadorBackupAlterar').value = backup.codComputador;
-}
-
-function preencheModalExcluir(backup){
-	document.getElementById('dataBackupExcluir').innerHTML = backup.data;
-	document.getElementById('idBackupExcluir').value = backup.id;
-}
-
-
-preencheDisco();
-var utils = require('./../../utilsCliente.js');
-buscaComputador(function(idComputador){
-	if(!idComputador){
-		document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
-		$("#erroModal").modal('show');
-		return;
-	}
-	// console.log("O ID do computador buscado é: " + idComputador);
-	utils.enviaRequisicao("Backup", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
+	require('./../../utilsCliente.js').enviaRequisicao('DiscoBackup', 'INSERIR', {token: localStorage.token, msg: disco}, function(res){
 		if(res.statusCode == 200){
-			var msg = "";
-			res.on('data', function(chunk){
-				msg += chunk;
-			});
-			res.on('end', function(){
-				var vetorBackup = JSON.parse(msg);
-				(function(){
-					document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorBackup)}, false);
-				}());
-				preencheTabela(vetorBackup);
-			});
-		}else if(res.statusCode != 747){
-			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+			preencheDisco();
+			$("#cadastraDiscoModal").modal('toggle');
+		}else if(res.statusCode == 412){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+			$("#erroModal").modal('show');
+			return;
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 			$("#erroModal").modal('show');
 			return;
 		}
 	});
-});
-},{"./../../utilsCliente.js":168}],168:[function(require,module,exports){
+}
+},{"./../../model/mBackup.js":168,"./../../model/mDiscoBackup.js":169,"./../../utilsCliente.js":170}],168:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.data = '';
+		final.nomePasta = '';
+		final.tamanho = 0;
+		final.codComputador = 0;
+		final.codDisco = 0;
+		final.observacao = '';
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['data', 'observacao', 'nomePasta'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	}
+}
+},{}],169:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.nome = '';
+		final.local = '';
+		final.tamanho = 0;
+		final.observacao = '';
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['nome', 'observacao', 'local'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	}
+}
+},{}],170:[function(require,module,exports){
 (function (Buffer){
 module.exports = {
 	senhaHash: function(senha){

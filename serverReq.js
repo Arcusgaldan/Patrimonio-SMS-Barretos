@@ -162,8 +162,9 @@ http.createServer(function(req, res) {
                 res.end();
                 return;
             }else{
+                console.log("\nEntrando em trataOperação\nObjeto: " + req.headers['objeto'] + "\nOperação: " + req.headers['operacao'] + "\n");
             	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs.msg, function(resposta){ //Puxa a ação relativa ao objeto e operação
-            		console.log("Acabou a execução do trataOperacao!");
+            		// console.log("Acabou a execução do trataOperacao! Resposta.codigo = " + resposta.codigo + " e resposta.msg = " + resposta.msg);
             		res.statusCode = resposta.codigo;
             		if(resposta.msg){
             			res.write(resposta.msg);
