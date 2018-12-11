@@ -1,5 +1,6 @@
 ﻿-- RESOLVIDOS
 ![V] Fazer busca em todos os CRUD
+[V] Fazer botão para limpar formulário (usando form.reset()) de busca
 
 -- PENDENTES
 [-] Considerar criar uma tabela de locais para setor
@@ -11,6 +12,5 @@
 [-] Considerar paginação para listagens
 
 -- EM ANDAMENTO
-[#] Fazer botão para limpar formulário (usando form.reset()) de busca
 
 -- ABORTADOS

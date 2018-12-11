@@ -5,6 +5,11 @@ document.getElementById('btnCadastrarSO').addEventListener('click', cadastrarSO,
 function cadastrar(){
 	var computador = require('./../../model/mComputador.js').novo();
 	computador.codItem = document.getElementById('patrimonioComputadorCadastrar').value;
+	if(computador.codItem == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um nome para o processador";
+		$("#erroModal").modal('show');
+		return;
+	}
 	
 	if(document.getElementById('processadorComputadorCadastrar').value == '0'){
 		computador.codProcessador = null;
@@ -24,7 +29,77 @@ function cadastrar(){
 		computador.tipoMemoria = document.getElementById('tipoMemoriaComputadorCadastrar').value;
 	}
 
-	
+	if(document.getElementById('armazenamentoComputadorCadastrar').value == '')	{
+		computador.armazenamento = null;
+	}else{
+		computador.armazenamento = document.getElementById('armazenamentoComputadorCadastrar').value;
+	}
+
+	if(document.getElementById('sistemaComputadorCadastrar').value == '0'){
+		computador.codSO = null;
+	}else{
+		computador.codSO = document.getElementById('sistemaComputadorCadastrar').value;
+	}
+
+	if(document.getElementById('reservaComputadorCadastrar').checked){
+		computador.reserva = 1;
+	}else{
+		computador.reserva = 0;
+	}
+
+	if(document.getElementById('aposentadoComputadorCadastrar').checked){
+		computador.aposentado = 1;
+	}else{
+		computador.aposentado = 0;
+	}
+
+	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'INSERIR', {token: localStorage.token, msg: computador}, function(res){
+		if(res.statusCode == 200){
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	  		setTimeout(function(){location.reload();} , 2000);
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Não foi possível cadastrar o computador";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function cadastrarProcessador(){
+	var processador = require('./../../model/mProcessador.js').novo();
+
+	processador.nome = document.getElementById('nomeProcessadorCadastrar').value;
+	if(processador.nome == ""){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um nome para o processador";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	require('./../../utilsCliente.js').enviaRequisicao('Processador', 'INSERIR', {token: localStorage.token, msg: processador}, function(res){
+		if(res.statusCode == 200){
+			$("#cadastraProcessadorModal").modal('toggle');
+			preencheProcessador();
+		}
+	});
+}
+
+function cadastrarSO(){
+	var SO = require('./../../model/mSistemaOperacional.js').novo();
+
+	SO.nome = document.getElementById('nomeSOCadastrar').value;
+	if(SO.nome == ""){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um nome para o Sistema Operacional";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	require('./../../utilsCliente.js').enviaRequisicao('SistemaOperacional', 'INSERIR', {token: localStorage.token, msg: SO}, function(res){
+		if(res.statusCode == 200){
+			$("#cadastraSOModal").modal('toggle');
+			preencheSO();
+		}
+	});
 }
 
 function preencheProcessador(){

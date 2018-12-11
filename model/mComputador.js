@@ -2,11 +2,9 @@ module.exports = {
 	novo: function(){
 		var final = {};
 		final.id = 0;
-		final.processador = '';
 		final.qtdMemoria = 0;
 		final.tipoMemoria = '';
 		final.armazenamento = 0;
-		final.SO = '';
 		final.codItem = 0;
 		final.reserva = 0;
 		final.aposentado = 0;
