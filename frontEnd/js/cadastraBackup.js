@@ -40,6 +40,12 @@ function cadastrar(){
 	if(backup.observacao.trim() == ""){
 		backup.observacao = null;
 	}
+
+	if(backup.codDisco == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione um disco de backup";
+		$("#erroModal").modal('show');
+		return;
+	}
 	buscaComputador(function(idComputador){
 		if(!idComputador){
 			document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";

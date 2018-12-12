@@ -65,7 +65,8 @@
 
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
-              <div class="card-header">Gerenciamento de Backup 
+              <div class="card-header">
+                <a class="btn btn-warning mr-3" href="/computadores"><i class="fas fa-arrow-left mr-1"></i><i class="fas fa-desktop"></i></a>Gerenciamento de Backup 
                 <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
                 <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
                 <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
@@ -117,7 +118,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalBuscar">Buscar Backup</h5>
+            <h5 class="modal-title" id="tituloModalCadastrar">Cadastrar Backup</h5>
             <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -132,21 +133,21 @@
               <div class="form-group">
                 <div class="form-label-group">
                   <input type="datetime-local" id="dataBackupCadastrar" class="form-control" name="data" placeholder="Data">
-                  <label for="dataBackupBuscar">Data</label>
+                  <label for="dataBackupCadastrar">Data</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
                   <input type="text" id="nomePastaBackupCadastrar" class="form-control" name="nomePasta" placeholder="Nome da Pasta">
-                  <label for="nomePastaBackupBuscar">Nome da Pasta</label>
+                  <label for="nomePastaBackupCadastrar">Nome da Pasta</label>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="form-label-group">
                   <input type="number" id="tamanhoBackupCadastrar" class="form-control" name="tamanho" placeholder="Tamanho">
-                  <label for="tamanhoBackupBuscar">Tamanho</label>
+                  <label for="tamanhoBackupCadastrar">Tamanho (MB)</label>
                 </div>
               </div> 
 
@@ -214,7 +215,7 @@
               <div class="form-group">
                 <div class="form-label-group">
                   <input type="number" id="tamanhoBackupAlterar" class="form-control" name="tamanho" placeholder="Tamanho">
-                  <label for="tamanhoBackupAlterar">Tamanho</label>
+                  <label for="tamanhoBackupAlterar">Tamanho (MB)</label>
                 </div>
               </div> 
 
@@ -332,7 +333,7 @@
                 <div class="form-group col-md-8">
                   <div class="form-label-group">
                     <input type="number" id="tamanhoBackupBuscar" class="form-control" name="tamanho" placeholder="Tamanho">
-                    <label for="tamanhoBackupBuscar">Tamanho</label>
+                    <label for="tamanhoBackupBuscar">Tamanho (MB)</label>
                   </div>
                 </div>                                  
               </div>
@@ -385,7 +386,7 @@
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="number" id="tamanhoDiscoCadastrar" class="form-control" name="tamanhoDiscoCadastrar" placeholder="Tamanho">
-                    <label for="tamanhoDiscoCadastrar">Tamanho</label>
+                    <label for="tamanhoDiscoCadastrar">Tamanho (GB)</label>
                   </div>
                 </div>
 
@@ -417,7 +418,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="formAlteraDisco">
 
                   <div class="form-group">
                     <div class="form-row">
@@ -435,28 +436,28 @@
                   
                   <div class="form-group">
                     <div class="form-label-group">
-                      <input type="text" id="nomeDiscoAlterar" class="form-control" name="nomeDiscoAlterar" placeholder="Nome">
+                      <input type="text" id="nomeDiscoAlterar" class="form-control" name="nomeDiscoAlterar" placeholder="Nome" disabled="true">
                       <label for="nomeDiscoAlterar">Nome</label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="form-label-group">
-                      <input type="text" id="localDiscoAlterar" class="form-control" name="localDiscoAlterar" placeholder="Local">
+                      <input type="text" id="localDiscoAlterar" class="form-control" name="localDiscoAlterar" placeholder="Local" disabled="true">
                       <label for="localDiscoAlterar">Local</label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="form-label-group">
-                      <input type="number" id="tamanhoDiscoAlterar" class="form-control" name="tamanhoDiscoAlterar" placeholder="Tamanho">
-                      <label for="tamanhoDiscoAlterar">Tamanho</label>
+                      <input type="number" id="tamanhoDiscoAlterar" class="form-control" name="tamanhoDiscoAlterar" placeholder="Tamanho" disabled="true">
+                      <label for="tamanhoDiscoAlterar">Tamanho (GB)</label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="form-label-group">
-                      <textarea id="observacaoDiscoAlterar" rows="4" class="form-control" name="observacaoDiscoAlterar"> </textarea>
+                      <textarea id="observacaoDiscoAlterar" rows="4" class="form-control" name="observacaoDiscoAlterar" disabled="true"> </textarea>
                       <label for="observacaoDiscoAlterar">Observação</label>
                     </div>
                   </div>            
@@ -520,7 +521,7 @@
     <script type="text/javascript" src="/js/logoutFront.js"></script>
     <script type="text/javascript" src="/js/listaBackupFront.js"></script>
     <script type="text/javascript" src="/js/cadastraBackupFront.js"></script>
-    <!-- <script type="text/javascript" src="/js/alteraBackupFront.js"></script> -->
+    <script type="text/javascript" src="/js/alteraBackupFront.js"></script>
     <!-- <script type="text/javascript" src="/js/excluiBackupFront.js"></script> -->
 
   </body>

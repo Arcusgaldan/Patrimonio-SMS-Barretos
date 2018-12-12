@@ -239,6 +239,8 @@ function preencheModalAlterar(backup){
 	document.getElementById('discoBackupAlterar').value = backup.codDisco;
 	document.getElementById('idBackupAlterar').value = backup.id;
 	document.getElementById('computadorBackupAlterar').value = backup.codComputador;
+	if(backup.observacao)
+		document.getElementById('observacaoBackupAlterar')value = backup.observacao;
 }
 
 function preencheModalExcluir(backup){
