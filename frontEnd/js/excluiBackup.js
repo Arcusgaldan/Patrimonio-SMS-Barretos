@@ -1,74 +1,24 @@
-document.getElementById('btnCadastrar').addEventListener('click', cadastrar, false);
-document.getElementById('btnCadastrarDisco').addEventListener('click', cadastrarDisco, false);
+document.getElementById('btnExcluir').addEventListener('click', excluir, false);
+document.getElementById('btnExcluirDisco').addEventListener('click', excluirDisco, false);
+document.getElementById('btnModalDiscoExcluir').addEventListener('click', function(){
+	document.getElementById('nomeDiscoExcluir').innerHTML = $('#selectDiscoAlterar').children("option:selected").text()
+	document.getElementById('idDiscoExcluir').value = document.getElementById('selectDiscoAlterar').value;
+	$("#excluirDiscoModal").modal('show');
+}, false);
 
-function buscaComputador(cb){
-	var patrimonio = window.location.pathname.split("/")[2];
-	// console.log("Em listaBackup::buscaComputador, patrimonio = " + patrimonio);
+function excluir(){
+	let idBackup = document.getElementById('idBackupExcluir').value;
 
-	var argumentos = {};
-
-	argumentos.where = "i.patrimonio = '" + patrimonio + "'";
-	argumentos.joins = [{tabela: "TBItem i", on: "i.id = c.codItem"}];
-	argumentos.aliasTabela = "c";
-
-	require('./../../utilsCliente.js').enviaRequisicao("Computador", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+	require('./../../utilsCliente.js').enviaRequisicao('Backup', 'EXCLUIR', {token: localStorage.token, msg: {id: idBackup}}, function(res){
 		if(res.statusCode == 200){
-			var msg = "";
-			res.on('data', function(chunk){
-				msg += chunk;
-			});
-			res.on('end', function(){
-				var computador = JSON.parse(msg)[0];
-				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
-				cb(computador.id);
-			});
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	  		setTimeout(function(){location.reload();} , 2000);
 		}else{
-			cb(null);
-			return;
-		}
-	});
-}
-
-function cadastrar(){
-	var backup = require('./../../model/mBackup.js').novo();
-
-	backup.data = document.getElementById('dataBackupCadastrar').value;
-	backup.nomePasta = document.getElementById('nomePastaBackupCadastrar').value;
-	backup.tamanho = document.getElementById('tamanhoBackupCadastrar').value;
-	backup.codDisco = document.getElementById('discoBackupCadastrar').value;
-	backup.observacao = document.getElementById('observacaoBackupCadastrar').value;
-	if(backup.observacao.trim() == ""){
-		backup.observacao = null;
-	}
-
-	if(backup.codDisco == '0'){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione um disco de backup";
-		$("#erroModal").modal('show');
-		return;
-	}
-	buscaComputador(function(idComputador){
-		if(!idComputador){
-			document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 			$("#erroModal").modal('show');
 			return;
 		}
-		backup.codComputador = idComputador;
-
-		require('./../../utilsCliente.js').enviaRequisicao('Backup', 'INSERIR', {token: localStorage.token, msg: backup}, function(res){
-			if(res.statusCode == 200){
-				$("#sucessoModal").modal('show');
-				$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-		  		setTimeout(function(){location.reload();} , 2000);
-			}else if(res.statusCode == 412){
-				document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
-				$("#erroModal").modal('show');
-				return;
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
-				$("#erroModal").modal('show');
-				return;
-			}
-		});
 	});
 }
 
@@ -144,29 +94,17 @@ function preencheDisco(){
 	});
 }
 
-function cadastrarDisco(){
-	var disco = require('./../../model/mDiscoBackup.js').novo();
+function excluirDisco(){
+	let idDisco = document.getElementById('idDiscoExcluir').value;
 
-	disco.nome = document.getElementById('nomeDiscoCadastrar').value;
-	disco.local = document.getElementById('localDiscoCadastrar').value;
-	disco.tamanho = document.getElementById('tamanhoDiscoCadastrar').value;
-	disco.observacao = document.getElementById('observacaoDiscoCadastrar').value;
-	if(disco.observacao.trim() == ""){
-		disco.observacao = null;
-	}	
-
-	require('./../../utilsCliente.js').enviaRequisicao('DiscoBackup', 'INSERIR', {token: localStorage.token, msg: disco}, function(res){
+	require('./../../utilsCliente.js').enviaRequisicao('DiscoBackup', 'EXCLUIR', {token: localStorage.token, msg: {id: idDisco}}, function(res){
 		if(res.statusCode == 200){
 			preencheDisco();
-			$("#cadastraDiscoModal").modal('toggle');
-		}else if(res.statusCode == 412){
-			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
-			$("#erroModal").modal('show');
-			return;
 		}else{
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 			$("#erroModal").modal('show');
 			return;
 		}
+		$("#excluirDiscoModal").modal('toggle');
 	});
 }

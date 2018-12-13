@@ -54,6 +54,17 @@ module.exports = {
 					cb(resposta);
 				});
 				break;
+			case 'LISTARCOMPUTADOR':
+				this.listarComputador(msg.idComputador, function(res){
+					if(res){
+						resposta.codigo = 200;
+						resposta.msg = JSON.stringify(res);
+					}else{
+						resposta.codigo = 400;
+					}
+					cb(resposta);
+				});
+				break;
 			default:
 				resposta.codigo = 410;
 				cb(resposta);
@@ -115,5 +126,21 @@ module.exports = {
 		require('./controller.js').buscar("Procedimento", argumentos, function(res){
 			cb(res);
 		});		
+	},
+
+	listarComputador: function(idComputador, cb){
+		var argumentos = {};
+		argumentos.where = "codComputador = " + idComputador;
+		argumentos.orderBy = {campos: "p.data", sentido: "DESC"};
+		argumentos.aliasTabela = "p";
+		argumentos.selectCampos = ["p.*", "i.patrimonio patrimonioComputador"];
+		argumentos.joins = [
+			{tabela: "TBComputador c", on: "c.id = p.codComputador"},
+			{tabela: "TBItem i", on: "i.id = c.codItem"}
+		];
+
+		require('./controller.js').buscar("Procedimento", argumentos, function(res){			
+			cb(res);
+		});
 	}
 }

@@ -25046,6 +25046,27 @@ module.exports = {
 			default:
 				return '';
 		}
+	},
+
+	formataData: function(data){
+		if(!data){
+			return "-";
+		}
+		var separado = data.substring(0, 10).split('-');
+		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+		return resultado;
+	},
+
+	formataDataHora: function(data){
+		if(!data){
+			return "-";
+		}
+
+		var diaMes = data.substring(0, 10);
+		var hora = data.substring(11, 19);
+		var separado = diaMes.split('-');
+		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+		return resultado;
 	}
 };
 }).call(this,require("buffer").Buffer)

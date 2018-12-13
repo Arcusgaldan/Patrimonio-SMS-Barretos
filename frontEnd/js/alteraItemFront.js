@@ -32972,7 +32972,8 @@ module.exports = {
 				});
 				break;
 			default:
-				cb(410);
+				resposta.codigo = 410;
+				cb(resposta);
 		}
 	},
 
@@ -33091,7 +33092,8 @@ module.exports = {
 				});
 				break;
 			default:
-				cb(410);
+				resposta.codigo = 410;
+				cb(resposta);
 		}
 	},
 
@@ -33248,6 +33250,9 @@ module.exports = {
 			if(argumentos.campos && argumentos.joins){
 				sql = "SELECT " + argumentos.campos + " FROM TB" + alvo;
 				for(let i = 0; i < argumentos.joins.length; i++){
+					if(argumentos.joins[i].tipo){
+						sql += " " + argumentos.joins[i].tipo;
+					}
 					sql += " JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on;
 				}
 			}else
@@ -33270,7 +33275,7 @@ module.exports = {
 					sql += " ASC;";
 				}
 			}
-			console.log("SQL em controller:listar = " + sql);
+			// console.log("SQL em controller:listar = " + sql);
 		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -33301,12 +33306,18 @@ module.exports = {
 
 		if(argumentos.aliasTabela){
 			aliasTabela = argumentos.aliasTabela;
+			orderCampos = aliasTabela + ".id";
 		}
 
 		sql += selectCampos + " FROM TB" + alvo + " " + aliasTabela + " ";
 
 		if(argumentos.joins){
 			for(let i = 0; i < argumentos.joins.length; i++){
+				// console.log("Em controller:buscar, joins[i] = " + JSON.stringify(argumentos.joins[i]));
+				if(argumentos.joins[i].tipo){
+					joins += argumentos.joins[i].tipo + " ";
+					//console.log("Havia um tipo de join: " + argumentos.joins[i].tipo);
+				}
 				joins += "JOIN " + argumentos.joins[i].tabela + " ON " + argumentos.joins[i].on + " ";
 			}
 		}
@@ -33320,14 +33331,14 @@ module.exports = {
 				orderCampos = argumentos.orderBy.campos;
 			}
 
-			if(argumentos.orderBy.sentido && (sentido == "ASC" || sentido == "DESC")){
+			if(argumentos.orderBy.sentido && (argumentos.orderBy.sentido == "ASC" || argumentos.orderBy.sentido == "DESC")){
 				orderSentido = argumentos.orderBy.sentido
 			}
 		}
 
 		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
 
-		console.log("Em controller::buscar, SQL = " + sql);
+		console.log("Em controller::buscar, SQL:\n" + sql);
 
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -33356,10 +33367,10 @@ module.exports = {
 	inserir: function(con, comando, cb){
 		con.connect(function(err){
 			if(err){console.log(err); cb(400); return;}
-			console.log("Conectado ao banco!");
+			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){ console.log("Erro: " + err); cb(400); return;}				
-				console.log("Deu bom inserindo");
+				// console.log("Deu bom inserindo");
 				con.destroy();
 				cb(200);
 			});
@@ -33369,10 +33380,10 @@ module.exports = {
 	buscar: function(con, comando, cb){
 		con.connect(function(err){
 			if(err) throw err;
-			console.log("Conectado ao banco!");
+			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
 				if(err){console.log("Erro " + err); cb(null); return;}
-				console.log("Deu bom buscando");
+				// console.log("Deu bom buscando");
 				con.destroy();
 				cb(res);
 			});
@@ -57273,6 +57284,27 @@ module.exports = {
 			default:
 				return '';
 		}
+	},
+
+	formataData: function(data){
+		if(!data){
+			return "-";
+		}
+		var separado = data.substring(0, 10).split('-');
+		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+		return resultado;
+	},
+
+	formataDataHora: function(data){
+		if(!data){
+			return "-";
+		}
+
+		var diaMes = data.substring(0, 10);
+		var hora = data.substring(11, 19);
+		var separado = diaMes.split('-');
+		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+		return resultado;
 	}
 };
 }).call(this,require("buffer").Buffer)

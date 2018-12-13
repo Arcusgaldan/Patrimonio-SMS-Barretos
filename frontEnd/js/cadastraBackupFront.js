@@ -24722,6 +24722,12 @@ function cadastrar(){
 	if(backup.observacao.trim() == ""){
 		backup.observacao = null;
 	}
+
+	if(backup.codDisco == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione um disco de backup";
+		$("#erroModal").modal('show');
+		return;
+	}
 	buscaComputador(function(idComputador){
 		if(!idComputador){
 			document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
@@ -24746,6 +24752,42 @@ function cadastrar(){
 			}
 		});
 	});
+}
+
+function preencheAlterarDisco(){
+	var select = document.getElementById('selectDiscoAlterar');
+	if(select.value == '0'){
+		document.getElementById('nomeDiscoAlterar').disabled = true;
+		document.getElementById('localDiscoAlterar').disabled = true;
+		document.getElementById('tamanhoDiscoAlterar').disabled = true;
+		document.getElementById('observacaoDiscoAlterar').disabled = true;
+		document.getElementById('formAlteraDisco').reset();
+	}else{
+		document.getElementById('nomeDiscoAlterar').disabled = false;
+		document.getElementById('localDiscoAlterar').disabled = false;
+		document.getElementById('tamanhoDiscoAlterar').disabled = false;
+		document.getElementById('observacaoDiscoAlterar').disabled = false;
+
+		require('./../../utilsCliente.js').enviaRequisicao('DiscoBackup', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + select.value}}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					var disco = JSON.parse(msg)[0];
+					document.getElementById('nomeDiscoAlterar').value = disco.nome;
+					document.getElementById('localDiscoAlterar').value = disco.local;
+					document.getElementById('tamanhoDiscoAlterar').value = disco.tamanho;
+					document.getElementById('observacaoDiscoAlterar').value = disco.observacao;
+				});
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar dados deste disco";
+				$("#erroModal").modal('show');
+				return;
+			}
+		});
+	}
 }
 
 function preencheDisco(){
@@ -24774,6 +24816,7 @@ function preencheDisco(){
 					$("#discoBackupBuscar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
 					$("#selectDiscoAlterar").append("<option value='"+vetorDisco[i].id+"'>"+vetorDisco[i].nome+"</option>");
 				}
+				preencheAlterarDisco();
 			});
 		}else if(res.statusCode != 747){
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar discos de backup";
@@ -24792,9 +24835,7 @@ function cadastrarDisco(){
 	disco.observacao = document.getElementById('observacaoDiscoCadastrar').value;
 	if(disco.observacao.trim() == ""){
 		disco.observacao = null;
-	}
-
-	console.log("Este é o disco em cadastraBackup::cadastrarDisco: " + JSON.stringify(disco));
+	}	
 
 	require('./../../utilsCliente.js').enviaRequisicao('DiscoBackup', 'INSERIR', {token: localStorage.token, msg: disco}, function(res){
 		if(res.statusCode == 200){
