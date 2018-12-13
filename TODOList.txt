@@ -14,7 +14,9 @@
 [-] Considerar paginação para listagens
 [-] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco
 [-] Adicionar campo IP em computador
-[-] Adicionar opção de escolher um item/computador por patrimônio para "copiar" seu cadastro (para múltiplos itens iguais)
+![-] Adicionar opção de escolher um item/computador por patrimônio para "copiar" seu cadastro (para múltiplos itens iguais)
+[-] Ao finalizar CRUD's, iniciar gráficos e estatísticas na página inicial do sistema.
+
 
 
 -- EM ANDAMENTO
