@@ -134,7 +134,7 @@ function buscar(){
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
 				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], 
 			where: "lt.atual = 1 AND " + where, 
-			orderBy: {campos: "i.patrimonio"}
+			orderBy: [{campo: "i.patrimonio", sentido: "asc"}]
 		};
 
 		utils.enviaRequisicao("Computador", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){

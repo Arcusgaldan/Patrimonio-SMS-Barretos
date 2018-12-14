@@ -24745,6 +24745,10 @@ function cadastrar(){
 				document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
 				$("#erroModal").modal('show');
 				return;
+			}else if(res.statusCode == 415){
+				document.getElementById('msgErroModal').innerHTML = "Por favor, insira uma data válida";
+				$("#erroModal").modal('show');
+				return;
 			}else{
 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 				$("#erroModal").modal('show');
@@ -24996,6 +25000,31 @@ module.exports = {
 		var separado = diaMes.split('-');
 		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
 		return resultado;
+	},
+
+	comparaData: function(a, b){//
+		a = a.split('-');
+		b = b.split('-');
+
+		if(parseInt(a[0]) < parseInt(b[0])){
+			return -1;
+		}else if(parseInt(a[0]) > parseInt(b[0])){
+			return 1;
+		}else{
+			if(parseInt(a[1]) < parseInt(b[1])){
+				return -1;
+			}else if(parseInt(a[1]) > parseInt(b[1])){
+				return 1;
+			}else{
+				if(parseInt(a[2]) < parseInt(b[2])){
+					return -1;
+				}else if(parseInt(a[2]) > parseInt(b[2])){
+					return 1;
+				}else{
+					return 0;
+				}
+			}
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)

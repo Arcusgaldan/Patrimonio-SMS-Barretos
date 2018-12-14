@@ -3,3 +3,4 @@
 412: Dados não validados
 413: Falta de privilégio
 414: Objeto essencial, não pode ser excluído
+415: Data inválida

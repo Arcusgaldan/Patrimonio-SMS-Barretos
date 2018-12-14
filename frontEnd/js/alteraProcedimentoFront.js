@@ -24680,65 +24680,103 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
-document.getElementById('btnAlterar').addEventListener('click', altera, false);
+document.getElementById('btnAlterar').addEventListener('click', alterar, false);
 
-function altera(){
-	var modelo = require('./../../model/mUsuario.js').novo();
-	var utils = require('./../../utilsCliente.js');
+function buscaComputador(cb){
+	var patrimonio = window.location.pathname.split("/")[2];
+	// console.log("Em listaBackup::buscaComputador, patrimonio = " + patrimonio);
 
-	modelo.id = document.getElementById('idUsuarioAlterar').value;
-	modelo.nome = document.getElementById('nomeUsuarioAlterar').value;
-	modelo.cpf = document.getElementById('cpfUsuarioAlterar').value;
-	modelo.email = document.getElementById('emailUsuarioAlterar').value;
+	var argumentos = {};
 
-	if(document.getElementById('senhaUsuarioAlterar').value == ""){
-		modelo.senha = document.getElementById('senhaAntigaUsuarioAlterar').value;
-	}else if(document.getElementById('senhaUsuarioAlterar').value !== document.getElementById('confirmaSenhaUsuarioAlterar').value){
-		document.getElementById('msgErroModal').innerHTML = "Senhas não conferem";
-		$("#erroModal").modal('show');
-		return;
-	}else{
-		modelo.senha = utils.senhaHash(document.getElementById('senhaUsuarioAlterar').value);
-	}
+	argumentos.where = "i.patrimonio = '" + patrimonio + "'";
+	argumentos.joins = [{tabela: "TBItem i", on: "i.id = c.codItem"}];
+	argumentos.aliasTabela = "c";
 
-	if(document.getElementById('senhaExpiradaUsuarioAlterar').checked){
-		modelo.senhaExpirada = 1;
-	}else{
-		modelo.senhaExpirada = 0;
-	}
-
-	utils.enviaRequisicao("Usuario", "ALTERAR", {token: localStorage.token, msg: modelo}, function(res){
+	require('./../../utilsCliente.js').enviaRequisicao("Computador", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
 		if(res.statusCode == 200){
-			$("#sucessoModal").modal('show');
-			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-	    	setTimeout(function(){location.reload();} , 2000);
-			
-		}else if(res.statusCode == 412){
-			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
-			$("#erroModal").modal('show');
-			return;
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var computador = JSON.parse(msg)[0];
+				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
+				cb(computador.id);
+			});
 		}else{
-			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
-			$("#erroModal").modal('show');
-			return;		
+			cb(null);
+			return;
 		}
 	});
 }
-},{"./../../model/mUsuario.js":168,"./../../utilsCliente.js":169}],168:[function(require,module,exports){
+
+function alterar(){
+	var procedimento = require('./../../model/mProcedimento.js').novo();
+	
+	procedimento.id = document.getElementById('idProcedimentoAlterar').value;
+	procedimento.codComputador = document.getElementById('computadorProcedimentoAlterar').value;
+
+	procedimento.data = document.getElementById('dataProcedimentoAlterar').value;
+	if(procedimento.data == "")
+		procedimento.data = null;
+
+	procedimento.peca = document.getElementById('pecaProcedimentoAlterar').value;
+	if(procedimento.peca == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione uma peça";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	procedimento.descricao = document.getElementById('descricaoProcedimentoAlterar').value;
+	if(procedimento.descricao.trim() == ""){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira uma descrição";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	buscaComputador(function(idComputador){
+		if(!idComputador){
+			document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar o computador";
+			$("#erroModal").modal('show');
+			return;
+		}
+		procedimento.codComputador = idComputador;
+
+		require('./../../utilsCliente.js').enviaRequisicao('Procedimento', 'ALTERAR', {token: localStorage.token, msg: procedimento}, function(res){
+			if(res.statusCode == 200){
+				$("#sucessoModal").modal('show');
+				$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+		  		setTimeout(function(){location.reload();} , 2000);
+			}else if(res.statusCode == 412){
+				document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+				$("#erroModal").modal('show');
+				return;
+			}else if(res.statusCode == 415){
+				document.getElementById('msgErroModal').innerHTML = "Por favor, insira uma data válida";
+				$("#erroModal").modal('show');
+				return;
+			}else{
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+				$("#erroModal").modal('show');
+				return;
+			}
+		});
+	});
+}
+},{"./../../model/mProcedimento.js":168,"./../../utilsCliente.js":169}],168:[function(require,module,exports){
 module.exports = {
 	novo: function(){
 		var final = {};
 		final.id = 0;
-		final.nome = '';
-		final.cpf = '';
-		final.email = '';
-		final.senha = '';
-		final.senhaExpirada = 0;
+		final.peca = '';
+		final.descricao = '';
+		final.data = '';
+		final.codComputador = 0;
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['nome', 'cpf', 'email', 'senha'];
+		var strings = ['peca', 'descricao', 'data'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;

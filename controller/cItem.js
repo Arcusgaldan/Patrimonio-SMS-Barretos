@@ -108,7 +108,16 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
-		}, {campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome, s.id setorId", joins: [{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, {tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, {tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "lt.atual = 1", orderBy: {campos: "patrimonio"}});
+		}, 
+		{campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome, s.id setorId", 
+		joins: 
+			[
+				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
+				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+			], 
+		where: "lt.atual = 1", 
+		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

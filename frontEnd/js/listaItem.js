@@ -86,7 +86,7 @@ function buscar(){
 				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
 			], 
 			where: "lt.atual = 1 AND " + where, 
-			orderBy: {campos: "patrimonio"}
+			orderBy: [{campo: "patrimonio", sentido: "asc"}]
 		};
 		
 		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){

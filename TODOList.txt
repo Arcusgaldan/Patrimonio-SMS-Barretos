@@ -16,6 +16,8 @@
 [-] Adicionar campo IP em computador
 ![-] Adicionar opção de escolher um item/computador por patrimônio para "copiar" seu cadastro (para múltiplos itens iguais)
 [-] Ao finalizar CRUD's, iniciar gráficos e estatísticas na página inicial do sistema.
+[-] Adicionar funcionalidade de apertar enter para enviar formulários
+[-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 
 
 

@@ -24680,6 +24680,101 @@ function extend() {
 }
 
 },{}],167:[function(require,module,exports){
+document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+document.getElementById('btnLimparBusca').addEventListener('click', function(){
+	document.getElementById('formBuscarProcedimento').reset();
+}, false);
+
+function buscar(){
+	var utils = require('./../../utilsCliente.js');
+	var where = "";
+
+	if(document.getElementById('dataProcedimentoBuscar').value != ""){
+		let data = document.getElementById('dataProcedimentoBuscar').value;
+		let operador = utils.enumOperador(document.getElementById('argumentoDataProcedimentoBuscar').value);
+
+		if(where != "")
+			where += " AND ";
+
+		where += "data " + operador + " '" + data + "'";
+	}
+
+	if(document.getElementById('pecaProcedimentoBuscar').value != "0"){
+		let peca = document.getElementById('pecaProcedimentoBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "peca = '" + peca + "'";
+	}	
+
+	if(where == ""){
+		buscaComputador(function(idComputador){
+			if(!idComputador){
+				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
+				$("#erroModal").modal('show');
+				return;
+			}
+			utils.enviaRequisicao("Procedimento", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
+				if(res.statusCode == 200){
+					var msg = "";
+					res.on('data', function(chunk){
+						msg += chunk;
+					});
+					res.on('end', function(){
+						let listaProcedimento = JSON.parse(msg);
+						preencheTabela(listaProcedimento);
+					});
+				}else if(res.statusCode == 747){
+					$("#tabelaProcedimento").empty();
+				}else{
+					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar procedimentos";
+					$("#erroModal").modal('show');
+					return;
+				}
+				$("#buscaModal").modal('toggle');
+			});
+		});
+	}else{
+		buscaComputador(function(idComputador){
+			if(!idComputador){
+				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
+				$("#erroModal").modal('show');
+				return;
+			}
+			var argumentos = {};
+			argumentos.where = "codComputador = " + idComputador + " AND " + where;
+			argumentos.orderBy = [{campo: "p.data", sentido: "DESC"}, {campo: "p.peca", sentido: "ASC"}];
+			argumentos.aliasTabela = "p";
+			argumentos.selectCampos = ["p.*", "i.patrimonio patrimonioComputador"];
+			argumentos.joins = [
+				{tabela: "TBComputador c", on: "c.id = p.codComputador"},
+				{tabela: "TBItem i", on: "i.id = c.codItem"}
+			];
+			
+			utils.enviaRequisicao("Procedimento", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+				if(res.statusCode == 200){
+					var msg = "";
+					res.on('data', function(chunk){
+						msg += chunk;
+					});
+					res.on('end', function(){
+						let listaProcedimento = JSON.parse(msg);
+						preencheTabela(listaProcedimento);
+					});
+				}else if(res.statusCode == 747){
+					$("#tabelaBackup").empty();
+				}else{
+					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar procedimentos";
+					$("#erroModal").modal('show');
+					return;
+				}
+				$("#buscaModal").modal('toggle');
+			});
+		});
+	}
+}
+
 function buscaComputador(cb){
 	var patrimonio = window.location.pathname.split("/")[2];
 	// console.log("Em listaBackup::buscaComputador, patrimonio = " + patrimonio);
@@ -24757,6 +24852,7 @@ function preencheTabela(listaProcedimento){
 
 function preencheModalAlterar(procedimento){
 	document.getElementById('idProcedimentoAlterar').value = procedimento.id;
+	document.getElementById('computadorProcedimentoAlterar').value = procedimento.codComputador;
 	document.getElementById('pecaProcedimentoAlterar').value = procedimento.peca;
 	document.getElementById('descricaoProcedimentoAlterar').value = procedimento.descricao;
 	document.getElementById('dataProcedimentoAlterar').value = procedimento.data.substring(0, 10);
@@ -24764,7 +24860,8 @@ function preencheModalAlterar(procedimento){
 
 function preencheModalExcluir(procedimento){
 	document.getElementById('idProcedimentoExcluir').value = procedimento.id;
-	document.getElementById('dataProcedimentoExcluir').value = require('./../../utilsCliente.js').formataData(procedimento.data);
+	document.getElementById('pecaProcedimentoExcluir').innerHTML = procedimento.peca;
+	document.getElementById('dataProcedimentoExcluir').innerHTML = require('./../../utilsCliente.js').formataData(procedimento.data);
 }
 
 buscaComputador(function(idComputador){
@@ -24893,6 +24990,31 @@ module.exports = {
 		var separado = diaMes.split('-');
 		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
 		return resultado;
+	},
+
+	comparaData: function(a, b){//
+		a = a.split('-');
+		b = b.split('-');
+
+		if(parseInt(a[0]) < parseInt(b[0])){
+			return -1;
+		}else if(parseInt(a[0]) > parseInt(b[0])){
+			return 1;
+		}else{
+			if(parseInt(a[1]) < parseInt(b[1])){
+				return -1;
+			}else if(parseInt(a[1]) > parseInt(b[1])){
+				return 1;
+			}else{
+				if(parseInt(a[2]) < parseInt(b[2])){
+					return -1;
+				}else if(parseInt(a[2]) > parseInt(b[2])){
+					return 1;
+				}else{
+					return 0;
+				}
+			}
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)

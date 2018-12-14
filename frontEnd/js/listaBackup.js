@@ -109,7 +109,7 @@ function buscar(){
 			}
 			var argumentos = {};
 			argumentos.where = "codComputador = " + idComputador + " AND " + where;
-			argumentos.orderBy = {campos: "b.data", sentido: "DESC"};
+			argumentos.orderBy = [{campo: "b.data", sentido: "DESC"}];
 			argumentos.aliasTabela = "b";
 			argumentos.selectCampos = ["b.*", "i.patrimonio patrimonioComputador", "d.nome discoNome"];
 			argumentos.joins = [

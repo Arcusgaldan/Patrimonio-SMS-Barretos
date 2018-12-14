@@ -33138,19 +33138,19 @@ module.exports = {
 			}
 
 			if(argumentos.orderBy){
-				if(argumentos.orderBy.campos){
-					sql += " ORDER BY " + argumentos.orderBy.campos;
-				}else{
-					sql += " ORDER BY id";
+				var order = " ORDER BY";
+				for(let i = 0; i < argumentos.orderBy.length; i++){
+					if(argumentos.orderBy[i].campo && argumentos.orderBy[i].sentido){
+						order += " " + argumentos.orderBy[i].campo + " " + argumentos.orderBy[i].sentido + ","
+					}
 				}
-
-				if(argumentos.orderBy.sentido){
-					sql += " " + argumentos.orderBy.sentido + ";";
-				}else{
-					sql += " ASC;";
-				}
+				order = order.substring(0, order.length-1);
+				order += ";";
+				sql += order;				
+			}else{
+				sql += ";";
 			}
-			// console.log("SQL em controller:listar = " + sql);
+			console.log("SQL em controller:listar = " + sql);
 		}
 		var dao = require('./../dao.js');
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
@@ -33163,8 +33163,6 @@ module.exports = {
 		var selectCampos = "";
 		var comparacoes = "";
 		var joins = "";
-		var orderCampos = "id";
-		var orderSentido = "ASC";
 		var aliasTabela = "";
 
 		if(argumentos.selectCampos){
@@ -33201,17 +33199,21 @@ module.exports = {
 			cb(null);
 		}
 
+		sql += joins + "WHERE " + argumentos;
+
 		if(argumentos.orderBy){
-			if(argumentos.orderBy.campos){
-				orderCampos = argumentos.orderBy.campos;
+			var order = " ORDER BY";
+			for(let i = 0; i < argumentos.orderBy.length; i++){
+				if(argumentos.orderBy[i].campo && argumentos.orderBy[i].sentido){
+					order += " " + argumentos.orderBy[i].campo + " " + argumentos.orderBy[i].sentido + ","
+				}
 			}
-
-			if(argumentos.orderBy.sentido && (argumentos.orderBy.sentido == "ASC" || argumentos.orderBy.sentido == "DESC")){
-				orderSentido = argumentos.orderBy.sentido
-			}
+			order = order.substring(0, order.length-1);
+			order += ";";
+			sql += order;				
+		}else{
+			sql += " ORDER BY id ASC;";
 		}
-
-		sql += joins + "WHERE " + argumentos.where + " ORDER BY " + orderCampos + " " + orderSentido + ";";
 
 		console.log("Em controller::buscar, SQL:\n" + sql);
 
@@ -57090,6 +57092,31 @@ module.exports = {
 		var separado = diaMes.split('-');
 		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
 		return resultado;
+	},
+
+	comparaData: function(a, b){//
+		a = a.split('-');
+		b = b.split('-');
+
+		if(parseInt(a[0]) < parseInt(b[0])){
+			return -1;
+		}else if(parseInt(a[0]) > parseInt(b[0])){
+			return 1;
+		}else{
+			if(parseInt(a[1]) < parseInt(b[1])){
+				return -1;
+			}else if(parseInt(a[1]) > parseInt(b[1])){
+				return 1;
+			}else{
+				if(parseInt(a[2]) < parseInt(b[2])){
+					return -1;
+				}else if(parseInt(a[2]) > parseInt(b[2])){
+					return 1;
+				}else{
+					return 0;
+				}
+			}
+		}
 	}
 };
 }).call(this,require("buffer").Buffer)

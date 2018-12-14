@@ -91,6 +91,16 @@ module.exports = {
 	},
 
 	inserir: function(backup, cb){ //Insere as informações passadas pelo servidor
+		if(backup){
+			if(backup.data){
+				let utils = require('./../utilsCliente.js');
+				let cData = require('./cData.js');
+				if(utils.comparaData(backup.data.substring(0, 10), cData.dataAtual()) == 1){
+					cb(415);
+					return;
+				}
+			}
+		}
 		if(!this.validar(backup)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
@@ -101,6 +111,16 @@ module.exports = {
 	},
 
 	alterar: function(backup, cb){ //Altera as informações passadas por servidor
+		if(backup){
+			if(backup.data){
+				let utils = require('./../utilsCliente.js');
+				let cData = require('./cData.js');
+				if(utils.comparaData(backup.data.substring(0, 10), cData.dataAtual()) == 1){
+					cb(415);
+					return;
+				}
+			}
+		}
 		if(!this.validar(backup)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
@@ -136,7 +156,7 @@ module.exports = {
 	listarComputador: function(idComputador, cb){
 		var argumentos = {};
 		argumentos.where = "codComputador = " + idComputador;
-		argumentos.orderBy = {campos: "b.data", sentido: "DESC"};
+		argumentos.orderBy = [{campo: "b.data", sentido: "DESC"}];
 		argumentos.aliasTabela = "b";
 		argumentos.selectCampos = ["b.*", "i.patrimonio patrimonioComputador", "d.nome discoNome"];
 		argumentos.joins = [

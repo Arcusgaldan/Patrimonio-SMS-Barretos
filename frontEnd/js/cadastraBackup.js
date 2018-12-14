@@ -63,6 +63,10 @@ function cadastrar(){
 				document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
 				$("#erroModal").modal('show');
 				return;
+			}else if(res.statusCode == 415){
+				document.getElementById('msgErroModal').innerHTML = "Por favor, insira uma data válida";
+				$("#erroModal").modal('show');
+				return;
 			}else{
 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 				$("#erroModal").modal('show');
