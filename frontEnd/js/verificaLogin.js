@@ -5,9 +5,7 @@ if(!localStorage.token){
 
 	utils.enviaRequisicao("Token", "BUSCAR", {token: localStorage.token}, function(res){
 		if(res.statusCode == 400){
-			document.getElementById("msgErroModal").innerHTML = 'Algo deu errado com sua autenticação. Por favor, faça login novamente.';			
-			$('#erroModal').modal('show');
-			$('#erroModal').on('hide.bs.modal', function(){location.href = "/login";});
+			location.href = "/login";
 			localStorage.removeItem('token');
 		}else if(res.statusCode == 200){
 			var msg = "";

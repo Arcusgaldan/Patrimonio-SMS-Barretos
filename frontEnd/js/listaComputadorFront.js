@@ -24841,6 +24841,15 @@ function buscar(){
 	}
 }
 
+function preencheCopiarComputador(listaComputador){
+	$("#copiarComputadorCadastrar > option").remove();
+	$("#copiarComputadorCadastrar").append("<option value='0'>Selecione um computador com as mesmas características (opcional)</option>");
+	
+	for(let i = 0; i < listaComputador.length; i++){
+		$("#copiarComputadorCadastrar").append("<option value='"+listaComputador[i].id+"'>"+listaComputador[i].itemPatrimonio+"</option>");
+	}
+}
+
 function preencheSetor(){
 	var utils = require('./../../utilsCliente.js');
 	utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
@@ -25106,6 +25115,7 @@ utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, funct
 		});
 		res.on('end', function(){
 			var vetorComputador = JSON.parse(msg);
+			preencheCopiarComputador(vetorComputador);
 			(function(){
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorComputador)}, false);
 			}());

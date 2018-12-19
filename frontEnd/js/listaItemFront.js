@@ -24793,6 +24793,15 @@ function buscar(){
 	}
 }
 
+function preencheCopiarItem(listaItem){
+	$("#copiarItemCadastrar > option").remove();
+	$("#copiarItemCadastrar").append("<option value='0'>Selecione um item com as mesmas características (opcional)</option>");
+	
+	for(let i = 0; i < listaItem.length; i++){
+		$("#copiarItemCadastrar").append("<option value='"+listaItem[i].id+"'>"+listaItem[i].patrimonio+"</option>");
+	}
+}
+
 function preencheTabela(listaItem){	
 	if(!listaItem){
 		return;
@@ -24960,6 +24969,7 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
 			}());
 			preencheTabela(vetorItem);
+			preencheCopiarItem(vetorItem);
 		});
 	}else if(res.statusCode != 747){
 		document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";

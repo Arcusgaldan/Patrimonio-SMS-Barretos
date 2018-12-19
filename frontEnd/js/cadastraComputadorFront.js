@@ -24683,6 +24683,41 @@ function extend() {
 document.getElementById('btnCadastrar').addEventListener('click', cadastrar, false);
 document.getElementById('btnCadastrarProcessador').addEventListener('click', cadastrarProcessador, false);
 document.getElementById('btnCadastrarSO').addEventListener('click', cadastrarSO, false);
+document.getElementById('copiarComputadorCadastrar').addEventListener('change', copiarComputador, false);
+
+function copiarComputador(){
+	var select = document.getElementById('copiarComputadorCadastrar');
+	
+	if(select.value != '0'){
+		require('./../../utilsCliente.js').enviaRequisicao('Computador', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + select.value}}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					var computador = JSON.parse(msg)[0];
+					document.getElementById('processadorComputadorCadastrar').value = computador.codProcessador;
+					document.getElementById('qtdMemoriaComputadorCadastrar').value = computador.qtdMemoria;
+					document.getElementById('tipoMemoriaComputadorCadastrar').value = computador.tipoMemoria;
+					document.getElementById('armazenamentoComputadorCadastrar').value = computador.armazenamento;
+					document.getElementById('sistemaComputadorCadastrar').value = computador.codSO;
+					if(computador.reserva == true){
+						document.getElementById('reservaComputadorCadastrar').checked = true;
+					}else if(computador.aposentado == true){
+						document.getElementById('aposentadoComputadorCadastrar').checked = true;						
+					}
+				});
+			}else if(res.statusCode != 747){
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar computadores";
+				$("#erroModal").modal('show');
+				return;
+			}
+		});
+	}else{
+		document.getElementById('formCadastroComputador').reset();
+	}
+}
 
 function cadastrar(){
 	var computador = require('./../../model/mComputador.js').novo();

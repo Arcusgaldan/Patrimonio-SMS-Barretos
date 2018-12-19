@@ -32984,7 +32984,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(item.id) || !validates.req(item.patrimonio) || !validates.req(item.codTipoItem)){
+		if(!validates.req(item.id) || !validates.exact(item.patrimonio, 6) || !validates.req(item.codTipoItem)){
 			return false;
 		}else{
 			return true;
@@ -33333,7 +33333,7 @@ module.exports = {
 			cb(null);
 		}
 
-		sql += joins + "WHERE " + argumentos;
+		sql += joins + "WHERE " + argumentos.where;
 
 		if(argumentos.orderBy){
 			var order = " ORDER BY";
@@ -33346,7 +33346,7 @@ module.exports = {
 			order += ";";
 			sql += order;				
 		}else{
-			sql += " ORDER BY id ASC;";
+			sql += ";";
 		}
 
 		console.log("Em controller::buscar, SQL:\n" + sql);
@@ -33432,6 +33432,7 @@ module.exports = {
 },{"mysql":202,"nodemailer":273}],194:[function(require,module,exports){
 document.getElementById('btnCadastrar').addEventListener('click', cadastrarItem, false);
 document.getElementById('btnCadastrarTipo').addEventListener('click', cadastrarTipo, false);
+document.getElementById('copiarItemCadastrar').addEventListener('change', copiarItem, false);
 
 function preencheTipo(){
 	var utils = require('./../../utilsCliente.js');
@@ -33464,6 +33465,34 @@ function preencheTipo(){
 	});
 }
 
+function copiarItem(){
+	var select = document.getElementById('copiarItemCadastrar');
+	
+	if(select.value != '0'){
+		require('./../../utilsCliente.js').enviaRequisicao('Item', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + select.value}}, function(res){
+			if(res.statusCode == 200){
+				var msg = "";
+				res.on('data', function(chunk){
+					msg += chunk;
+				});
+				res.on('end', function(){
+					var item = JSON.parse(msg)[0];
+					document.getElementById('marcaItemCadastrar').value = item.marca;
+					document.getElementById('modeloItemCadastrar').value = item.modelo;
+					document.getElementById('descricaoItemCadastrar').value = item.descricao;
+					document.getElementById('tipoItemCadastrar').value = item.codTipoItem;
+				});
+			}else if(res.statusCode != 747){
+				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+				$("#erroModal").modal('show');
+				return;
+			}
+		});
+	}else{
+		document.getElementById('formCadastroItem').reset();
+	}
+}
+
 function cadastrarTipo(){
 	var tipoItem = require('./../../model/mTipoItem.js').novo();
 	tipoItem.nome = document.getElementById('nomeTipoCadastrar').value;
@@ -33494,6 +33523,11 @@ function cadastrarTipo(){
 function cadastrarItem(){
 	var item = require('./../../model/mItem.js').novo();
 	item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
+	if(item.patrimonio == ""){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+		$("#erroModal").modal('show');
+		return;
+	}
 	while(item.patrimonio.length < 6){
 		item.patrimonio = "0" + item.patrimonio;
 	}
@@ -33503,6 +33537,13 @@ function cadastrarItem(){
 		$("#erroModal").modal('show');
 		return;
 	}
+
+	if(document.getElementById('setorItemCadastrar').value == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um setor";
+		$("#erroModal").modal('show');
+		return;
+	}
+	
 	item.marca = document.getElementById('marcaItemCadastrar').value;
 	item.modelo = document.getElementById('modeloItemCadastrar').value;
 	item.descricao = document.getElementById('descricaoItemCadastrar').value;

@@ -4,11 +4,11 @@
 [V] Considerar criar uma tabela para discos de backup (ex: o PC 123) para poder gerenciar espaço disponível, relatórios etc.
 [V] Fazer botão para limpar formulário (usando form.reset()) de busca
 ![V] Criar Model e Controller de TBDiscoBackup
+![V] Fazer transferência de patrimônio entre setores
 
 -- PENDENTES
 [-] Considerar criar uma tabela de locais para setor
 [-] Considerar criar um campo "motivo" em TBLogTransferencia
-![-] Fazer transferência de patrimônio entre setores
 [-] Colocar checkbox em todas as listas para facilitar ações em lote
 [-] Fazer validação campo-a-campo em todos os formulários
 [-] Considerar paginação para listagens

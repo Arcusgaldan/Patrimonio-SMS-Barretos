@@ -67,7 +67,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(item.id) || !validates.req(item.patrimonio) || !validates.req(item.codTipoItem)){
+		if(!validates.req(item.id) || !validates.exact(item.patrimonio, 6) || !validates.req(item.codTipoItem)){
 			return false;
 		}else{
 			return true;
