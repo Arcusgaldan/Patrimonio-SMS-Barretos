@@ -33199,7 +33199,7 @@ module.exports = {
 			cb(null);
 		}
 
-		sql += joins + "WHERE " + argumentos;
+		sql += joins + "WHERE " + argumentos.where;
 
 		if(argumentos.orderBy){
 			var order = " ORDER BY";
@@ -33212,7 +33212,7 @@ module.exports = {
 			order += ";";
 			sql += order;				
 		}else{
-			sql += " ORDER BY id ASC;";
+			sql += ";";
 		}
 
 		console.log("Em controller::buscar, SQL:\n" + sql);

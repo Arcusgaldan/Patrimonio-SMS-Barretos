@@ -13,7 +13,7 @@ var http = require('http');
 var vetorTokens = [];
 
 http.createServer(function(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+	res.setHeader('Access-Control-Allow-Origin', 'http://172.17.17.15');
     res.setHeader('Access-Control-Allow-Credentials', "true");
     res.setHeader('Access-Control-Allow-Methods', 'OPTION, GET, POST');    
     res.setHeader('Accept-Encoding', 'gzip, deflate, br');

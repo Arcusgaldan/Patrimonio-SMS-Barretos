@@ -65,7 +65,12 @@
 
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
-              <div class="card-header">Gerenciamento de Item 
+              <div class="card-header">Gerenciamento de Item
+                <select id="selectAcaoItem" class="ml-5">
+                  <option value="transferir">Transferir</option>
+                  <option value="excluir">Excluir</option>
+                </select>
+                <button class="btn btn-warning ml-1" id="btnAcaoItem">Ir</button>
                 <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
                 <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
                 <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
@@ -454,7 +459,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="tituloModalBuscar">Transferência de Item</h5>
+              <h5 class="modal-title" id="tituloModalTransferir">Transferência de Item</h5>
               <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -495,7 +500,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Patrimônio do Item: <strong><span id="patrimonioItemConfirmaTransferencia"></span></strong> <br> Setor de Origem: <strong><span id="setorAntigoItemConfirmaTransferencia"></span></strong><br>Setor de Destino: <strong><span id="setorNovoItemConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
+            <div class="modal-body"><p style="color: #000">Patrimônio(s) do(s) Item(ns): <strong><span id="patrimonioItemConfirmaTransferencia"></span></strong> <br> Setor de Origem: <strong><span id="setorAntigoItemConfirmaTransferencia"></span></strong><br>Setor de Destino: <strong><span id="setorNovoItemConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnTransferir">SIM</button>
               <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
@@ -504,6 +509,41 @@
         </div>
       </div> 
       <!-- /CONFIRMA TRANSFERENCIA MODAL -->
+
+      <!-- TRANSFERE LOTE MODAL -->
+      <div class="modal fade" id="transfereLoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tituloModalTransferirLote">Transferência de Item</h5>
+              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioLoteTransferir" class="form-control" placeholder="Patrimônios" disabled="true">
+                    <label for="patrimonioLoteTransferir">Patrimônios</label>
+                  </div>
+                </div>
+
+                <div class="form-label-group">
+                  <select id="setorLoteTransferir" class="form-control"></select>
+                </div>
+              </form>
+              <div id="idItemTransferirLote" style="display: none;"></div>
+              <div id="idSetorTransferirLote" style="display: none;"></div>
+              <div class="modal-footer">
+                <button class="btn btn-success" type="button" id="btnModalTransferenciaLote">Transferir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /TRANSFERE LOTE MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->
