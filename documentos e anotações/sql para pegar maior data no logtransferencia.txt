@@ -1,0 +1,1 @@
+select lt.* FROM TBLogTransferencia lt INNER JOIN (SELECT codItem, MAX(data) as MaxData FROM TBLogTransferencia GROUP BY CodItem) grupoLT on lt.codItem = grupoLT.codItem AND lt.data = grupoLT.MaxData;

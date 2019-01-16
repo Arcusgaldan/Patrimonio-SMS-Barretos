@@ -4,3 +4,4 @@
 413: Falta de privilégio
 414: Objeto essencial, não pode ser excluído
 415: Data inválida
+444: Erro fatal com necessidade de contato urgente ao suporte

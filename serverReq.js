@@ -167,6 +167,7 @@ http.createServer(function(req, res) {
             		// console.log("Acabou a execução do trataOperacao! Resposta.codigo = " + resposta.codigo + " e resposta.msg = " + resposta.msg);
             		res.statusCode = resposta.codigo;
             		if(resposta.msg){
+                        console.log("Há um texto a ser enviado na resposta!");
             			res.write(resposta.msg);
             		}
             		res.end();

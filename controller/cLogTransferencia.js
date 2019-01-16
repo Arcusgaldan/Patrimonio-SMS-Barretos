@@ -54,6 +54,22 @@ module.exports = {
 					cb(resposta);
 				});
 				break;
+			case 'TRANSFERIRLOTE':
+				if(!usuario){
+					resposta.codigo = 413;
+					cb(resposta);
+				}
+				this.transferirLote(msg.itens, msg.destino, function(codRes, texto){
+					resposta.codigo = codRes;
+					if(texto != null){
+						texto += "";
+						resposta.msg = texto;
+					}else{
+						console.log("Não há texto em trataOperacao::cLogTransferencia!");
+					}
+					cb(resposta);
+				});
+				break;
 			default:
 				resposta.codigo = 410;
 				cb(resposta);
@@ -126,5 +142,107 @@ module.exports = {
 		require('./controller.js').buscar("LogTransferencia", argumentos, function(res){
 			cb(res);
 		});		
+	},
+
+	transferirLote: function(itens, destino, cb){
+		sql = "SELECT i.id idItem, s.id idSetor, lt.id idLog FROM TBItem i JOIN TBLogTransferencia lt ON i.id = lt.codItem JOIN TBSetor s ON s.id = lt.codSetor WHERE lt.atual = 1 AND ";
+		let stringItens = '(';
+		let qtdExcluidos = 0;
+		let logs = [];
+		let itensFinal = [];
+		let alterarLote = this.alterarLote;
+		let inserirLote = this.inserirLote;
+		for(let i = 0; i < itens.length; i++){
+			if(i == itens.length - 1){
+				stringItens += 'i.id = ' + itens[i];
+			}else{
+				stringItens += 'i.id = ' + itens[i] + ' OR ';
+			}
+		}
+		stringItens += ');';
+		sql += stringItens;
+		let dao = require('./../dao.js');
+		dao.buscar(dao.criaConexao(), sql, function(resultado){
+			if(resultado){
+				for(let i = 0; i < resultado.length; i++){
+					if(resultado[i].idSetor == destino){
+						qtdExcluidos++;
+					}else{
+						logs.push(resultado[i].idLog);
+						itensFinal.push(resultado[i].idItem);
+					}
+				}
+				if(logs.length == 0){
+					cb(400, qtdExcluidos);
+					return;
+				}else{
+					alterarLote(logs, 0, function(codRes){
+						if(codRes == 200){
+							inserirLote(itensFinal, destino, function(codRes){
+								if(codRes == 200){
+									cb(200, qtdExcluidos);
+									return;
+								}else{
+									alterarLote(logs, 1, function(codRes){
+										if(codRes == 200){
+											cb(400);
+											return;
+										}else{
+											cb(444);
+											return;
+										}
+									});
+								}
+							});
+						}else{
+							cb(400);
+							return;
+						}
+					});
+				}
+			}else{
+				cb(400);
+				return;
+			}
+		});
+	},
+
+	alterarLote: function(logs, atual, cb){
+		let sql = "UPDATE TBLogTransferencia SET atual = " + atual + " WHERE ";
+		let stringLogs = "(";
+		for(let i = 0; i < logs.length; i++){
+			if(i == logs.length - 1){
+				stringLogs += "id = " + logs[i];
+			}else{
+				stringLogs += "id = " + logs[i] + " OR ";
+			}
+		}
+		stringLogs += ");";
+		sql += stringLogs;
+		let dao = require('./../dao.js');
+		dao.inserir(dao.criaConexao(), sql, function(codRes){
+			cb(codRes);
+			return;
+		});
+	},
+
+	inserirLote: function(itens, destino, cb){
+		let sql = "INSERT INTO TBLogTransferencia (id, data, codSetor, codItem, atual) VALUES ";
+		let dataAtual = require('./cData.js').dataHoraAtual();
+		let values = "";
+		for(let i = 0; i < itens.length; i++){
+			if(i == itens.length - 1){
+				values += "(0, '" + dataAtual + "', " + destino + ", " + itens[i] + ", 1);";
+			}else{
+				values += "(0, '" + dataAtual + "', " + destino + ", " + itens[i] + ", 1), ";
+			}
+		}
+
+		sql += values;
+		let dao = require('./../dao.js');
+		dao.inserir(dao.criaConexao(), sql, function(codRes){
+			cb(codRes);
+			return;
+		});
 	}
 }

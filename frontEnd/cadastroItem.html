@@ -537,13 +537,33 @@
               <div id="idItemTransferirLote" style="display: none;"></div>
               <div id="idSetorTransferirLote" style="display: none;"></div>
               <div class="modal-footer">
-                <button class="btn btn-success" type="button" id="btnModalTransferenciaLote">Transferir</button>
+                <button class="btn btn-success" type="button" id="btnTransfereLoteModal">Transferir</button>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- /TRANSFERE LOTE MODAL -->
+
+      <!-- CONFIRMA TRANSFERENCIA MODAL -->
+      <div class="modal fade" id="confirmaTransferenciaLoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Transferência entre setores</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body"><p style="color: #000">Patrimônios dos Itens: <strong><span id="patrimonioLoteConfirmaTransferencia"></span></strong> <br> Setor de Destino: <strong><span id="setorNovoLoteConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
+            <div class="modal-footer">
+              <button class="btn btn-success" id="btnTransferirLote">SIM</button>
+              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <!-- /CONFIRMA TRANSFERENCIA MODAL -->
 
 
     <!-- Bootstrap core JavaScript-->
@@ -577,6 +597,7 @@
     <script type="text/javascript" src="/js/alteraItemFront.js"></script>
     <script type="text/javascript" src="/js/excluiItemFront.js"></script>
     <script type="text/javascript" src="/js/transfereItemFront.js"></script>
+    <script type="text/javascript" src="/js/transfereMultItemFront.js"></script>
 
   </body>
 

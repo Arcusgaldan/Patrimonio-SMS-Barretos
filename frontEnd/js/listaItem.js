@@ -11,30 +11,41 @@ function lote(){
 		//Fazer uma função no controller de LogTransferencia para itens multiplos, que além do retorno numerico também retorna em texto os patrimonios que não foram transferidos porque o setor de destino é igual à origem
 		//Se possível fazer essa validação primeiro a nível cliente e depois a nível servidor
 		var vetorMarcados = [];
+		var vetorID = [];
 		for(let i = 0; true; i++){
 			var cboxAtual = document.getElementById('cboxItemLista' + i);
 			if(cboxAtual == null)
 				break;
 
-			if(cboxAtual.checked == true)
+			if(cboxAtual.checked == true){
 				vetorMarcados.push(i);
+				vetorID.push(cboxAtual.value);
+			}
 		}
 
 		if(vetorMarcados.length == 0){
 			document.getElementById('msgErroModal').innerHTML = "Selecione ao menos um item!";
 			$("#erroModal").modal('show');
 			return;
+		}else if(vetorMarcados.length == 1){
+			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
+			document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
+			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
+			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+			$("#transfereModal").modal('show');
+		}else{
+			document.getElementById('patrimonioLoteTransferir').value = "";
+			for(let i = 0; i < vetorMarcados.length; i++){
+				if(i < vetorMarcados.length - 1)
+					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
+				else
+					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
+			}
+			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
+			$("#transfereLoteModal").modal('show');			
 		}
 
-		document.getElementById('patrimonioLoteTransferir').value = "";
-		for(let i = 0; i < vetorMarcados.length; i++){
-			if(i < vetorMarcados.length - 1)
-				document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
-			else
-				document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
-		}
-		$("#transfereLoteModal").modal('show');
-		//require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'TRANSFERIRLOTE', {token: localStorage.token, })
 	}
 }
 
@@ -178,12 +189,14 @@ function preencheTabela(listaItem){
 				    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
 				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
 				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
+				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
 				  </div>\
 				</div>\
 		    </td>\
 		  </tr>\
 		");
 
+		document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
 		document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;
 		document.getElementById('patrimonioItemDados' + i).innerHTML = listaItem[i].patrimonio;
 		if(listaItem[i].marca)
@@ -202,6 +215,8 @@ function preencheTabela(listaItem){
 		document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
 
 		document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorLocal + " - " + listaItem[i].setorNome;
+
+		document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
 
 		(function(){
 			var item = listaItem[i];		
@@ -289,17 +304,18 @@ function preencheSetor(){
 				$("#setorItemCadastrar > option").remove();
 				$("#setorItemBuscar > option").remove();
 				$("#setorItemTransferir > option").remove();
-				$("#setorItemTransferirLote > option").remove();
+				$("#setorLoteTransferir > option").remove();
 				
 				$("#setorItemCadastrar").append("<option value='0'>Setor</option");
 				$("#setorItemBuscar").append("<option value='0'>Setor</option");
+				$("#setorLoteTransferir").append("<option value='0'>Setor</option");
 
 
 				for(let i = 0; i < vetorSetor.length; i++){
 					$("#setorItemCadastrar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
 					$("#setorItemBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
 					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorItemTransferirLote").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
+					$("#setorLoteTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
 				}
 			});
 		}else if(res.statusCode != 747){
