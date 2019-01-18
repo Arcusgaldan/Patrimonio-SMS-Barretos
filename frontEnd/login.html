@@ -91,6 +91,16 @@
     <!-- Core plugin JavaScript-->
     <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
+    <script type="text/javascript">
+      $("#formLogin input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnLogin').click();
+        }
+      });
+    </script>
+
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>
     <script type="text/javascript" src="/js/loginFront.js"></script>

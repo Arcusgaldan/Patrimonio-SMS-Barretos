@@ -24694,6 +24694,15 @@ document.getElementById('btnModalTransferencia').addEventListener('click', funct
 
 }, false);
 
+function completaZero(valor, qtd){
+	valor += "";
+	let resultado = valor;
+	while(resultado.length < qtd){
+		resultado = "0" + resultado;
+	}
+	return resultado;
+}
+
 document.getElementById('btnTransferir').addEventListener('click', function(){
 	//Enviar requisições para alterar o Log antigo para atual = 0 e criar um novo Log com atual = 1
 	var utils = require('./../../utilsCliente.js');
@@ -24711,8 +24720,12 @@ document.getElementById('btnTransferir').addEventListener('click', function(){
 				logAntigo = JSON.parse(msg)[0];
 				console.log("Só para validar data, logAntigo = " + msg);
 				logAntigo.atual = 0;
-				logAntigo.data = logAntigo.data.replace('T', ' ');
-				logAntigo.data = logAntigo.data.replace('Z', '');
+				let dataPadrao = new Date(logAntigo.data);
+				logAntigo.data = dataPadrao.getFullYear() + "-" + completaZero(dataPadrao.getMonth() + 1, 2) + "-" + completaZero(dataPadrao.getDate(), 2) + " " + completaZero(dataPadrao.getHours(), 2) + ":" + completaZero(dataPadrao.getMinutes(), 2) + ":" + completaZero(dataPadrao.getSeconds(), 2);
+				console.log("Só a data! " + logAntigo.data);
+				// logAntigo.data = logAntigo.data.replace('T', ' ');
+				// logAntigo.data = logAntigo.data.replace('Z', '');
+				console.log("Só para validar data depois da correção, logAntigo = " + JSON.stringify(logAntigo));
 				utils.enviaRequisicao('LogTransferencia', 'ALTERAR', {token: localStorage.token, msg: logAntigo}, function(res){
 					if(res.statusCode == 200){
 						var logNovo = require('./../../model/mLogTransferencia.js').novo();
@@ -24854,12 +24867,24 @@ module.exports = {
 		}
 	},
 
+	completaZero: function (valor, qtd){
+		valor += "";
+		let resultado = valor;
+		while(resultado.length < qtd){
+			resultado = "0" + resultado;
+		}
+		return resultado;
+	},
+
 	formataData: function(data){
 		if(!data){
 			return "-";
 		}
-		var separado = data.substring(0, 10).split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4);
 		return resultado;
 	},
 
@@ -24868,10 +24893,41 @@ module.exports = {
 			return "-";
 		}
 
-		var diaMes = data.substring(0, 10);
-		var hora = data.substring(11, 19);
-		var separado = diaMes.split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		return resultado;
+	},
+
+	fomataDataISO: function(data){
+		if(!data){
+			return "-";
+		}
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2);
+		return resultado;
+	},
+
+	formataDataHoraISO: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + "T" + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
 		return resultado;
 	},
 

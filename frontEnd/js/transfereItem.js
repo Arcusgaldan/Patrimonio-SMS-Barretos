@@ -12,6 +12,15 @@ document.getElementById('btnModalTransferencia').addEventListener('click', funct
 
 }, false);
 
+function completaZero(valor, qtd){
+	valor += "";
+	let resultado = valor;
+	while(resultado.length < qtd){
+		resultado = "0" + resultado;
+	}
+	return resultado;
+}
+
 document.getElementById('btnTransferir').addEventListener('click', function(){
 	//Enviar requisições para alterar o Log antigo para atual = 0 e criar um novo Log com atual = 1
 	var utils = require('./../../utilsCliente.js');
@@ -29,8 +38,12 @@ document.getElementById('btnTransferir').addEventListener('click', function(){
 				logAntigo = JSON.parse(msg)[0];
 				console.log("Só para validar data, logAntigo = " + msg);
 				logAntigo.atual = 0;
-				logAntigo.data = logAntigo.data.replace('T', ' ');
-				logAntigo.data = logAntigo.data.replace('Z', '');
+				let dataPadrao = new Date(logAntigo.data);
+				logAntigo.data = dataPadrao.getFullYear() + "-" + completaZero(dataPadrao.getMonth() + 1, 2) + "-" + completaZero(dataPadrao.getDate(), 2) + " " + completaZero(dataPadrao.getHours(), 2) + ":" + completaZero(dataPadrao.getMinutes(), 2) + ":" + completaZero(dataPadrao.getSeconds(), 2);
+				console.log("Só a data! " + logAntigo.data);
+				// logAntigo.data = logAntigo.data.replace('T', ' ');
+				// logAntigo.data = logAntigo.data.replace('Z', '');
+				console.log("Só para validar data depois da correção, logAntigo = " + JSON.stringify(logAntigo));
 				utils.enviaRequisicao('LogTransferencia', 'ALTERAR', {token: localStorage.token, msg: logAntigo}, function(res){
 					if(res.statusCode == 200){
 						var logNovo = require('./../../model/mLogTransferencia.js').novo();

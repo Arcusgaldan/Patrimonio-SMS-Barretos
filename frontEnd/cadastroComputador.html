@@ -376,7 +376,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form id="formCadastroProcessador">
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="text" id="nomeProcessadorCadastrar" class="form-control" name="nomeProcessadorCadastrar" placeholder="Nome">
@@ -405,7 +405,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="formAlteraProcessador">
 
                   <div class="form-group">
                     <div class="form-row">
@@ -470,7 +470,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form> 
+              <form id="formCadastroSO"> 
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="text" id="nomeSOCadastrar" class="form-control" name="nomeSOCadastrar" placeholder="Nome">
@@ -499,7 +499,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="formAlteraSO">
 
                   <div class="form-group">
                     <div class="form-row">
@@ -758,6 +758,76 @@
     <!-- Demo scripts for this page-->
     <script src="/js/demo/datatables-demo.js"></script>
     <script src="/js/demo/chart-area-demo.js"></script>
+
+    <script type="text/javascript">
+      $("#formCadastroComputador input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraComputador input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarComputador input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroProcessador input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrarProcessador').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraProcessador input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterarProcessador').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroSO input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrarSO').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraSO input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterarSO').click();
+        }
+      });
+    </script>
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

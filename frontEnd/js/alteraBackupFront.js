@@ -24727,6 +24727,7 @@ function buscaComputador(cb){
 
 	var argumentos = {};
 
+	argumentos.selectCampos = ['c.id idComputador'];
 	argumentos.where = "i.patrimonio = '" + patrimonio + "'";
 	argumentos.joins = [{tabela: "TBItem i", on: "i.id = c.codItem"}];
 	argumentos.aliasTabela = "c";
@@ -24740,7 +24741,7 @@ function buscaComputador(cb){
 			res.on('end', function(){
 				var computador = JSON.parse(msg)[0];
 				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
-				cb(computador.id);
+				cb(computador.idComputador);
 			});
 		}else{
 			cb(null);
@@ -25015,12 +25016,24 @@ module.exports = {
 		}
 	},
 
+	completaZero: function (valor, qtd){
+		valor += "";
+		let resultado = valor;
+		while(resultado.length < qtd){
+			resultado = "0" + resultado;
+		}
+		return resultado;
+	},
+
 	formataData: function(data){
 		if(!data){
 			return "-";
 		}
-		var separado = data.substring(0, 10).split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4);
 		return resultado;
 	},
 
@@ -25029,10 +25042,41 @@ module.exports = {
 			return "-";
 		}
 
-		var diaMes = data.substring(0, 10);
-		var hora = data.substring(11, 19);
-		var separado = diaMes.split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		return resultado;
+	},
+
+	fomataDataISO: function(data){
+		if(!data){
+			return "-";
+		}
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2);
+		return resultado;
+	},
+
+	formataDataHoraISO: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + "T" + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
 		return resultado;
 	},
 

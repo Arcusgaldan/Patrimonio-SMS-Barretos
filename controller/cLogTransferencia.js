@@ -140,6 +140,8 @@ module.exports = {
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
 		require('./controller.js').buscar("LogTransferencia", argumentos, function(res){
+			// console.log("A resposta da busca em logtransferencia é: " + JSON.stringify(res));
+			// console.log("Por outro lado, somente a data da primeira entrada sem o stringify é: " + res[0].dataTransferencia);
 			cb(res);
 		});		
 	},

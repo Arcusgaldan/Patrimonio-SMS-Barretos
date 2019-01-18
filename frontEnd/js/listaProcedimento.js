@@ -99,6 +99,7 @@ function buscaComputador(cb){
 
 	var argumentos = {};
 
+	argumentos.selectCampos = ['c.id idComputador'];
 	argumentos.where = "i.patrimonio = '" + patrimonio + "'";
 	argumentos.joins = [{tabela: "TBItem i", on: "i.id = c.codItem"}];
 	argumentos.aliasTabela = "c";
@@ -112,7 +113,7 @@ function buscaComputador(cb){
 			res.on('end', function(){
 				var computador = JSON.parse(msg)[0];
 				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
-				cb(computador.id);
+				cb(computador.idComputador);
 			});
 		}else{
 			cb(null);

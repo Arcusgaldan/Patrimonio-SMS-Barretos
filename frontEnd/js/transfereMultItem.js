@@ -33,7 +33,7 @@ function transferir(){
 						document.getElementById('msgSucessoModal').innerHTML = qtdExcluidos + " itens já estavam no setor e não foram alterados, os demais foram transferidos com sucesso!";
 						$("#sucessoModal").modal('show');
 						$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-						setTimeout(function(){location.reload();} , 2000);
+						setTimeout(function(){location.reload();} , 6000);
 					}
 					break;
 				case 400:

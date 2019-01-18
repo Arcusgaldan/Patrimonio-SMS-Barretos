@@ -308,7 +308,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form id="formCadastroTipo">
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="text" id="nomeTipoCadastrar" class="form-control" name="nomeTipoCadastrar" placeholder="Nome">
@@ -337,7 +337,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form id="formAlteraTipo">
                 <div class="form-group">
                   <div class="form-row">
                     <div class="form-label-group col-md-11">                        
@@ -565,6 +565,27 @@
       </div> 
       <!-- /CONFIRMA TRANSFERENCIA MODAL -->
 
+      <!-- HISTORICO MODAL -->
+      <div class="modal fade" id="historicoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="">Histórico de movimentação do item <span id="patrimonioHistorico"></span></h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body" id="corpoHistoricoModal">
+              
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger"  data-dismiss="modal">FECHAR</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <!-- /HISTORICO MODAL -->
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -584,6 +605,56 @@
     <!-- Demo scripts for this page-->
     <script src="/js/demo/datatables-demo.js"></script>
     <script src="/js/demo/chart-area-demo.js"></script>
+
+    <script type="text/javascript">
+      $("#formCadastroItem input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraItem input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarItem input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroTipo input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrarTipo').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraTipo input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterarTipo').click();
+        }
+      });
+    </script>
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

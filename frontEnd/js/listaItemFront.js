@@ -24872,6 +24872,8 @@ function preencheTabela(listaItem){
 				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
 				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
 				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
+				    <br>\
+				    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
 				  </div>\
 				</div>\
 		    </td>\
@@ -24911,6 +24913,9 @@ function preencheTabela(listaItem){
 			document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
 				preencheModalTransferencia(item);
 			}, false);
+			document.getElementById("historicoItemDados" + i).addEventListener("click", function(){
+				preencheModalHistorico(item);
+			}, false);
 		}());
 	}	
 }
@@ -24935,6 +24940,37 @@ function preencheModalTransferencia(item){
 	document.getElementById('idItemTransferir').value = item.id;
 	document.getElementById('setorAntigoItemTransferir').value = item.setorLocal + " - " + item.setorNome;
 	document.getElementById('idSetorAntigoItemTransferir').value = item.setorId;
+}
+
+function preencheModalHistorico(item){
+	document.getElementById('patrimonioHistorico').innerHTML = item.patrimonio;
+	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "s.local localSetor", "s.sigla siglaSetor", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "codItem = " + item.id, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				let historico = JSON.parse(msg);
+				$("#corpoHistoricoModal >").remove();
+				for(let i = 0; i < historico.length; i++){
+					$("#corpoHistoricoModal").append('<div class="card mb-1" style="width: 100%;">\
+					    <div class="card-body">\
+					      <h5 class="card-title">' + historico[i].localSetor + ' - ' + historico[i].nomeSetor + '</h5>\
+					      <p class="card-text">Data de Transferência: ' + require('./../../utilsCliente.js').formataDataHora(historico[i].dataTransferencia) + '</p>\
+					    </div>\
+					  </div>');
+					// console.log("Data sem formatar: " + historico[i].dataTransferencia);
+					// console.log("Data formatada: " + require('./../../utilsCliente.js').formataDataHora(historico[i].dataTransferencia))
+				}
+				$("#historicoModal").modal('show');
+			});
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar histórico do item";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
 }
 
 function preencheTipo(){
@@ -25112,12 +25148,24 @@ module.exports = {
 		}
 	},
 
+	completaZero: function (valor, qtd){
+		valor += "";
+		let resultado = valor;
+		while(resultado.length < qtd){
+			resultado = "0" + resultado;
+		}
+		return resultado;
+	},
+
 	formataData: function(data){
 		if(!data){
 			return "-";
 		}
-		var separado = data.substring(0, 10).split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4);
 		return resultado;
 	},
 
@@ -25126,10 +25174,41 @@ module.exports = {
 			return "-";
 		}
 
-		var diaMes = data.substring(0, 10);
-		var hora = data.substring(11, 19);
-		var separado = diaMes.split('-');
-		var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getDate(), 2) + "/" + this.completaZero(d.getMonth() + 1, 2) + "/" + this.completaZero(d.getFullYear(), 4) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		return resultado;
+	},
+
+	fomataDataISO: function(data){
+		if(!data){
+			return "-";
+		}
+		// var separado = data.substring(0, 10).split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0];
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2);
+		return resultado;
+	},
+
+	formataDataHoraISO: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + "T" + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
 		return resultado;
 	},
 

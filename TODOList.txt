@@ -6,18 +6,17 @@
 ![V] Criar Model e Controller de TBDiscoBackup
 ![V] Fazer transferência de patrimônio entre setores
 ![V] Adicionar opção de escolher um item/computador por patrimônio para "copiar" seu cadastro (para múltiplos itens iguais)
+![V] Colocar checkbox em todas as listas para facilitar ações em lote
+[V] Adicionar funcionalidade de apertar enter para enviar formulários
 
 -- PENDENTES
 [-] Considerar criar uma tabela de locais para setor
-[-] Considerar criar um campo "motivo" em TBLogTransferencia
-![-] Colocar checkbox em todas as listas para facilitar ações em lote
 ![-] Melhorar interface para cadastro de computador junto a cadastro de item
 [-] Fazer validação campo-a-campo em todos os formulários
 [-] Considerar paginação para listagens
 [-] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco
 [-] Adicionar campo IP em computador
 [-] Ao finalizar CRUD's, iniciar gráficos e estatísticas na página inicial do sistema.
-[-] Adicionar funcionalidade de apertar enter para enviar formulários
 [-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 [-] Permitir cadastrar itens/computadores baseado num range de patrimonio (ex: 205599 - 205619)
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
@@ -25,3 +24,4 @@
 -- EM ANDAMENTO
 
 -- ABORTADOS
+[X] Considerar criar um campo "motivo" em TBLogTransferencia //Ia ficar cansativo para várias transações em seguida

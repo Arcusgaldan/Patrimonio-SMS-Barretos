@@ -34,6 +34,7 @@ module.exports = {
 
 		}
 		sql += campos + ") values (" + valores + ");"; //Finaliza a string de comando sql
+		console.log("Em controller:inserir, SQL = " + sql);
 		var dao = require('./../dao.js'); //Puxa o módulo DAO, responsável pela conexão com o BD
 		dao.inserir(dao.criaConexao(), sql, function(codRes){ //Executa o comando de inserção (sql com retorno apenas de status)
 			cb(codRes); //Executa o callback com o código retornado pelo callback do DAO.

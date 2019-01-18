@@ -368,7 +368,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              <form id="formCadastroDisco">
                 <div class="form-group">
                   <div class="form-label-group">
                     <input type="text" id="nomeDiscoCadastrar" class="form-control" name="nomeDiscoCadastrar" placeholder="Nome">
@@ -511,6 +511,56 @@
     <!-- Demo scripts for this page-->
     <script src="/js/demo/datatables-demo.js"></script>
     <script src="/js/demo/chart-area-demo.js"></script>
+
+    <script type="text/javascript">
+      $("#formCadastroBackup input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraBackup input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarBackup input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroDisco input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrarDisco').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraDisco input").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterarDisco').click();
+        }
+      });
+    </script>
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>
