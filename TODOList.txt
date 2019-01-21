@@ -17,11 +17,12 @@
 [-] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco
 [-] Adicionar campo IP em computador
 [-] Ao finalizar CRUD's, iniciar gráficos e estatísticas na página inicial do sistema.
-[-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 [-] Permitir cadastrar itens/computadores baseado num range de patrimonio (ex: 205599 - 205619)
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
+[-] Estudar defesas para SQL Injection
 
 -- EM ANDAMENTO
+[-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 
 -- ABORTADOS
 [X] Considerar criar um campo "motivo" em TBLogTransferencia //Ia ficar cansativo para várias transações em seguida

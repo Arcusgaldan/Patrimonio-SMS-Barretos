@@ -33,7 +33,7 @@ function buscaComputador(cb){
 function cadastrar(){
 	var backup = require('./../../model/mBackup.js').novo();
 
-	backup.data = document.getElementById('dataBackupCadastrar').value;
+	backup.data = document.getElementById('dataBackupCadastrar').value.replace('T', ' ');
 	backup.nomePasta = document.getElementById('nomePastaBackupCadastrar').value;
 	backup.tamanho = document.getElementById('tamanhoBackupCadastrar').value;
 	backup.codDisco = document.getElementById('discoBackupCadastrar').value;

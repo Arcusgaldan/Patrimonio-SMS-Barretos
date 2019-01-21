@@ -24935,6 +24935,22 @@ module.exports = {
 		return resultado;
 	},
 
+	formataDataHoraSQL: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
+		return resultado;
+	},
+
 	comparaData: function(a, b){//
 		a = a.split('-');
 		b = b.split('-');

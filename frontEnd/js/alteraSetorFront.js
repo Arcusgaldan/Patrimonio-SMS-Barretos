@@ -33226,6 +33226,15 @@ module.exports = {
 		//Acabar de inventar busca com todos os parâmetros possiveis (join, like, etc.)
 		//Para passar os valores para busca, usar algo como [{campo: nome, valor: 'Thales', operador: 'LIKE'}, {campo: idade, valor: 20, operador: >}, {campo: objetivo, valor: 'Ficar pobre', operador: <>}]
 		//Usar valores padrão, por exemplo se não especificar selectCampos usar *, se não especificar operador usar '=', etc.
+	},
+
+	proximoID: function(alvo, cb){
+		var sql = 'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "dbpatrimoniosms" AND TABLE_NAME = "TB' + alvo + '"';
+		var dao = require('./../dao.js');
+		dao.buscar(dao.criaConexao(), sql, function(resultado){
+			let id = resultado[0].AUTO_INCREMENT;
+			cb(id);
+		});
 	}
 }
 },{"./../dao.js":192}],192:[function(require,module,exports){
@@ -57135,6 +57144,22 @@ module.exports = {
 
 		let d = new Date(data);
 		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + "T" + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
+		return resultado;
+	},
+
+	formataDataHoraSQL: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
 		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
 		return resultado;
 	},

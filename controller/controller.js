@@ -189,5 +189,14 @@ module.exports = {
 		//Acabar de inventar busca com todos os parâmetros possiveis (join, like, etc.)
 		//Para passar os valores para busca, usar algo como [{campo: nome, valor: 'Thales', operador: 'LIKE'}, {campo: idade, valor: 20, operador: >}, {campo: objetivo, valor: 'Ficar pobre', operador: <>}]
 		//Usar valores padrão, por exemplo se não especificar selectCampos usar *, se não especificar operador usar '=', etc.
+	},
+
+	proximoID: function(alvo, cb){
+		var sql = 'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "dbpatrimoniosms" AND TABLE_NAME = "TB' + alvo + '"';
+		var dao = require('./../dao.js');
+		dao.buscar(dao.criaConexao(), sql, function(resultado){
+			let id = resultado[0].AUTO_INCREMENT;
+			cb(id);
+		});
 	}
 }

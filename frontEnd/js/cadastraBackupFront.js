@@ -24715,7 +24715,7 @@ function buscaComputador(cb){
 function cadastrar(){
 	var backup = require('./../../model/mBackup.js').novo();
 
-	backup.data = document.getElementById('dataBackupCadastrar').value;
+	backup.data = document.getElementById('dataBackupCadastrar').value.replace('T', ' ');
 	backup.nomePasta = document.getElementById('nomePastaBackupCadastrar').value;
 	backup.tamanho = document.getElementById('tamanhoBackupCadastrar').value;
 	backup.codDisco = document.getElementById('discoBackupCadastrar').value;
@@ -25043,6 +25043,22 @@ module.exports = {
 
 		let d = new Date(data);
 		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + "T" + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
+		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
+		return resultado;
+	},
+
+	formataDataHoraSQL: function(data){
+		if(!data){
+			return "-";
+		}
+
+		// var diaMes = data.substring(0, 10);
+		// var hora = data.substring(11, 19);
+		// var separado = diaMes.split('-');
+		// var resultado = separado[2] + "/" + separado[1] + "/" + separado[0] + " " + hora;
+
+		let d = new Date(data);
+		let resultado = this.completaZero(d.getFullYear(), 4) + "-" + this.completaZero(d.getMonth() + 1, 2) + "-" + this.completaZero(d.getDate(), 2) + " " + this.completaZero(d.getHours(), 2) + ":" + this.completaZero(d.getMinutes(), 2) + ":" + this.completaZero(d.getSeconds(), 2);
 		//console.log("Em formataDataHoraISO, data = " + data + " e resultado = " + resultado);
 		return resultado;
 	},
