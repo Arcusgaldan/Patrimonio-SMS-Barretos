@@ -20,6 +20,8 @@
 [-] Permitir cadastrar itens/computadores baseado num range de patrimonio (ex: 205599 - 205619)
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
 [-] Estudar defesas para SQL Injection
+[-] Estudar melhoramento para log de transferência em lote
+[-] Aplicar modelo de criptografia
 
 -- EM ANDAMENTO
 [-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);

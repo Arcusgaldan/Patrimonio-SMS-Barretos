@@ -27,6 +27,11 @@ module.exports = {
 	// },
 
 	inserir: function(log, cb){
+		if(log){
+			if(log.mudanca){
+				log.mudanca = log.mudanca.replace(/\"/g, '\'');
+			}
+		}
 		require('./controller.js').inserir("Log", log, function(codRes){
 			cb(codRes);
 		});

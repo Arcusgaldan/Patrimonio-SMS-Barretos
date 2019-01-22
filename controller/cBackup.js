@@ -11,9 +11,18 @@ module.exports = {
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
-						require('./controller.js').proximoID("Backup", function(id){
-							console.log("Testando função de correção de data: " + require('./cData.js').dataHoraAtual().replace('T', ' '));
-							require('./cLog.js').inserir({id: id - 1, chave: msg.id, tabela: "TBBackup", operacao: "INSERIR", mudanca: JSON.stringify(msg), data: require('./cData.js').dataHoraAtual().replace('T', ' '), codUsuario: usuario.id}, function(codRes){
+						require('./controller.js').proximoID("Backup", function(id){						
+							msg.id = parseInt(id) - 1;
+							let log = {
+								id: 0,
+								chave: parseInt(id) - 1,
+								tabela: "TBBackup",
+								operacao: "INSERIR",
+								mudanca: JSON.stringify(msg),
+								data: require('./cData.js').dataHoraAtual(),
+								codUsuario: usuario.id
+							}
+							require('./cLog.js').inserir(log, function(codRes){
 								if(codRes == 200){
 									cb(resposta);	
 									return;																
@@ -39,17 +48,24 @@ module.exports = {
 				this.alterar(msg, function(codRes){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
-						require('./controller.js').proximoID("Backup", function(id){
-							require('./cLog.js').inserir({id: id - 1, chave: msg.id, tabela: "TBBackup", operacao: "ALTERAR", mudanca: JSON.stringify(msg), data: require('./cData.js').dataHoraAtual().replace('T', ' '), codUsuario: usuario.id}, function(codRes){
-								if(codRes == 200){
-									cb(resposta);	
-									return;																
-								}else{
-									resposta.codigo = 416;
-									cb(resposta);
-									return;
-								}
-							});
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBBackup",
+							operacao: "ALTERAR",
+							mudanca: JSON.stringify(msg),
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);	
+								return;																
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
 						});
 					}else{
 						cb(resposta);
@@ -66,17 +82,24 @@ module.exports = {
 				this.excluir(msg, function(codRes){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
-						require('./controller.js').proximoID("Backup", function(id){
-							require('./cLog.js').inserir({id: id - 1, chave: msg.id, tabela: "TBBackup", operacao: "EXCLUIR", mudanca: '-', data: require('./cData.js').dataHoraAtual().replace('T', ' '), codUsuario: usuario.id}, function(codRes){
-								if(codRes == 200){
-									cb(resposta);		
-									return;															
-								}else{
-									resposta.codigo = 416;
-									cb(resposta);
-									return;
-								}
-							});
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBBackup",
+							operacao: "EXCLUIR",
+							mudanca: '-',
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);		
+								return;															
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
 						});
 					}else{
 						cb(resposta);

@@ -9,7 +9,34 @@ module.exports = {
 				}
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						require('./controller.js').proximoID("LogTransferencia", function(id){						
+							msg.id = parseInt(id) - 1;
+							let log = {
+								id: 0,
+								chave: parseInt(id) - 1,
+								tabela: "TBLogTransferencia",
+								operacao: "INSERIR",
+								mudanca: JSON.stringify(msg),
+								data: require('./cData.js').dataHoraAtual(),
+								codUsuario: usuario.id
+							}
+
+							require('./cLog.js').inserir(log, function(codRes){
+								if(codRes == 200){
+									cb(resposta);	
+									return;																
+								}else{
+									resposta.codigo = 416;
+									cb(resposta);
+									return;
+								}
+							});
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				});
 				break;
 			case 'ALTERAR':
@@ -19,7 +46,30 @@ module.exports = {
 				}
 				this.alterar(msg, function(codRes){
 					resposta.codigo = codRes;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBLogTransferencia",
+							operacao: "ALTERAR",
+							mudanca: JSON.stringify(msg),
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);	
+								return;																
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				});
 				break;
 			case 'EXCLUIR':
@@ -29,7 +79,30 @@ module.exports = {
 				}
 				this.excluir(msg, function(codRes){
 					resposta.codigo = codRes;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBLogTransferencia",
+							operacao: "EXCLUIR",
+							mudanca: '-',
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);		
+								return;															
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				});
 				break;
 			case 'LISTAR':
@@ -61,13 +134,39 @@ module.exports = {
 				}
 				this.transferirLote(msg.itens, msg.destino, function(codRes, texto){
 					resposta.codigo = codRes;
-					if(texto != null){
-						texto += "";
-						resposta.msg = texto;
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: 0,
+							tabela: "TBLogTransferencia",
+							operacao: "TRANSFERIRLOTE",
+							mudanca: JSON.stringify(msg),
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								if(texto != null){
+									texto += "";
+									resposta.msg = texto;
+								}else{
+									console.log("Não há texto em trataOperacao::cLogTransferencia!");
+								}
+								cb(resposta);		
+								return;															
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
 					}else{
-						console.log("Não há texto em trataOperacao::cLogTransferencia!");
-					}
-					cb(resposta);
+						if(texto != null){
+							texto += "";
+							resposta.msg = texto;
+						}
+						cb(resposta);
+					}		
 				});
 				break;
 			default:

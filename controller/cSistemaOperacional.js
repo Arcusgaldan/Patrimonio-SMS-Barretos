@@ -5,7 +5,34 @@ module.exports = {
 			case 'INSERIR':
 				if(!usuario){
 					resposta.codigo = 413;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						require('./controller.js').proximoID("SistemaOperacional", function(id){						
+							msg.id = parseInt(id) - 1;
+							let log = {
+								id: 0,
+								chave: parseInt(id) - 1,
+								tabela: "TBSistemaOperacional",
+								operacao: "INSERIR",
+								mudanca: JSON.stringify(msg),
+								data: require('./cData.js').dataHoraAtual(),
+								codUsuario: usuario.id
+							}
+
+							require('./cLog.js').inserir(log, function(codRes){
+								if(codRes == 200){
+									cb(resposta);	
+									return;																
+								}else{
+									resposta.codigo = 416;
+									cb(resposta);
+									return;
+								}
+							});
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				}
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
@@ -19,7 +46,30 @@ module.exports = {
 				}
 				this.alterar(msg, function(codRes){
 					resposta.codigo = codRes;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBSistemaOperacional",
+							operacao: "ALTERAR",
+							mudanca: JSON.stringify(msg),
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);	
+								return;																
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				});
 				break;
 			case 'EXCLUIR':
@@ -29,7 +79,30 @@ module.exports = {
 				}
 				this.excluir(msg, function(codRes){
 					resposta.codigo = codRes;
-					cb(resposta);
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBSistemaOperacional",
+							operacao: "EXCLUIR",
+							mudanca: '-',
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);		
+								return;															
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
 				});
 				break;
 			case 'LISTAR':
