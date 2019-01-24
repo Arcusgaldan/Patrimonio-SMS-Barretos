@@ -360,6 +360,33 @@
         }
       });
     </script>
+
+    <script type="text/javascript">
+      $("#formCadastroProcedimento select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraProcedimento select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarProcedimento select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

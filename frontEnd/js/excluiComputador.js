@@ -13,6 +13,7 @@ document.getElementById('btnModalSOExcluir').addEventListener('click', function(
 	$("#excluirSOModal").modal('show');
 }, false);
 document.getElementById('btnExcluirSO').addEventListener('click', excluirSO, false);
+document.getElementById('btnDescartar').addEventListener('click', descartar, false);
 
 function preencheProcessador(){
 	require('./../../utilsCliente.js').enviaRequisicao("Processador", "LISTAR", {token: localStorage.token}, function(res){
@@ -125,6 +126,32 @@ function excluirSO(){
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 			$("#erroModal").modal('show');
 			return;
+		}
+	});
+}
+
+function descartar(){
+	let id = document.getElementById('idComputadorExcluir').value;
+	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + id}}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var idItem = JSON.parse(msg)[0].codItem;
+				require('./../../utilsCliente.js').enviaRequisicao('Item', 'DESCARTAR', {token: localStorage.token, msg: {id: idItem}}, function(res){
+					if(res.statusCode == 200){
+						$("#sucessoModal").modal('show');
+						$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+				    	setTimeout(function(){location.reload();} , 2000);
+					}else{
+						document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+						$("#erroModal").modal('show');
+						return;
+					}
+				});
+			});
 		}
 	});
 }

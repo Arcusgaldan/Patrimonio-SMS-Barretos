@@ -1,6 +1,7 @@
 document.getElementById('btnExcluir').addEventListener('click', excluir, false);
 document.getElementById('btnExcluirTipo').addEventListener('click', excluirTipo, false);
 document.getElementById('btnModalExcluir').addEventListener('click', trocaNome, false);
+document.getElementById('btnDescartar').addEventListener('click', descartar, false);
 
 function preencheTipo(){
 	var utils = require('./../../utilsCliente.js');
@@ -85,6 +86,21 @@ function trocaNome(){
 				document.getElementById('idTipoItemExcluir').value = tipo.id;
 				$("#excluirTipoModal").modal('show');
 			});
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function descartar(){
+	let id = document.getElementById('idItemExcluir').value;
+	require('./../../utilsCliente.js').enviaRequisicao('Item', 'DESCARTAR', {token: localStorage.token, msg: {id: id}}, function(res){
+		if(res.statusCode == 200){
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+	    	setTimeout(function(){location.reload();} , 2000);
 		}else{
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
 			$("#erroModal").modal('show');

@@ -8,6 +8,9 @@
 ![V] Adicionar opção de escolher um item/computador por patrimônio para "copiar" seu cadastro (para múltiplos itens iguais)
 ![V] Colocar checkbox em todas as listas para facilitar ações em lote
 [V] Adicionar funcionalidade de apertar enter para enviar formulários
+[V] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
+[V] Corrigir enter em formulários para abranger selects também (e trocar o dropdown por algum outro botão que não o enter)
+[V] Adicionar campo "Ativo" a TBItem para poder descartar itens sem excluí-los do banco
 
 -- PENDENTES
 [-] Considerar criar uma tabela de locais para setor
@@ -20,11 +23,10 @@
 [-] Permitir cadastrar itens/computadores baseado num range de patrimonio (ex: 205599 - 205619)
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
 [-] Estudar defesas para SQL Injection
-[-] Estudar melhoramento para log de transferência em lote
+[-] Estudar melhoramento para log de transferência em lote (usar laço)
 [-] Aplicar modelo de criptografia
 
 -- EM ANDAMENTO
-[-] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 
 -- ABORTADOS
 [X] Considerar criar um campo "motivo" em TBLogTransferencia //Ia ficar cansativo para várias transações em seguida

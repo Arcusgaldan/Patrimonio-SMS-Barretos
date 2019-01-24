@@ -189,7 +189,7 @@ module.exports = {
 			{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
 			{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
 		], 
-		where: "lt.atual = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
+		where: "lt.atual = 1 AND i.ativo = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

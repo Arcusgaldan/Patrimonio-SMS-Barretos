@@ -127,6 +127,35 @@ module.exports = {
 					cb(resposta);
 				});
 				break;
+			case 'DESCARTAR':
+				this.descartar(msg.id, function(codRes){
+					resposta.codigo = codRes;
+					if(resposta.codigo == 200){
+						let log = {
+							id: 0,
+							chave: msg.id,
+							tabela: "TBItem",
+							operacao: "DESCARTAR",
+							mudanca: '-',
+							data: require('./cData.js').dataHoraAtual(),
+							codUsuario: usuario.id
+						}
+						require('./cLog.js').inserir(log, function(codRes){
+							if(codRes == 200){
+								cb(resposta);		
+								return;															
+							}else{
+								resposta.codigo = 416;
+								cb(resposta);
+								return;
+							}
+						});
+					}else{
+						cb(resposta);
+						return;
+					}
+				});
+				break;
 			default:
 				resposta.codigo = 410;
 				cb(resposta);
@@ -189,7 +218,7 @@ module.exports = {
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
 				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
 			], 
-		where: "lt.atual = 1", 
+		where: "lt.atual = 1 AND TBItem.ativo = 1",
 		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
 	},
 
@@ -197,5 +226,13 @@ module.exports = {
 		require('./controller.js').buscar("Item", argumentos, function(res){
 			cb(res);
 		});		
+	},
+
+	descartar: function(id, cb){
+		sql = "UPDATE TBItem SET ativo = 0 WHERE id = " + id;
+		let dao = require('./../dao.js');
+		dao.inserir(dao.criaConexao(), sql, function(codRes){
+			cb(codRes);
+		});
 	}
 }

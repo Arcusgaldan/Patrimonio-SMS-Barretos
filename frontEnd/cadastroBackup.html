@@ -561,6 +561,33 @@
         }
       });
     </script>
+
+    <script type="text/javascript">
+      $("#formCadastroBackup select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraBackup select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarBackup select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

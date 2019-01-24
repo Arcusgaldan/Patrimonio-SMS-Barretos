@@ -286,11 +286,12 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o item <span id="patrimonioItemExcluir" style="color: #000"></span>?</p></div>
+            <div class="modal-body"><p style="color: #000">Você deseja descartar ou excluir o regitro do item <span id="patrimonioItemExcluir" style="color: #000"></span>?</p></div>
             <div style="display: none;" id="idItemExcluir"></div>
-            <div class="modal-footer">
-              <button class="btn btn-success" id="btnExcluir">SIM</button>
-              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+            <div class="modal-footer">                
+              <button class="btn btn-warning" id="btnDescartar">Descartar</button>
+              <button class="btn btn-danger mr-auto" id="btnExcluir">Excluir</button>
+              <button class="btn btn-primary"  data-dismiss="modal">Cancelar</button>
             </div>
           </div>
         </div>
@@ -441,6 +442,15 @@
                 <select id="tipoItemBuscar" class="form-control" name="tipoItemBuscar" placeholder="Tipo">
                   <option value="0">Tipo</option>
                 </select>
+              </div>
+
+               <div class="form-group col-md-6 mt-1">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="ativoItemBuscar">
+                    Incluir itens descartados
+                  </label>
+                </div>
               </div>
 
             </form>
@@ -652,6 +662,36 @@
         if(codigo == 13){
           e.preventDefault();
           document.getElementById('btnAlterarTipo').click();
+        }
+      });
+    </script>
+
+     <script type="text/javascript">
+      $("#formCadastroItem select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraItem select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarItem select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
         }
       });
     </script>

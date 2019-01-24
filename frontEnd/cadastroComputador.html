@@ -354,11 +354,12 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Você deseja realmente excluir o computador <span id="patrimonioComputadorExcluir" style="color: #000"></span>?</p></div>
+            <div class="modal-body"><p style="color: #000">Você deseja descartar ou excluir o registro do computador <span id="patrimonioComputadorExcluir" style="color: #000"></span>?</p></div>
             <div style="display: none;" id="idComputadorExcluir"></div>
             <div class="modal-footer">
-              <button class="btn btn-success" id="btnExcluir">SIM</button>
-              <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>
+              <button class="btn btn-warning" id="btnDescartar">Descartar</button>
+              <button class="btn btn-danger mr-auto" id="btnExcluir">Excluir</button>
+              <button class="btn btn-primary"  data-dismiss="modal">Cancelar</button>
             </div>
           </div>
         </div>
@@ -672,6 +673,15 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="form-group col-md-6 mt-1">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="ativoComputadorBuscar">
+                      Incluir itens descartados
+                    </label>
+                  </div>
+                </div>
               </form>
               <div class="modal-footer">
                 <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>
@@ -825,6 +835,36 @@
         if(codigo == 13){
           e.preventDefault();
           document.getElementById('btnAlterarSO').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroComputador select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraComputador select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formBuscarComputador select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnBuscar').click();
         }
       });
     </script>

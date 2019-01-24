@@ -24784,6 +24784,20 @@ function buscar(){
 		where += "codTipoItem = " + tipo;
 	}
 
+	if(document.getElementById('ativoItemBuscar').checked == true){
+		if(where != ""){
+			where += " AND ";
+		}
+
+		where += "(ativo = 1 or ativo = 0)";
+	}else{
+		if(where != ""){
+			where += " AND ";
+		}
+
+		where += "ativo = 1";
+	}
+
 	if(where == ""){
 		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
 			if(res.statusCode == 200){
