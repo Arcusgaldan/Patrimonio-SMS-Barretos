@@ -50,7 +50,7 @@ http.createServer(function(req, res) {
                             res.statusCode(411);
                             res.end();
                             return;
-                        }else if(!jsonRqs.email || !jsonRqs.senha){ //Se não houver email ou senha no corpo da requisição, retorna erro de login ou senha inválidos.
+                        }else if(!jsonRqs.email || !jsonRqs.senha || !jsonRqs.chave){ //Se não houver email, senha ou chave AES no corpo da requisição, retorna erro de login ou senha inválidos.
                             res.statusCode(411);
                             res.end();
                             return;
@@ -67,7 +67,14 @@ http.createServer(function(req, res) {
                                         if(!vetorTokens[token])
                                             break;
                                     }
-                                    vetorTokens[token] = resposta[0];
+                                    console.log("Token criado com sucesso, chave enviada = " + jsonRqs.chave);
+                                    let dados = {
+                                        usuario: resposta[0],
+                                        chave: require('./utilsCripto.js').descriptoRSA(jsonRqs.chave),
+                                        incremental: 1
+                                    }
+                                    console.log("Chave descriptografada = " + dados.chave);                                   
+                                    vetorTokens[token] = dados;
                                     res.statusCode = 200;
                                     res.write(token);
                                     res.end();
@@ -116,7 +123,7 @@ http.createServer(function(req, res) {
                         if(jsonRqs && jsonRqs.token){
                                 if(vetorTokens[jsonRqs.token]){ //Verifica se o token recebido está registrado no vetor e se sim, retorna sucesso
                                 res.statusCode = 200;
-                                res.write(JSON.stringify(vetorTokens[jsonRqs.token]));
+                                res.write(JSON.stringify(vetorTokens[jsonRqs.token].usuario));
                                 res.end();
                             }else{ //Se não estiver registrado, retorna erro
                                 res.statusCode = 400;
@@ -132,7 +139,7 @@ http.createServer(function(req, res) {
                         if(jsonRqs && jsonRqs.token && jsonRqs.msg){
                             cUsuario = require('./controller/cUsuario.js');
                             if(cUsuario.validar(jsonRqs.msg)){
-                                vetorTokens[jsonRqs.token] = jsonRqs.msg;
+                                vetorTokens[jsonRqs.token].usuario = jsonRqs.msg;
                                 res.statusCode = 200;
                                 res.end();
                             }else{
@@ -153,7 +160,10 @@ http.createServer(function(req, res) {
             }else{
                 var usuario;
                 if(jsonRqs && jsonRqs.token){ //Se houver corpo de requisição e um campo token neste corpo, puxa o usuário no vetor
-                    usuario = vetorTokens[jsonRqs.token];
+                    if(vetorTokens[jsonRqs.token])
+                        usuario = vetorTokens[jsonRqs.token].usuario;
+                    else
+                        usuario = null;
                 }else{ //Se não houver corpo e/ou campo token, passa null no parâmetro usuario
                     usuario = null;
                 }

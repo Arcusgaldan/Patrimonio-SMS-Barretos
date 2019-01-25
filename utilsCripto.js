@@ -22,19 +22,27 @@ module.exports = {
 
 	criptoRSA: function(msg){
 		let rsa = require('node-rsa');
-		let publicKey = "-----BEGIN RSA PUBLIC KEY-----\n"+
-		"MIIBCgKCAQEAoHvzrCdqxoqWwxiEFgdfJ+JYYIpS5jmVVercqK2oXpCT3OuuBvGq\n"+
-		"FRgyHXD1fgwCLqHBIfT+SP+faVgEiVl1WDfDW7gqkX5y4ko/+naYR8UNe10xBXpv\n"+
-		"x96SXyOH23GlsduiztOfZkX1FkqFbobMEpvq8orExZTzY20ceMVWyxtWVNxX5+6z\n"+
-		"y6qCJXBFYoucF2O8qHMRrSj8dnYkEA/0tK0UplkEcyXt9OJpxI092Z46C2cKjs8P\n"+
-		"5SXF7gpd3xpQApuHT7lTbI6Di7aRjF2QppEGC9I6GotxWNifqa0/NgbbwqJSAo55\n"+
-		"DxbZrqVgOGVR5zvS7vNM70VIpk4UmGrP8wIDAQAB\n"+
-		"-----END RSA PUBLIC KEY-----";
+		let publicKey = "-----BEGIN PUBLIC KEY-----"+
+		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFSZes81wmDnhSPbNVOf4atc/X"+
+		"YMDeVn9KLgGxRrzF2i8ce68uxWTWbKZsAi4ChV5XFCFB+MMLIFdBEFxBbupva5BK"+
+		"fxm9M66SJ5YKvDf5lGhyw7yFt343YnI1Ayy/CP5hroVRBLlILNgSNvjWfEwFUEB2"+
+		"+CHElmLRQxvS/+PTEQIDAQAB"+
+		"-----END PUBLIC KEY-----";
 
 		var key = new rsa();
 		key.importKey(publicKey, 'pkcs1-public');
 		let msgCripto = key.encrypt(msg, 'hex');
 
 		return msgCripto;
+	},
+
+	descriptoRSA: function(msg){
+		let rsa = require('node-rsa');
+		let privateKey = require('fs').readFileSync('./privateRSA.txt');
+
+		var key = new rsa();
+		key.importKey(privateKey, 'pkcs1-private');
+		let msgFinal = key.decrypt(msg);
+		return msgFinal;
 	}
 };

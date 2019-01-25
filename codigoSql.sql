@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBItem` (
   `marca` VARCHAR(100) NULL,
   `modelo` VARCHAR(100) NULL,
   `descricao` TEXT NULL,
+  `ativo` TINYINT NOT NULL,
   `codTipoItem` INT NOT NULL,
   PRIMARY KEY (`id`, `codTipoItem`),
   UNIQUE INDEX `patrimonio_UNIQUE` (`patrimonio` ASC),
@@ -239,9 +240,33 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBLog`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBLog` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLog` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `chave` INT NOT NULL,
+  `tabela` VARCHAR(45) NOT NULL,
+  `operacao` VARCHAR(45) NOT NULL,
+  `mudanca` TEXT NOT NULL,
+  `data` DATETIME NOT NULL,
+  `codUsuario` INT NOT NULL,
+  PRIMARY KEY (`id`, `codUsuario`),
+  INDEX `fk_TBLog_TBUsuario1_idx` (`codUsuario` ASC),
+  CONSTRAINT `fk_TBLog_TBUsuario1`
+    FOREIGN KEY (`codUsuario`)
+    REFERENCES `DBPatrimonioSMS`.`TBUsuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 
 

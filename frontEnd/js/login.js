@@ -2,10 +2,15 @@ document.getElementById('btnLogin').addEventListener('click', login, false);
 
 function login(){
 	var utils = require('./../../utilsCliente.js');
+	let chave = JSON.stringify(utils.geraAES());
+	console.log("Chave gerada pelo sistema = " + chave);
 	var objeto = {
 		email: document.getElementById('emailLogin').value,
-		senha: utils.senhaHash(document.getElementById('senhaLogin').value)
+		senha: utils.senhaHash(document.getElementById('senhaLogin').value),
+		chave: utils.criptoRSA(chave)
 	};
+
+
 	
 	utils.enviaRequisicao("Token", "CRIAR", objeto, function(res){
 		if(res.statusCode == 200){
