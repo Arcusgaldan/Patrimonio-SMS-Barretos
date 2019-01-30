@@ -21,13 +21,8 @@ module.exports = {
 	},
 
 	criptoRSA: function(msg){
-		let rsa = require('node-rsa');
-		let publicKey = "-----BEGIN PUBLIC KEY-----"+
-		"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFSZes81wmDnhSPbNVOf4atc/X"+
-		"YMDeVn9KLgGxRrzF2i8ce68uxWTWbKZsAi4ChV5XFCFB+MMLIFdBEFxBbupva5BK"+
-		"fxm9M66SJ5YKvDf5lGhyw7yFt343YnI1Ayy/CP5hroVRBLlILNgSNvjWfEwFUEB2"+
-		"+CHElmLRQxvS/+PTEQIDAQAB"+
-		"-----END PUBLIC KEY-----";
+		let rsa = require('node-rsa');		
+		let publicKey = require('fs').readFileSync('./publicRSA.txt');
 
 		var key = new rsa();
 		key.importKey(publicKey, 'pkcs1-public');
@@ -40,8 +35,7 @@ module.exports = {
 		let rsa = require('node-rsa');
 		let privateKey = require('fs').readFileSync('./privateRSA.txt');
 
-		var key = new rsa();
-		key.importKey(privateKey, 'pkcs1-private');
+		var key = new rsa(privateKey, 'pkcs1-private');
 		let msgFinal = key.decrypt(msg);
 		return msgFinal;
 	}

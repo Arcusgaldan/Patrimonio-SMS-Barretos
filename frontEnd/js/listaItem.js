@@ -341,7 +341,42 @@ function preencheTipo(){
 	});
 }
 
-function preencheSetor(){
+function preencheLocal(){
+	var utils = require('./../../utilsCliente.js');
+	utils.enviaRequisicao("Local", "LISTAR", {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var vetorLocal = JSON.parse(msg);
+				$("#localItemCadastrar > option").remove();
+				$("#localItemBuscar > option").remove();
+				$("#localItemTransferir > option").remove();
+				$("#localLoteTransferir > option").remove();
+				
+				$("#localItemCadastrar").append("<option value='0'>Local</option");
+				$("#localItemBuscar").append("<option value='0'>Local</option");
+				$("#localLoteTransferir").append("<option value='0'>Local</option");
+
+
+				for(let i = 0; i < vetorSetor.length; i++){
+					$("#localItemCadastrar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
+					$("#localItemBuscar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
+					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
+					$("#localLoteTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar locais";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function preencheSetor(local){
 	var utils = require('./../../utilsCliente.js');
 	utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
 		if(res.statusCode == 200){
@@ -377,7 +412,7 @@ function preencheSetor(){
 }
 
 preencheTipo();
-preencheSetor();
+preencheLocal();
 var utils = require('./../../utilsCliente.js');
 utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
 	if(res.statusCode == 200){

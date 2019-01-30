@@ -181,13 +181,14 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Computador", function(res){
 			cb(res);
-		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, s.local setorLocal, s.id setorId", 
+		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, l.nome localNome, s.id setorId", 
 		joins: [
 			{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
 			{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 
 			{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
 			{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
-			{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+			{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+			{tabela: "TBLocal l", on "l.id = lt.codLocal"}
 		], 
 		where: "lt.atual = 1 AND i.ativo = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
 	},

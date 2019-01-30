@@ -10,12 +10,12 @@ module.exports = {
 				this.inserir(msg, function(codRes){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
-						require('./controller.js').proximoID("Setor", function(id){						
+						require('./controller.js').proximoID("Local", function(id){						
 							msg.id = parseInt(id) - 1;
 							let log = {
 								id: 0,
 								chave: parseInt(id) - 1,
-								tabela: "TBSetor",
+								tabela: "TBLocal",
 								operacao: "INSERIR",
 								mudanca: JSON.stringify(msg),
 								data: require('./cData.js').dataHoraAtual(),
@@ -50,7 +50,7 @@ module.exports = {
 						let log = {
 							id: 0,
 							chave: msg.id,
-							tabela: "TBSetor",
+							tabela: "TBLocal",
 							operacao: "ALTERAR",
 							mudanca: JSON.stringify(msg),
 							data: require('./cData.js').dataHoraAtual(),
@@ -83,7 +83,7 @@ module.exports = {
 						let log = {
 							id: 0,
 							chave: msg.id,
-							tabela: "TBSetor",
+							tabela: "TBLocal",
 							operacao: "EXCLUIR",
 							mudanca: '-',
 							data: require('./cData.js').dataHoraAtual(),
@@ -133,62 +133,59 @@ module.exports = {
 		}
 	},
 
-	validar: function(setor){ //Valida os campos necessários em seu formato ideal
-		if(!setor){
+	validar: function(local){ //Valida os campos necessários em seu formato ideal
+		if(!local){
 			return false;
 		}
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(setor.id) || !validates.req(setor.nome) || !validates.req(setor.local)){
+		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.local) || !validates.req(local.tamanho)){
 			return false;
 		}else{
 			return true;
 		}
 	},
 
-	inserir: function(setor, cb){ //Insere as informações passadas pelo servidor
-		if(!this.validar(setor)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+	inserir: function(local, cb){ //Insere as informações passadas pelo servidor
+		if(!this.validar(local)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
 		}
-		require('./controller.js').inserir("Setor", setor, function(codRes){
+		require('./controller.js').inserir("Local", local, function(codRes){
 			cb(codRes);
 		});
 	},
 
-	alterar: function(setor, cb){ //Altera as informações passadas por servidor
-		if(!this.validar(setor)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+	alterar: function(local, cb){ //Altera as informações passadas por servidor
+		if(!this.validar(local)){ //Se os dados não forem válidos, para a execução e retorna código de erro
 			cb(412);
 			return;
 		}
 
-		require('./controller.js').alterar("Setor", setor, function(codRes){
+		require('./controller.js').alterar("Local", local, function(codRes){
 			cb(codRes);
 		});
 	},
 
-	excluir: function(setor, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
-		if(!setor)
+	excluir: function(local, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
+		if(!local)
 			cb(412);
-		else if(!setor.id)
+		else if(!local.id)
 			cb(412);
-		require('./controller.js').excluir("Setor", setor, function(codRes){
+		require('./controller.js').excluir("Local", local, function(codRes){
 			cb(codRes);
 		});
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
-		require('./controller.js').listar("Setor", function(res){
+		require('./controller.js').listar("Local", function(res){
 			cb(res);
-		}, {campos: "TBSetor.*, l.nome localNome",
-			joins: [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}],
-			orderBy: [{campo: 'l.id', sentido: 'asc'}]
 		});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
-		require('./controller.js').buscar("Setor", argumentos, function(res){
+		require('./controller.js').buscar("Local", argumentos, function(res){
 			cb(res);
 		});		
 	}

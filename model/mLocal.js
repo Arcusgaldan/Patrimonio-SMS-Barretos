@@ -2,16 +2,14 @@ module.exports = {
 	novo: function(){
 		var final = {};
 		final.id = 0;
-		final.data = '';
-		final.codSetor = 0;
-		final.codItem = 0;
-		final.codLocal = 0;
-		final.atual = 0;
+		final.nome = '';
+		final.endereco = '';
+		final.telefone = '';
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['data'];
+		var strings = ['nome', 'endereco', 'telefone'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;

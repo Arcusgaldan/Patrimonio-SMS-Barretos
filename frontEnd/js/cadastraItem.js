@@ -147,7 +147,10 @@ function cadastrarItem(){
 								});
 								res.on('end', function(){
 									logTransferencia.codItem = JSON.parse(msg)[0].id;
-									logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+									logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
+									if(document.getElementById('setorItemCadastrar').value != '0'){
+										logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+									}
 									require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
 										if(res.statusCode == 200){
 											console.log("Passo 4 - Inserir logTransferencia feito com sucesso!");

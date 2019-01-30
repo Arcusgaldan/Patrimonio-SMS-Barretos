@@ -140,13 +140,14 @@ function buscar(){
 	}else{
 		//console.log("O where do buscar ficou assim: " + where);
 		var argumentos = {
-			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "s.local setorLocal", "s.id setorId"], 
+			selectCampos: ["TBComputador.*", "p.nome processadorNome", "so.nome sistemaNome", "i.patrimonio itemPatrimonio", "s.nome setorNome", "l.nome localNome", "s.id setorId", "l.id localId"], 
 			joins: [
 				{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
 				{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 
 				{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], 
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}], 
 			where: "lt.atual = 1 AND " + where, 
 			orderBy: [{campo: "i.patrimonio", sentido: "asc"}]
 		};
@@ -286,7 +287,7 @@ function preencheTabela(listaComputador){
 		else
 			document.getElementById('aposentadoComputadorDados' + i).innerHTML = "Não";		
 
-		document.getElementById('setorComputadorDados' + i).innerHTML = listaComputador[i].setorLocal + " - " + listaComputador[i].setorNome;
+		document.getElementById('setorComputadorDados' + i).innerHTML = listaComputador[i].localNome + " - " + listaComputador[i].setorNome;
 
 		(function(){
 			var computador = listaComputador[i];		

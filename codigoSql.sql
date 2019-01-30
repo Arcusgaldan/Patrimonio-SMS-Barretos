@@ -37,7 +37,6 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBItem` (
   `marca` VARCHAR(100) NULL,
   `modelo` VARCHAR(100) NULL,
   `descricao` TEXT NULL,
-  `ativo` TINYINT NOT NULL,
   `codTipoItem` INT NOT NULL,
   PRIMARY KEY (`id`, `codTipoItem`),
   UNIQUE INDEX `patrimonio_UNIQUE` (`patrimonio` ASC),
@@ -51,6 +50,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `DBPatrimonioSMS`.`TBLocal`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBLocal` ;
+
+CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLocal` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `endereco` TEXT NOT NULL,
+  `telefone` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `DBPatrimonioSMS`.`TBSetor`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSetor` ;
@@ -58,9 +72,15 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSetor` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSetor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `local` VARCHAR(100) NOT NULL,
   `sigla` VARCHAR(20) NULL,
-  PRIMARY KEY (`id`))
+  `codLocal` INT NOT NULL,
+  PRIMARY KEY (`id`, `codLocal`),
+  INDEX `fk_TBSetor_TBLocal1_idx` (`codLocal` ASC),
+  CONSTRAINT `fk_TBSetor_TBLocal1`
+    FOREIGN KEY (`codLocal`)
+    REFERENCES `DBPatrimonioSMS`.`TBLocal` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -137,20 +157,27 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBLogTransferencia` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLogTransferencia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `data` DATETIME NOT NULL,
-  `codSetor` INT NOT NULL,
   `codItem` INT NOT NULL,
+  `codLocal` INT NOT NULL,
+  `codSetor` INT NULL,
   `atual` TINYINT NOT NULL,
-  PRIMARY KEY (`id`, `codSetor`, `codItem`),
-  INDEX `fk_TBLogTransferencia_TBSetor1_idx` (`codSetor` ASC),
+  PRIMARY KEY (`id`, `codItem`, `codLocal`),
   INDEX `fk_TBLogTransferencia_TBItem1_idx` (`codItem` ASC),
-  CONSTRAINT `fk_TBLogTransferencia_TBSetor1`
-    FOREIGN KEY (`codSetor`)
-    REFERENCES `DBPatrimonioSMS`.`TBSetor` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_TBLogTransferencia_TBLocal1_idx` (`codLocal` ASC),
+  INDEX `fk_TBLogTransferencia_TBSetor1_idx` (`codSetor` ASC),
   CONSTRAINT `fk_TBLogTransferencia_TBItem1`
     FOREIGN KEY (`codItem`)
     REFERENCES `DBPatrimonioSMS`.`TBItem` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TBLogTransferencia_TBLocal1`
+    FOREIGN KEY (`codLocal`)
+    REFERENCES `DBPatrimonioSMS`.`TBLocal` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_TBLogTransferencia_TBSetor1`
+    FOREIGN KEY (`codSetor`)
+    REFERENCES `DBPatrimonioSMS`.`TBSetor` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -266,8 +293,6 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
 
 
 INSERT INTO TBUsuario VALUES (0, "Administrador", "123.456.789-10", "admin@email.com", "bd7822c76f3ca74cd699115b8128cbcb2c908ae53f2078bce4b5abd901401818", 0);
