@@ -41,6 +41,11 @@ module.exports = {
 			opcoesHTTP = this.opcoesHTTP("");
 			texto = "";
 		}else{
+			if(dados.msg){
+				console.log("Há mensagem a ser enviada, msg = " + JSON.stringify(dados.msg));
+				dados.msg.contInc = localStorage.contInc;
+				dados.msg = this.criptoAES(localStorage.chave, JSON.stringify(dados.msg));
+			}
 			texto = JSON.stringify(dados);
 			opcoesHTTP = this.opcoesHTTP(texto);
 		}
@@ -49,6 +54,14 @@ module.exports = {
 		opcoesHTTP.headers.Operacao = operacao;
 
 		var req = http.request(opcoesHTTP, (res) => {
+			if(objeto != "Token" && res.statusCode != 410 && dados.msg){
+				localStorage.contInc++;
+			}
+			if(res.statusCode == 417){
+				localStorage.removeItem('contInc');
+				localStorage.removeItem('chave');
+				localStorage.removeItem('token');
+			}
 			cb(res);
 		});
 
@@ -190,9 +203,14 @@ module.exports = {
 		return chave;
 	},
 
-	criptoAES: function(chave, msg){
+	criptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
+
+		console.log("utilsCliente::criptoAES, chave = " + chave);
+		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
+
 
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
@@ -201,7 +219,8 @@ module.exports = {
 		return hexCriptografado;
 	},
 
-	descriptoAES: function(chave, msg){
+	descriptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');		
 		bytesCriptografados = aes.utils.hex.toBytes(msg);
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());

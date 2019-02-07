@@ -40,7 +40,7 @@ function buscar(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						let listaProcedimento = JSON.parse(msg);
+						let listaProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 						preencheTabela(listaProcedimento);
 					});
 				}else if(res.statusCode == 747){
@@ -77,7 +77,7 @@ function buscar(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						let listaProcedimento = JSON.parse(msg);
+						let listaProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 						preencheTabela(listaProcedimento);
 					});
 				}else if(res.statusCode == 747){
@@ -111,7 +111,7 @@ function buscaComputador(cb){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var computador = JSON.parse(msg)[0];
+				var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
 				cb(computador.idComputador);
 			});
@@ -196,7 +196,7 @@ buscaComputador(function(idComputador){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcedimento = JSON.parse(msg);
+				var vetorProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				(function(){
 					document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorProcedimento)}, false);
 				}());

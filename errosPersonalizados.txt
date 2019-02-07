@@ -5,4 +5,5 @@
 414: Objeto essencial, não pode ser excluído
 415: Data inválida
 416: Falha ao inserir log
+417: Falha na confiança ponto-a-ponto (contagem)
 444: Erro fatal com necessidade de contato urgente ao suporte

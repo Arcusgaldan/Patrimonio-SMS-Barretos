@@ -10,7 +10,7 @@ function preencheTipo(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorTipo = JSON.parse(msg);
+				var vetorTipo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#tipoItemCadastrar > option").remove();
 				$("#tipoItemAlterar > option").remove();
 				$("#selectTipoAlterar > option").remove();

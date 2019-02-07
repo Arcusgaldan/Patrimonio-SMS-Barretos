@@ -10,6 +10,8 @@ function logout(){
 		utils.enviaRequisicao("Token", "EXCLUIR", {token: localStorage.token}, function(res){
 			if(res.statusCode == 200){
 				localStorage.removeItem('token');
+				localStorage.removeItem('chave');
+				localStorage.removeItem('contInc');
 				$("#sucessoModal").modal('show');
 				$('#sucessoModal').on('hide.bs.modal', function(){location.href = "/login";});
 		    	setTimeout(function(){location.href = "/login";} , 2000);

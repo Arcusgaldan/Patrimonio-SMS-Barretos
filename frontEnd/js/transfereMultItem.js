@@ -21,6 +21,7 @@ function transferir(){
 			console.log("Houve texto na resposta, adicionando " + chunk);
 		});
 		res.on('end', function(){
+			qtdExcluidos = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, qtdExcluidos);
 			switch(res.statusCode){
 				case 200:
 					console.log("Meu qtdExcluidos = " + qtdExcluidos);

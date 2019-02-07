@@ -19,7 +19,7 @@ function buscaComputador(cb){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var computador = JSON.parse(msg)[0];
+				var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
 				cb(computador.idComputador);
 			});
@@ -99,7 +99,7 @@ function preencheAlterarDisco(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var disco = JSON.parse(msg)[0];
+					var disco = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 					document.getElementById('nomeDiscoAlterar').value = disco.nome;
 					document.getElementById('localDiscoAlterar').value = disco.local;
 					document.getElementById('tamanhoDiscoAlterar').value = disco.tamanho;
@@ -122,7 +122,7 @@ function preencheDisco(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorDisco = JSON.parse(msg);
+				var vetorDisco = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 
 				$("#discoBackupCadastrar > option").remove();
 				$("#discoBackupAlterar > option").remove();

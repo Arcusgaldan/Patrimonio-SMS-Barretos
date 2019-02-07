@@ -11,7 +11,7 @@ function preencheTipo(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorTipo = JSON.parse(msg);
+				var vetorTipo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#tipoItemCadastrar > option").remove();
 				$("#tipoItemAlterar > option").remove();
 				$("#selectTipoAlterar > option").remove();
@@ -44,7 +44,7 @@ function copiarItem(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var item = JSON.parse(msg)[0];
+					var item = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 					document.getElementById('marcaItemCadastrar').value = item.marca;
 					document.getElementById('modeloItemCadastrar').value = item.modelo;
 					document.getElementById('descricaoItemCadastrar').value = item.descricao;
@@ -136,8 +136,8 @@ function cadastrarItem(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						console.log("DataHora = " + msg);
-						logTransferencia.data = msg;
+						console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+						logTransferencia.data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
 						require('./../../utilsCliente.js').enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: {where: "patrimonio = " + item.patrimonio}}, function(res){
 							if(res.statusCode == 200){
 								console.log("Passo 3 - Buscar ID do item feito com sucesso!");
@@ -146,7 +146,7 @@ function cadastrarItem(){
 									msg += chunk;
 								});
 								res.on('end', function(){
-									logTransferencia.codItem = JSON.parse(msg)[0].id;
+									logTransferencia.codItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0].id;
 									logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
 									if(document.getElementById('setorItemCadastrar').value != '0'){
 										logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;

@@ -124,7 +124,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaItem = JSON.parse(msg);
+					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaItem);
 				});
 			}else if(res.statusCode == 747){
@@ -156,7 +156,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaItem = JSON.parse(msg);
+					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaItem);
 				});
 			}else if(res.statusCode == 747){
@@ -283,7 +283,7 @@ function preencheModalHistorico(item){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				let historico = JSON.parse(msg);
+				let historico = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#corpoHistoricoModal >").remove();
 				for(let i = 0; i < historico.length; i++){
 					$("#corpoHistoricoModal").append('<div class="card mb-1" style="width: 100%;">\
@@ -314,7 +314,7 @@ function preencheTipo(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorTipo = JSON.parse(msg);
+				var vetorTipo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#tipoItemCadastrar > option").remove();
 				$("#tipoItemAlterar > option").remove();
 				$("#selectTipoAlterar > option").remove();
@@ -350,7 +350,7 @@ function preencheLocal(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorLocal = JSON.parse(msg);
+				var vetorLocal = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#localItemCadastrar > option").remove();
 				$("#localItemBuscar > option").remove();
 				$("#localItemTransferir > option").remove();
@@ -385,7 +385,7 @@ function preencheSetor(local){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSetor = JSON.parse(msg);
+				var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#setorItemCadastrar > option").remove();
 				$("#setorItemBuscar > option").remove();
 				$("#setorItemTransferir > option").remove();
@@ -421,7 +421,7 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 			msg += chunk;
 		});
 		res.on('end', function(){
-			var vetorItem = JSON.parse(msg);
+			var vetorItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 			(function(){
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
 			}());

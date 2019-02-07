@@ -67,11 +67,11 @@ http.createServer(function(req, res) {
                                         if(!vetorTokens[token])
                                             break;
                                     }
-                                    console.log("Token criado com sucesso, chave enviada = " + jsonRqs.chave);
+                                    //console.log("Token criado com sucesso, chave enviada = " + jsonRqs.chave);
                                     let dados = {
                                         usuario: resposta[0],
                                         chave: require('./utilsCripto.js').descriptoRSA(jsonRqs.chave),
-                                        incremental: 1
+                                        contInc: 1
                                     }
                                     console.log("Chave descriptografada = " + dados.chave);                                   
                                     vetorTokens[token] = dados;
@@ -123,7 +123,7 @@ http.createServer(function(req, res) {
                         if(jsonRqs && jsonRqs.token){
                                 if(vetorTokens[jsonRqs.token]){ //Verifica se o token recebido está registrado no vetor e se sim, retorna sucesso
                                 res.statusCode = 200;
-                                res.write(JSON.stringify(vetorTokens[jsonRqs.token].usuario));
+                                res.write(require('./utilsCripto.js').criptoAES(vetorTokens[jsonRqs.token].chave, JSON.stringify(vetorTokens[jsonRqs.token].usuario)));
                                 res.end();
                             }else{ //Se não estiver registrado, retorna erro
                                 res.statusCode = 400;
@@ -173,13 +173,27 @@ http.createServer(function(req, res) {
                     res.end();
                     return;
                 }else{
+                    if(jsonRqs.msg){
+                        console.log("O que chegou pela rede: " + jsonRqs.msg);
+                        jsonRqs.msg = JSON.parse(require('./utilsCripto.js').descriptoAES(vetorTokens[jsonRqs.token].chave, jsonRqs.msg));
+                        console.log("O que foi descriptografado: " + JSON.stringify(jsonRqs.msg));
+                        if(jsonRqs.msg.contInc == vetorTokens[jsonRqs.token].contInc){
+                            vetorTokens[jsonRqs.token].contInc++;
+                        }else{
+                            console.log("Falha na confiança ponto-a-ponto. Valor no vetor: " + vetorTokens[jsonRqs.token].contInc + "\nValor recebido no pacote: " + jsonRqs.msg.contInc);
+                            res.statusCode = 417;
+                            res.end();
+                            return;
+                        }
+                    }
                     console.log("\nEntrando em trataOperação\nObjeto: " + req.headers['objeto'] + "\nOperação: " + req.headers['operacao'] + "\n");
                 	require('./controller/c' + req.headers['objeto'] + '.js').trataOperacao(usuario, req.headers['operacao'], jsonRqs.msg, function(resposta){ //Puxa a ação relativa ao objeto e operação
                 		// console.log("Acabou a execução do trataOperacao! Resposta.codigo = " + resposta.codigo + " e resposta.msg = " + resposta.msg);
                 		res.statusCode = resposta.codigo;
                 		if(resposta.msg){
-                            console.log("Há um texto a ser enviado na resposta!");
-                			res.write(resposta.msg);
+                            console.log("Há um texto a ser enviado na resposta! O token é " + jsonRqs.token);
+                            let respostaFinal = require('./utilsCripto.js').criptoAES(vetorTokens[jsonRqs.token].chave, resposta.msg);
+                			res.write(respostaFinal);
                 		}
                 		res.end();
                 	});
@@ -187,7 +201,7 @@ http.createServer(function(req, res) {
             }
         }catch(err){
             res.statusCode = 500;
-            res.write(err);
+            res.write("Erro interno do servidor");
             res.end();
             return;
         }

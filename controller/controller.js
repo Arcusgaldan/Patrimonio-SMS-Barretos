@@ -6,7 +6,7 @@ module.exports = {
 		var campos = "";
 		var valores = "";
 		for(var key in objeto){
-			if(objeto[key] == null)
+			if(objeto[key] == null || key == "contInc")
 				continue;
 
 			if(campos == ""){
@@ -46,7 +46,7 @@ module.exports = {
 		var sql = "UPDATE TB" + alvo + " SET "; //Inicializa string de comando SQL
 		var campos = "";
 		for(var key in objeto){
-			if(key == 'id') //Pula o campo ID pois o ID nunca será alterado
+			if(key == 'id' || key == 'contInc') //Pula o campo ID pois o ID nunca será alterado e o campo contInc que é de segurança
 				continue;
 
 			var modelo = require('./../model/m' + alvo + '.js');

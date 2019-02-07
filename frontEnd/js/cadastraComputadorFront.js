@@ -26000,7 +26000,7 @@ function copiarComputador(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var computador = JSON.parse(msg)[0];
+					var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 					document.getElementById('processadorComputadorCadastrar').value = computador.codProcessador;
 					document.getElementById('qtdMemoriaComputadorCadastrar').value = computador.qtdMemoria;
 					document.getElementById('tipoMemoriaComputadorCadastrar').value = computador.tipoMemoria;
@@ -26137,7 +26137,7 @@ function preencheProcessador(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcessador = JSON.parse(msg);
+				var vetorProcessador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
@@ -26168,7 +26168,7 @@ function preencheSO(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSO = JSON.parse(msg);
+				var vetorSO = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();
@@ -31560,6 +31560,11 @@ module.exports = {
 			opcoesHTTP = this.opcoesHTTP("");
 			texto = "";
 		}else{
+			if(dados.msg){
+				console.log("Há mensagem a ser enviada, msg = " + JSON.stringify(dados.msg));
+				dados.msg.contInc = localStorage.contInc;
+				dados.msg = this.criptoAES(localStorage.chave, JSON.stringify(dados.msg));
+			}
 			texto = JSON.stringify(dados);
 			opcoesHTTP = this.opcoesHTTP(texto);
 		}
@@ -31568,6 +31573,14 @@ module.exports = {
 		opcoesHTTP.headers.Operacao = operacao;
 
 		var req = http.request(opcoesHTTP, (res) => {
+			if(objeto != "Token" && res.statusCode != 410 && dados.msg){
+				localStorage.contInc++;
+			}
+			if(res.statusCode == 417){
+				localStorage.removeItem('contInc');
+				localStorage.removeItem('chave');
+				localStorage.removeItem('token');
+			}
 			cb(res);
 		});
 
@@ -31709,9 +31722,14 @@ module.exports = {
 		return chave;
 	},
 
-	criptoAES: function(chave, msg){
+	criptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
+
+		console.log("utilsCliente::criptoAES, chave = " + chave);
+		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
+
 
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
@@ -31720,7 +31738,8 @@ module.exports = {
 		return hexCriptografado;
 	},
 
-	descriptoAES: function(chave, msg){
+	descriptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');		
 		bytesCriptografados = aes.utils.hex.toBytes(msg);
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
@@ -31733,17 +31752,17 @@ module.exports = {
 	criptoRSA: function(msg){
 		let rsa = require('node-rsa');
 		let publicKey = "-----BEGIN RSA PUBLIC KEY-----\n"+
-		"MIIBCgKCAQEAoHvzrCdqxoqWwxiEFgdfJ+JYYIpS5jmVVercqK2oXpCT3OuuBvGq\n"+
-		"FRgyHXD1fgwCLqHBIfT+SP+faVgEiVl1WDfDW7gqkX5y4ko/+naYR8UNe10xBXpv\n"+
-		"x96SXyOH23GlsduiztOfZkX1FkqFbobMEpvq8orExZTzY20ceMVWyxtWVNxX5+6z\n"+
-		"y6qCJXBFYoucF2O8qHMRrSj8dnYkEA/0tK0UplkEcyXt9OJpxI092Z46C2cKjs8P\n"+
-		"5SXF7gpd3xpQApuHT7lTbI6Di7aRjF2QppEGC9I6GotxWNifqa0/NgbbwqJSAo55\n"+
-		"DxbZrqVgOGVR5zvS7vNM70VIpk4UmGrP8wIDAQAB\n"+
+		"MIIBCgKCAQEAyT0Ios5P/qKKnoIAvwB1K14IaR33P+aNJbW8Di+pVom3zUuIHzHk\n"+
+		"qfhNrHPzFnOMwnw6DYB0F9luXcpqZe0nbSauauMObo80W/+kPtnkJgGyjoDo2FwZ\n"+
+		"X+vWGnAgCTqlrc9n738+8FXYUxpzb0MP3er3ClAiJv5y87g7RGI8d8qYJL0l2klP\n"+
+		"iWd5yVWJe7vtBAaWJjxmdvqG6DnDsxaYaeyEP1i/IlXfD/ePlzgYW3EfUALFc0y2\n"+
+		"hBM0OIMI83U1Qao/cPCFx2fut5w2UqLSowdCxurFZ4T6HFBlrX2zVtzce2wkxiAf\n"+
+		"aEghTU14LpiE/ulVH2enxekza3qnvTk+bwIDAQAB\n"+
 		"-----END RSA PUBLIC KEY-----";
 
 		var key = new rsa();
 		key.importKey(publicKey, 'pkcs1-public');
-		let msgCripto = key.encrypt(msg, 'hex');
+		let msgCripto = key.encrypt(msg, 'base64');
 
 		return msgCripto;
 	}

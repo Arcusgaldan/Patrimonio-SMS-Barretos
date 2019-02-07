@@ -35,7 +35,7 @@ document.getElementById('btnTransferir').addEventListener('click', function(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				logAntigo = JSON.parse(msg)[0];
+				logAntigo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				console.log("Só para validar data, logAntigo = " + msg);
 				logAntigo.atual = 0;
 				let dataPadrao = new Date(logAntigo.data);

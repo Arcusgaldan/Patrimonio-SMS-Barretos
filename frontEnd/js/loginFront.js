@@ -25988,15 +25988,16 @@ document.getElementById('btnLogin').addEventListener('click', login, false);
 
 function login(){
 	var utils = require('./../../utilsCliente.js');
-	let chave = JSON.stringify(utils.geraAES());
-	console.log("Chave gerada pelo sistema = " + chave);
+	var chave = JSON.stringify(utils.geraAES());
+	// console.log("TESTE001: ([): " + chave[0]);
+	// let chaveTeste = JSON.parse(chave);
+	// console.log("TESTE002: (Primeiro elemento da chave): " + chaveTeste[0]);	
+	// console.log("Chave gerada pelo sistema = " + chave);
 	var objeto = {
 		email: document.getElementById('emailLogin').value,
 		senha: utils.senhaHash(document.getElementById('senhaLogin').value),
 		chave: utils.criptoRSA(chave)
 	};
-
-
 	
 	utils.enviaRequisicao("Token", "CRIAR", objeto, function(res){
 		if(res.statusCode == 200){
@@ -26006,6 +26007,13 @@ function login(){
 			});
 			res.on('end', function(){
 				localStorage.token = msg;
+				// console.log("TESTE003: (Primeiro elemento da chave): " + JSON.parse(chave)[0]);
+				localStorage.chave = chave;
+				// console.log("TESTE004: (Primeiro elemento da chave): " + localStorage.chave[0]);
+				// console.log("Chave com parse: " + JSON.parse(chave));
+				// console.log("localStorage.chave: " + localStorage.chave);
+				// console.log("localStorage.chave[0]: " + localStorage.chave[0]);
+				localStorage.contInc = 1;
 		    	var form = document.getElementById('formLogin');
 		    	form.method = "POST";
 		    	form.action = "/index";
@@ -31346,6 +31354,11 @@ module.exports = {
 			opcoesHTTP = this.opcoesHTTP("");
 			texto = "";
 		}else{
+			if(dados.msg){
+				console.log("Há mensagem a ser enviada, msg = " + JSON.stringify(dados.msg));
+				dados.msg.contInc = localStorage.contInc;
+				dados.msg = this.criptoAES(localStorage.chave, JSON.stringify(dados.msg));
+			}
 			texto = JSON.stringify(dados);
 			opcoesHTTP = this.opcoesHTTP(texto);
 		}
@@ -31354,6 +31367,14 @@ module.exports = {
 		opcoesHTTP.headers.Operacao = operacao;
 
 		var req = http.request(opcoesHTTP, (res) => {
+			if(objeto != "Token" && res.statusCode != 410 && dados.msg){
+				localStorage.contInc++;
+			}
+			if(res.statusCode == 417){
+				localStorage.removeItem('contInc');
+				localStorage.removeItem('chave');
+				localStorage.removeItem('token');
+			}
 			cb(res);
 		});
 
@@ -31495,9 +31516,14 @@ module.exports = {
 		return chave;
 	},
 
-	criptoAES: function(chave, msg){
+	criptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
+
+		console.log("utilsCliente::criptoAES, chave = " + chave);
+		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
+
 
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
@@ -31506,7 +31532,8 @@ module.exports = {
 		return hexCriptografado;
 	},
 
-	descriptoAES: function(chave, msg){
+	descriptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');		
 		bytesCriptografados = aes.utils.hex.toBytes(msg);
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());

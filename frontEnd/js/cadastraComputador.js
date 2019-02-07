@@ -14,7 +14,7 @@ function copiarComputador(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var computador = JSON.parse(msg)[0];
+					var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 					document.getElementById('processadorComputadorCadastrar').value = computador.codProcessador;
 					document.getElementById('qtdMemoriaComputadorCadastrar').value = computador.qtdMemoria;
 					document.getElementById('tipoMemoriaComputadorCadastrar').value = computador.tipoMemoria;
@@ -151,7 +151,7 @@ function preencheProcessador(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcessador = JSON.parse(msg);
+				var vetorProcessador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
@@ -182,7 +182,7 @@ function preencheSO(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSO = JSON.parse(msg);
+				var vetorSO = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();

@@ -1,5 +1,6 @@
 module.exports = {
-	criptoAES: function(chave, msg){
+	criptoAES: function(chaveString, msg){		
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
 
@@ -7,10 +8,12 @@ module.exports = {
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
 
 		var hexCriptografado = aes.utils.hex.fromBytes(bytesCriptografados);
+		console.log("utilsCripto::criptoAES, hexCriptografado = " + hexCriptografado);
 		return hexCriptografado;
 	},
 
-	descriptoAES: function(chave, msg){
+	descriptoAES: function(chaveString, msg){
+		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');		
 		bytesCriptografados = aes.utils.hex.toBytes(msg);
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());

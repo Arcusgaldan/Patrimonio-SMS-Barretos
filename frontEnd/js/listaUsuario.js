@@ -178,7 +178,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var listaUsuario = JSON.parse(msg);
+					var listaUsuario = JSON.parse(utils.descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaUsuario);
 				});
 			}else if(res.statusCode == 747){
@@ -198,7 +198,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var listaUsuario = JSON.parse(msg);
+					var listaUsuario = JSON.parse(utils.descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaUsuario);
 				});
 			}else if(res.statusCode == 747){
@@ -279,7 +279,9 @@ utils.enviaRequisicao("Usuario", "LISTAR", {token: localStorage.token}, function
 			msg += chunk;
 		});
 		res.on('end', function(){
-			var vetorUsuario = JSON.parse(msg);
+			console.log("O que veio pela rede: " + msg);
+			var vetorUsuario = JSON.parse(utils.descriptoAES(localStorage.chave, msg));
+			console.log("O que foi descriptografado: " + JSON.stringify(vetorUsuario));
 			(function(){
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorUsuario)}, false);
 			}());

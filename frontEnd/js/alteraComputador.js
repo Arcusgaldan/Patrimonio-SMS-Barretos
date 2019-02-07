@@ -134,7 +134,7 @@ function preencheProcessador(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcessador = JSON.parse(msg);
+				var vetorProcessador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();

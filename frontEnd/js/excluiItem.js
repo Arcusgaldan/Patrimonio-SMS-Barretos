@@ -12,7 +12,7 @@ function preencheTipo(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorTipo = JSON.parse(msg);
+				var vetorTipo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#tipoItemCadastrar > option").remove();
 				$("#tipoItemAlterar > option").remove();
 				$("#selectTipoAlterar > option").remove();
@@ -81,7 +81,7 @@ function trocaNome(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var tipo = JSON.parse(msg)[0];
+				var tipo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				document.getElementById('nomeTipoItemExcluir').innerHTML = tipo.nome;
 				document.getElementById('idTipoItemExcluir').value = tipo.id;
 				$("#excluirTipoModal").modal('show');

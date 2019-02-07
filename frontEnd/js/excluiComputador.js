@@ -23,7 +23,7 @@ function preencheProcessador(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcessador = JSON.parse(msg);
+				var vetorProcessador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
@@ -57,7 +57,7 @@ function preencheSO(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSO = JSON.parse(msg);
+				var vetorSO = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();
@@ -139,7 +139,7 @@ function descartar(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var idItem = JSON.parse(msg)[0].codItem;
+				var idItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0].codItem;
 				require('./../../utilsCliente.js').enviaRequisicao('Item', 'DESCARTAR', {token: localStorage.token, msg: {id: idItem}}, function(res){
 					if(res.statusCode == 200){
 						$("#sucessoModal").modal('show');

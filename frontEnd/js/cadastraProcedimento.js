@@ -18,7 +18,7 @@ function buscaComputador(cb){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var computador = JSON.parse(msg)[0];
+				var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
 				cb(computador.idComputador);
 			});

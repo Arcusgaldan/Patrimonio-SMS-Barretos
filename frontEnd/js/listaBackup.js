@@ -21,7 +21,7 @@ function buscaComputador(cb){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var computador = JSON.parse(msg)[0];
+				var computador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 				// console.log("Em buscaComputador, computador = " + JSON.stringify(computador));
 				cb(computador.idComputador);
 			});
@@ -88,7 +88,7 @@ function buscar(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						let listaBackup = JSON.parse(msg);
+						let listaBackup = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 						preencheTabela(listaBackup);
 					});
 				}else if(res.statusCode == 747){
@@ -126,7 +126,7 @@ function buscar(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						let listaBackup = JSON.parse(msg);
+						let listaBackup = JSON.parse(utils.descriptoAES(localStorage.chave, msg));
 						preencheTabela(listaBackup);
 					});
 				}else if(res.statusCode == 747){
@@ -163,7 +163,7 @@ function preencheAlterarDisco(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var disco = JSON.parse(msg)[0];
+					var disco = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0];
 					document.getElementById('nomeDiscoAlterar').value = disco.nome;
 					document.getElementById('localDiscoAlterar').value = disco.local;
 					document.getElementById('tamanhoDiscoAlterar').value = disco.tamanho;
@@ -186,7 +186,7 @@ function preencheDisco(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorDisco = JSON.parse(msg);
+				var vetorDisco = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 
 				$("#discoBackupCadastrar > option").remove();
 				$("#discoBackupAlterar > option").remove();
@@ -304,7 +304,7 @@ buscaComputador(function(idComputador){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorBackup = JSON.parse(msg);
+				var vetorBackup = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				(function(){
 					document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorBackup)}, false);
 				}());

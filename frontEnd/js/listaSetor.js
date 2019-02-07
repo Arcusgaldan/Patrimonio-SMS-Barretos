@@ -42,7 +42,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaSetor = JSON.parse(msg);
+					let listaSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaSetor);
 				});
 			}else if(res.statusCode == 747){
@@ -65,7 +65,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaSetor = JSON.parse(msg);
+					let listaSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaSetor);
 				});
 			}else if(res.statusCode == 747){
@@ -144,7 +144,7 @@ utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(r
 			msg += chunk;
 		});
 		res.on('end', function(){
-			var vetorSetor = JSON.parse(msg);
+			var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 			(function(){
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorSetor)}, false);
 			}());

@@ -125,7 +125,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaComputador = JSON.parse(msg);
+					let listaComputador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaComputador);
 				});
 			}else if(res.statusCode == 747){
@@ -159,7 +159,7 @@ function buscar(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					let listaComputador = JSON.parse(msg);
+					let listaComputador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					preencheTabela(listaComputador);
 				});
 			}else if(res.statusCode == 747){
@@ -192,7 +192,7 @@ function preencheSetor(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSetor = JSON.parse(msg);
+				var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#setorComputadorBuscar > option").remove();
 				$("#setorItemTransferir > option").remove();
 								
@@ -350,7 +350,7 @@ function preenchePatrimonio(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorItens = JSON.parse(msg);
+				var vetorItens = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#patrimonioComputadorCadastrar > option").remove();
 
 				$("#patrimonioComputadorCadastrar").append("<option value='0'>Patrimônio</option>");
@@ -375,7 +375,7 @@ function preencheProcessador(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorProcessador = JSON.parse(msg);
+				var vetorProcessador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#processadorComputadorCadastrar > option").remove();
 				$("#processadorComputadorAlterar > option").remove();
 				$("#selectProcessadorAlterar > option").remove();
@@ -409,7 +409,7 @@ function preencheSO(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var vetorSO = JSON.parse(msg);
+				var vetorSO = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#sistemaComputadorCadastrar > option").remove();
 				$("#sistemaComputadorAlterar > option").remove();
 				$("#selectSOAlterar > option").remove();
@@ -447,7 +447,7 @@ utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, funct
 			msg += chunk;
 		});
 		res.on('end', function(){
-			var vetorComputador = JSON.parse(msg);
+			var vetorComputador = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 			preencheCopiarComputador(vetorComputador);
 			(function(){
 				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorComputador)}, false);
