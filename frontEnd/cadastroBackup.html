@@ -588,6 +588,29 @@
         if(codigo == 13){
           e.preventDefault();
           document.getElementById('btnBuscar').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formCadastroDisco select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnCadastrarDisco').click();
+        }
+      });
+    </script>
+
+    <script type="text/javascript">
+      $("#formAlteraDisco select").keydown(function(e){
+        let codigo = e.which;
+        if(codigo == 13){
+          e.preventDefault();
+          document.getElementById('btnAlterarDisco').click();
+        }
+      });
+    </script>
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

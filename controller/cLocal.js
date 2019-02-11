@@ -140,7 +140,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.local) || !validates.req(local.tamanho)){
+		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.endereco) || !validates.req(local.telefone)){
 			return false;
 		}else{
 			return true;
@@ -181,7 +181,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Local", function(res){
 			cb(res);
-		});
+		}, {orderBy: [{campo: "nome", sentido: "ASC"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

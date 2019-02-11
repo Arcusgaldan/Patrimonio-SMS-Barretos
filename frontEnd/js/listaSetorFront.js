@@ -26002,13 +26002,13 @@ function buscar(){
 		where += "nome LIKE '%" + nome + "%'";
 	}
 
-	if(document.getElementById('localSetorBuscar').value != ""){
+	if(document.getElementById('localSetorBuscar').value != "0"){
 		let local = document.getElementById('localSetorBuscar').value;
 
 		if(where != "")
 			where += " AND ";
 
-		where += "local LIKE '%" + local + "%'";
+		where += "local = " + local;
 	}
 
 	if(document.getElementById('siglaSetorBuscar').value != ""){
@@ -26066,6 +26066,39 @@ function buscar(){
 	}
 }
 
+function preencheLocal(){
+	require('./../../utilsCliente.js').enviaRequisicao('Local', 'LISTAR', {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				let listaLocal = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+				$("#localSetorCadastrar > option").remove();
+				$("#localSetorAlterar > option").remove();
+				$("#localSetorBuscar > option").remove();
+				$("#selectLocalAlterar > option").remove();
+
+				$("#localSetorCadastrar").append("<option value='0'>Local</option");
+				$("#localSetorAlterar").append("<option value='0'>Local</option");
+				$("#localSetorBuscar").append("<option value='0'>Local</option");
+
+				for(let i = 0; i < listaLocal.length; i++){					
+					$("#localSetorCadastrar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
+					$("#localSetorAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
+					$("#localSetorBuscar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
+					$("#selectLocalAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar local";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
 function preencheTabela(listaSetor){
 	if(!listaSetor){
 		return;
@@ -26121,6 +26154,8 @@ function preencheModalExcluir(setor){
 	document.getElementById('nomeSetorExcluir').innerHTML = setor.local + " - " + setor.nome;
 	document.getElementById('idSetorExcluir').value = setor.id;
 }
+
+preencheLocal();
 
 var utils = require('./../../utilsCliente.js');
 utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
