@@ -4,7 +4,7 @@ document.getElementById('btnCadastrarLocal').addEventListener('click', cadastrar
 function cadastrar(){
 	var modelo = require('./../../model/mSetor.js').novo();
 	modelo.nome = document.getElementById('nomeSetorCadastrar').value;
-	modelo.local = document.getElementById('localSetorCadastrar').value;
+	modelo.codLocal = document.getElementById('localSetorCadastrar').value;
 	modelo.sigla = document.getElementById('siglaSetorCadastrar').value;
 
 	var controller = require('./../../controller/cSetor.js');

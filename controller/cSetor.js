@@ -140,7 +140,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(setor.id) || !validates.req(setor.nome) || !validates.req(setor.local)){
+		if(!validates.req(setor.id) || !validates.req(setor.nome) || !validates.req(setor.codLocal)){
 			return false;
 		}else{
 			return true;
@@ -181,7 +181,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Setor", function(res){
 			cb(res);
-		}, {campos: "TBSetor.*, l.nome localNome",
+		}, {campos: "TBSetor.*, l.nome localNome, l.id localId",
 			joins: [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}],
 			orderBy: [{campo: 'l.id', sentido: 'asc'}]
 		});

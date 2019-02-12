@@ -26347,7 +26347,7 @@ function preencheLocal(){
 				$("#localLoteTransferir").append("<option value='0'>Local</option");
 
 
-				for(let i = 0; i < vetorSetor.length; i++){
+				for(let i = 0; i < vetorLocal.length; i++){
 					$("#localItemCadastrar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
 					$("#localItemBuscar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
 					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");

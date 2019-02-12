@@ -26008,7 +26008,7 @@ function buscar(){
 		if(where != "")
 			where += " AND ";
 
-		where += "local = " + local;
+		where += "codLocal = " + local;
 	}
 
 	if(document.getElementById('siglaSetorBuscar').value != ""){
@@ -26043,6 +26043,8 @@ function buscar(){
 	}else{
 		var argumentos = {};
 		argumentos.where = where;
+		argumentos.joins = [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}];
+		argumentos.selectCampos = ["TBSetor.*", "l.nome localNome", "l.id localId"];
 
 		utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
 			if(res.statusCode == 200){
@@ -26123,9 +26125,9 @@ function preencheTabela(listaSetor){
 		  </tr>\
 		");
 
-		document.getElementById('nomeSetorLista' + i).innerHTML = listaSetor[i].local + " - " + listaSetor[i].nome;
+		document.getElementById('nomeSetorLista' + i).innerHTML = listaSetor[i].localNome + " - " + listaSetor[i].nome;
 		document.getElementById('nomeSetorDados' + i).innerHTML = listaSetor[i].nome;
-		document.getElementById('localSetorDados' + i).innerHTML = listaSetor[i].local;
+		document.getElementById('localSetorDados' + i).innerHTML = listaSetor[i].localNome;
 		if(listaSetor[i].sigla)
 			document.getElementById('siglaSetorDados' + i).innerHTML = listaSetor[i].sigla;
 		else
@@ -26145,7 +26147,7 @@ function preencheTabela(listaSetor){
 
 function preencheModalAlterar(setor){
 	document.getElementById('nomeSetorAlterar').value = setor.nome;
-	document.getElementById('localSetorAlterar').value = setor.local;
+	document.getElementById('localSetorAlterar').value = setor.localId;
 	document.getElementById('siglaSetorAlterar').value = setor.sigla;
 	document.getElementById('idSetorAlterar').value = setor.id;
 }

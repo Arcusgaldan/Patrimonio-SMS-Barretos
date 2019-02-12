@@ -33547,7 +33547,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(setor.id) || !validates.req(setor.nome) || !validates.req(setor.local)){
+		if(!validates.req(setor.id) || !validates.req(setor.nome) || !validates.req(setor.codLocal)){
 			return false;
 		}else{
 			return true;
@@ -33924,8 +33924,7 @@ function alterarLocal(){
 	utils.enviaRequisicao("Local", "ALTERAR", {token: localStorage.token, msg: modelo}, function(res){
 		if(res.statusCode == 200){
 			$("#sucessoModal").modal('show');
-			$('#sucessoModal').on('hide.bs.modal', function(){$("#cadastraLocalModal").modal('toggle');});
-	    	setTimeout(function(){$("#cadastraLocalModal").modal('toggle');} , 2000);
+			$("#alteraLocalModal").modal('toggle');
 		}else if(res.statusCode == 412){
 			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
 			$("#erroModal").modal('show');
