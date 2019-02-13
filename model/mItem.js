@@ -7,6 +7,7 @@ module.exports = {
 		final.modelo = '';
 		final.descricao = '';
 		final.codTipoItem = 0;
+		final.ativo = 1;
 		return final;
 	},
 

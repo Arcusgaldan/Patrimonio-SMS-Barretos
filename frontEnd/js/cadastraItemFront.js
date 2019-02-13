@@ -33379,12 +33379,13 @@ module.exports = {
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
 		}, 
-		{campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome, s.id setorId", 
+		{campos: "TBItem.*, ti.nome tipoNome, s.id setorId, s.nome setorNome, l.id localId, l.nome localNome", 
 		joins: 
 			[
 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 			], 
 		where: "lt.atual = 1 AND TBItem.ativo = 1",
 		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
@@ -34028,8 +34029,8 @@ function cadastrarItem(){
 		return;
 	}
 
-	if(document.getElementById('setorItemCadastrar').value == '0'){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um setor";
+	if(document.getElementById('localItemCadastrar').value == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um local";
 		$("#erroModal").modal('show');
 		return;
 	}
@@ -34058,7 +34059,7 @@ function cadastrarItem(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+						//console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 						logTransferencia.data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
 						require('./../../utilsCliente.js').enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: {where: "patrimonio = " + item.patrimonio}}, function(res){
 							if(res.statusCode == 200){
@@ -34072,6 +34073,8 @@ function cadastrarItem(){
 									logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
 									if(document.getElementById('setorItemCadastrar').value != '0'){
 										logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+									}else{
+										logTransferencia.codSetor = null;
 									}
 									require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
 										if(res.statusCode == 200){
@@ -34128,6 +34131,7 @@ module.exports = {
 		final.modelo = '';
 		final.descricao = '';
 		final.codTipoItem = 0;
+		final.ativo = 1;
 		return final;
 	},
 

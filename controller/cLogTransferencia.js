@@ -183,7 +183,7 @@ module.exports = {
 		var validates = require('./../validates.js');
 
 		if(!validates.req(logTransferencia.id) || !validates.dataHora(logTransferencia.data) || 
-			!validates.req(logTransferencia.codSetor) || !validates.req(logTransferencia.codItem) || 
+			!validates.req(logTransferencia.codLocal) || !validates.req(logTransferencia.codItem) || 
 			!validates.req(logTransferencia.atual)){
 			console.log("Validar em cLogTransferencia: data teve resultado " + validates.dataHora(logTransferencia.data));
 			return false;

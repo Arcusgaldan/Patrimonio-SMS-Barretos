@@ -106,8 +106,8 @@ function cadastrarItem(){
 		return;
 	}
 
-	if(document.getElementById('setorItemCadastrar').value == '0'){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um setor";
+	if(document.getElementById('localItemCadastrar').value == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um local";
 		$("#erroModal").modal('show');
 		return;
 	}
@@ -136,7 +136,7 @@ function cadastrarItem(){
 						msg += chunk;
 					});
 					res.on('end', function(){
-						console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+						//console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 						logTransferencia.data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
 						require('./../../utilsCliente.js').enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: {where: "patrimonio = " + item.patrimonio}}, function(res){
 							if(res.statusCode == 200){
@@ -150,6 +150,8 @@ function cadastrarItem(){
 									logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
 									if(document.getElementById('setorItemCadastrar').value != '0'){
 										logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+									}else{
+										logTransferencia.codSetor = null;
 									}
 									require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
 										if(res.statusCode == 200){

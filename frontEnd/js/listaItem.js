@@ -4,6 +4,19 @@ document.getElementById('btnLimparBusca').addEventListener('click', function(){
 }, false);
 document.getElementById('btnAcaoItem').addEventListener('click', lote, false);
 
+document.getElementById('localItemCadastrar').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localItemCadastrar').value, "setorItemCadastrar");
+}, false);
+document.getElementById('localItemBuscar').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localItemBuscar').value, "setorItemBuscar");
+}, false);
+document.getElementById('localItemTransferir').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localItemTransferir').value, "setorItemTransferir");
+}, false);
+document.getElementById('localLoteTransferir').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
+}, false);
+
 function lote(){
 	var selecao = document.getElementById('selectAcaoItem').value;
 	if(selecao === 'transferir'){
@@ -202,6 +215,7 @@ function preencheTabela(listaItem){
 				    <p><strong>Modelo: </strong> <span id='modeloItemDados"+i+"'></span></p>\
 				    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
 				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
+				    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
 				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
 				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
 				    <br>\
@@ -230,7 +244,12 @@ function preencheTabela(listaItem){
 
 		document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
 
-		document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorLocal + " - " + listaItem[i].setorNome;
+		document.getElementById('localItemDados' + i).innerHTML = listaItem[i].localNome;		
+
+		if(listaItem[i].setorNome)
+			document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorNome;
+		else
+			document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
 
 		document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
 
@@ -276,7 +295,7 @@ function preencheModalTransferencia(item){
 
 function preencheModalHistorico(item){
 	document.getElementById('patrimonioHistorico').innerHTML = item.patrimonio;
-	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "s.local localSetor", "s.sigla siglaSetor", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor"}], where: "codItem = " + item.id, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
+	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "l.nome nomeLocal", "s.sigla siglaSetor", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"}, {tabela: "TBLocal l", on: "l.id = lt.codLocal"}], where: "codItem = " + item.id, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";
 			res.on('data', function(chunk){
@@ -286,9 +305,15 @@ function preencheModalHistorico(item){
 				let historico = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#corpoHistoricoModal >").remove();
 				for(let i = 0; i < historico.length; i++){
+					let localTemp;
+					if(historico[i].nomeSetor){
+						localTemp = historico[i].nomeLocal + ' - ' + historico[i].nomeSetor;
+					}else{
+						localTemp = historico[i].nomeLocal + ' -  Sem Setor';
+					}
 					$("#corpoHistoricoModal").append('<div class="card mb-1" style="width: 100%;">\
 					    <div class="card-body">\
-					      <h5 class="card-title">' + historico[i].localSetor + ' - ' + historico[i].nomeSetor + '</h5>\
+					      <h5 class="card-title">' + localTemp + '</h5>\
 					      <p class="card-text">Data de Transferência: ' + require('./../../utilsCliente.js').formataDataHora(historico[i].dataTransferencia) + '</p>\
 					    </div>\
 					  </div>');
@@ -362,10 +387,10 @@ function preencheLocal(){
 
 
 				for(let i = 0; i < vetorLocal.length; i++){
-					$("#localItemCadastrar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
-					$("#localItemBuscar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
-					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
-					$("#localLoteTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].local + " - " + vetorLocal[i].nome+"</option");
+					$("#localItemCadastrar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");
+					$("#localItemBuscar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");
+					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");
+					$("#localLoteTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -376,9 +401,14 @@ function preencheLocal(){
 	});
 }
 
-function preencheSetor(local){
+function preencheSetor(local, select){
+	if(local == '0'){
+		document.getElementById(select).disabled = true;
+		return;
+	}
+	document.getElementById(select).disabled = false;
 	var utils = require('./../../utilsCliente.js');
-	utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
+	utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: {where: "codLocal = " + local}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";
 			res.on('data', function(chunk){
@@ -386,21 +416,12 @@ function preencheSetor(local){
 			});
 			res.on('end', function(){
 				var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-				$("#setorItemCadastrar > option").remove();
-				$("#setorItemBuscar > option").remove();
-				$("#setorItemTransferir > option").remove();
-				$("#setorLoteTransferir > option").remove();
 				
-				$("#setorItemCadastrar").append("<option value='0'>Setor</option");
-				$("#setorItemBuscar").append("<option value='0'>Setor</option");
-				$("#setorLoteTransferir").append("<option value='0'>Setor</option");
-
+				$("#" + select + " > option").remove();				
+				$("#" + select).append("<option value='0'>Sem setor</option");
 
 				for(let i = 0; i < vetorSetor.length; i++){
-					$("#setorItemCadastrar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorItemBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorLoteTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
+					$("#" + select).append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].nome + "</option");					
 				}
 			});
 		}else if(res.statusCode != 747){

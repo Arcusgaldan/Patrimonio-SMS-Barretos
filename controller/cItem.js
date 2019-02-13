@@ -211,12 +211,13 @@ module.exports = {
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
 		}, 
-		{campos: "TBItem.*, ti.nome tipoNome, s.local setorLocal, s.nome setorNome, s.id setorId", 
+		{campos: "TBItem.*, ti.nome tipoNome, s.id setorId, s.nome setorNome, l.id localId, l.nome localNome", 
 		joins: 
 			[
 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 			], 
 		where: "lt.atual = 1 AND TBItem.ativo = 1",
 		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
