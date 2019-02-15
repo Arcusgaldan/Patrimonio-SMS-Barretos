@@ -175,6 +175,12 @@ http.createServer(function(req, res) {
                 }else{
                     if(jsonRqs.msg){
                         console.log("O que chegou pela rede: " + jsonRqs.msg);
+                        if(!vetorTokens[jsonRqs.token]){
+                            console.log("Não há token cadastrado nesta posição do vetor!");
+                            res.statusCode = 417;
+                            res.end();
+                            return;
+                        }
                         jsonRqs.msg = JSON.parse(require('./utilsCripto.js').descriptoAES(vetorTokens[jsonRqs.token].chave, jsonRqs.msg));
                         console.log("O que foi descriptografado: " + JSON.stringify(jsonRqs.msg));
                         if(jsonRqs.msg.contInc == vetorTokens[jsonRqs.token].contInc){

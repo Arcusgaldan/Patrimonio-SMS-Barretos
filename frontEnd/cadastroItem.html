@@ -500,19 +500,19 @@
                   </div>
                 </div>
 
-                <div class="form-label-group">
+                <div class="form-group">
                   <select id="localItemTransferir" class="form-control"></select>
                 </div>
 
-                <div class="form-label-group">
+                <div class="form-group">
                   <select id="setorItemTransferir" class="form-control" disabled>
                     <option value="0">Setor</option>
                   </select>
                 </div>
               </form>
               <div id="idItemTransferir" style="display: none;"></div>
-              <div id="localAntigoTransferir" style="display: none;"></div>
-              <div id="idLocalAntigoTransferir" style="display: none;"></div>
+              <div id="localAntigoItemTransferir" style="display: none;"></div>
+              <div id="idLocalAntigoItemTransferir" style="display: none;"></div>
               <div id="setorAntigoItemTransferir" style="display: none;"></div>
               <div id="idSetorAntigoItemTransferir" style="display: none;"></div>
               <div class="modal-footer">
@@ -534,7 +534,7 @@
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div class="modal-body"><p style="color: #000">Patrimônio(s) do(s) Item(ns): <strong><span id="patrimonioItemConfirmaTransferencia"></span></strong> <br> Setor de Origem: <strong><span id="setorAntigoItemConfirmaTransferencia"></span></strong><br>Setor de Destino: <strong><span id="setorNovoItemConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
+            <div class="modal-body"><p style="color: #000">Patrimônio(s) do(s) Item(ns): <strong><span id="patrimonioItemConfirmaTransferencia"></span></strong> <br><br> Local de Origem: <strong><span id="localAntigoItemConfirmaTransferencia"></span></strong><br> Setor de Origem: <strong><span id="setorAntigoItemConfirmaTransferencia"></span></strong><br><br> Local de Destino: <strong><span id="localNovoItemConfirmaTransferencia"></span></strong><br> Setor de Destino: <strong><span id="setorNovoItemConfirmaTransferencia"></span></strong><br><br>Deseja realmente realizar esta transferência?</p></div>
             <div class="modal-footer">
               <button class="btn btn-success" id="btnTransferir">SIM</button>
               <button class="btn btn-danger"  data-dismiss="modal">CANCELAR</button>

@@ -217,6 +217,7 @@ function preencheTabela(listaItem){
 				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
 				    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
 				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
+				    <div style='display: none;' id='idLocalItemDados"+i+"'></div>\
 				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
 				    <br>\
 				    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
@@ -251,6 +252,7 @@ function preencheTabela(listaItem){
 		else
 			document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
 
+		document.getElementById('idLocalItemDados' + i).value = listaItem[i].localId;
 		document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
 
 		(function(){
@@ -286,11 +288,20 @@ function preencheModalExcluir(item){
 }
 
 function preencheModalTransferencia(item){
+	document.getElementById('setorItemTransferir').disabled = true;
 	document.getElementById('patrimonioItemTransferir').value = item.patrimonio;
-	document.getElementById('setorItemTransferir').value = item.setorId;
+	document.getElementById('localItemTransferir').value = item.localId;
+	preencheSetor(item.localId, "setorItemTransferir", function(){
+		if(item.setorId)
+			document.getElementById('setorItemTransferir').value = item.setorId;
+		else
+			document.getElementById('setorItemTransferir').value = '0';			
+	});
 	document.getElementById('idItemTransferir').value = item.id;
-	document.getElementById('setorAntigoItemTransferir').value = item.setorLocal + " - " + item.setorNome;
+	document.getElementById('setorAntigoItemTransferir').value = item.setorNome;
 	document.getElementById('idSetorAntigoItemTransferir').value = item.setorId;
+	document.getElementById('localAntigoItemTransferir').value = item.localNome;
+	document.getElementById('idLocalAntigoItemTransferir').value = item.localId;
 }
 
 function preencheModalHistorico(item){
@@ -401,7 +412,7 @@ function preencheLocal(){
 	});
 }
 
-function preencheSetor(local, select){
+function preencheSetor(local, select, cb){
 	if(local == '0'){
 		document.getElementById(select).disabled = true;
 		return;
@@ -422,6 +433,9 @@ function preencheSetor(local, select){
 
 				for(let i = 0; i < vetorSetor.length; i++){
 					$("#" + select).append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].nome + "</option");					
+				}
+				if(cb){
+					cb();
 				}
 			});
 		}else if(res.statusCode != 747){

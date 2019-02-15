@@ -25985,15 +25985,27 @@ function extend() {
 
 },{}],172:[function(require,module,exports){
 document.getElementById('btnModalTransferencia').addEventListener('click', function(){
-	if(document.getElementById('setorItemTransferir').value == document.getElementById('idSetorAntigoItemTransferir').value){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione um setor diferente do setor de origem!";
-		$("#erroModal").modal('show');
-		return;
+	if(document.getElementById('localItemTransferir').value == document.getElementById('idLocalAntigoItemTransferir').value){
+		console.log("É o mesmo local!");
+		if(document.getElementById('setorItemTransferir').value == document.getElementById('idSetorAntigoItemTransferir').value || (document.getElementById('setorItemTransferir').value == '0' && document.getElementById('idSetorAntigoItemTransferir').value == null)){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, selecione um local e setor diferente do setor de origem!";
+			$("#erroModal").modal('show');
+			return;
+		}
 	}
 
 	document.getElementById('patrimonioItemConfirmaTransferencia').innerHTML = document.getElementById('patrimonioItemTransferir').value;
-	document.getElementById('setorAntigoItemConfirmaTransferencia').innerHTML = document.getElementById('setorAntigoItemTransferir').value;
-	document.getElementById('setorNovoItemConfirmaTransferencia').innerHTML = $('#setorItemTransferir').children("option:selected").text();
+	if(document.getElementById('setorAntigoItemTransferir').value)
+		document.getElementById('setorAntigoItemConfirmaTransferencia').innerHTML = document.getElementById('setorAntigoItemTransferir').value;
+	else
+		document.getElementById('setorAntigoItemConfirmaTransferencia').innerHTML = '-';
+	document.getElementById('localAntigoItemConfirmaTransferencia').innerHTML = document.getElementById('localAntigoItemTransferir').value;
+	if(document.getElementById('setorItemTransferir').value != '0')
+		document.getElementById('setorNovoItemConfirmaTransferencia').innerHTML = $('#setorItemTransferir').children("option:selected").text();
+	else
+		document.getElementById('setorNovoItemConfirmaTransferencia').innerHTML = '-';
+
+	document.getElementById('localNovoItemConfirmaTransferencia').innerHTML = $('#localItemTransferir').children("option:selected").text();
 	$("#confirmaTransferenciaModal").modal('show');
 
 }, false);
@@ -26034,7 +26046,11 @@ document.getElementById('btnTransferir').addEventListener('click', function(){
 					if(res.statusCode == 200){
 						var logNovo = require('./../../model/mLogTransferencia.js').novo();
 						logNovo.codItem = document.getElementById('idItemTransferir').value;
-						logNovo.codSetor = document.getElementById('setorItemTransferir').value;
+						logNovo.codLocal = document.getElementById('localItemTransferir').value;
+						if(document.getElementById('setorItemTransferir').value != '0')
+							logNovo.codSetor = document.getElementById('setorItemTransferir').value;
+						else
+							logNovo.codSetor = null;
 						utils.enviaRequisicao('LogTransferencia', 'INSERIR', {token: localStorage.token, msg: logNovo}, function(res){
 							if(res.statusCode == 200){								
 								$("#sucessoModal").modal('show');
