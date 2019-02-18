@@ -25989,18 +25989,27 @@ document.getElementById('btnTransferirLote').addEventListener('click', transferi
 
 function preencheModal(){
 	document.getElementById('patrimonioLoteConfirmaTransferencia').innerHTML = document.getElementById('patrimonioLoteTransferir').value;	
+	document.getElementById('localNovoLoteConfirmaTransferencia').innerHTML = $('#localLoteTransferir').children("option:selected").text();		
 	document.getElementById('setorNovoLoteConfirmaTransferencia').innerHTML = $('#setorLoteTransferir').children("option:selected").text();	
 	$("#confirmaTransferenciaLoteModal").modal('show');
 }
 
 function transferir(){
-	let novoSetor = document.getElementById('setorLoteTransferir').value;
-	if(novoSetor == '0'){
-		document.getElementById('msgErroModal').innerHTML = "Selecione um setor para transferir!";
+	let destino = {
+		novoLocal: document.getElementById('localLoteTransferir').value,
+		novoSetor: document.getElementById('setorLoteTransferir').value
+	};	
+	
+	if(destino.novoLocal == '0'){
+		document.getElementById('msgErroModal').innerHTML = "Selecione um local para transferir!";
 		$("#erroModal").modal('show');
 		return;
 	}
-	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'TRANSFERIRLOTE', {token: localStorage.token, msg: {itens: JSON.parse(document.getElementById('idItemTransferirLote').value), destino: novoSetor}}, function(res){
+
+	if(destino.novoSetor == '0'){
+		destino.novoSetor = null;
+	}
+	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'TRANSFERIRLOTE', {token: localStorage.token, msg: {itens: JSON.parse(document.getElementById('idItemTransferirLote').value), destino: destino}}, function(res){
 		let qtdExcluidos = "";
 		res.on('data', function(chunk){
 			qtdExcluidos += chunk;
@@ -31533,10 +31542,6 @@ module.exports = {
 		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
-
-		console.log("utilsCliente::criptoAES, chave = " + chave);
-		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
-
 
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);

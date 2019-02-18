@@ -246,7 +246,7 @@ module.exports = {
 	},
 
 	transferirLote: function(itens, destino, cb){
-		sql = "SELECT i.id idItem, s.id idSetor, lt.id idLog FROM TBItem i JOIN TBLogTransferencia lt ON i.id = lt.codItem JOIN TBSetor s ON s.id = lt.codSetor WHERE lt.atual = 1 AND ";
+		sql = "SELECT i.id idItem, s.id idSetor, l.id idLocal, lt.id idLog FROM TBItem i JOIN TBLogTransferencia lt ON i.id = lt.codItem JOIN TBLocal l ON l.id = lt.codLocal LEFT JOIN TBSetor s ON s.id = lt.codSetor WHERE lt.atual = 1 AND ";
 		let stringItens = '(';
 		let qtdExcluidos = 0;
 		let logs = [];
@@ -266,7 +266,7 @@ module.exports = {
 		dao.buscar(dao.criaConexao(), sql, function(resultado){
 			if(resultado){
 				for(let i = 0; i < resultado.length; i++){
-					if(resultado[i].idSetor == destino){
+					if(resultado[i].idLocal == destino.novoLocal && resultado[i].idSetor == destino.novoSetor){
 						qtdExcluidos++;
 					}else{
 						logs.push(resultado[i].idLog);
@@ -328,18 +328,19 @@ module.exports = {
 	},
 
 	inserirLote: function(itens, destino, cb){
-		let sql = "INSERT INTO TBLogTransferencia (id, data, codSetor, codItem, atual) VALUES ";
+		let sql = "INSERT INTO TBLogTransferencia (id, data, codLocal, codSetor, codItem, atual) VALUES ";
 		let dataAtual = require('./cData.js').dataHoraAtual();
 		let values = "";
 		for(let i = 0; i < itens.length; i++){
 			if(i == itens.length - 1){
-				values += "(0, '" + dataAtual + "', " + destino + ", " + itens[i] + ", 1);";
+				values += "(0, '" + dataAtual + "', " + destino.novoLocal + ", " + destino.novoSetor + ", " + itens[i] + ", 1);";
 			}else{
-				values += "(0, '" + dataAtual + "', " + destino + ", " + itens[i] + ", 1), ";
+				values += "(0, '" + dataAtual + "', " + destino.novoLocal + ", " + destino.novoSetor + ", " + itens[i] + ", 1), ";
 			}
 		}
 
 		sql += values;
+		console.log("Em cLogTransferencia::inserirLote, sql = " + sql);
 		let dao = require('./../dao.js');
 		dao.inserir(dao.criaConexao(), sql, function(codRes){
 			cb(codRes);

@@ -208,10 +208,6 @@ module.exports = {
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
 
-		console.log("utilsCliente::criptoAES, chave = " + chave);
-		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
-
-
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
 

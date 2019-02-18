@@ -26028,10 +26028,16 @@ function lote(){
 			return;
 		}else if(vetorMarcados.length == 1){
 			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+			document.getElementById('localItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+			preencheSetor(document.getElementById('idLocalItemDados' + vetorMarcados[0]).value, "setorItemTransferir", function(){
+				document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+			});
 			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
 			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
 			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+			document.getElementById('localAntigoItemTransferir').value = document.getElementById('localItemDados' + vetorMarcados[0]).innerHTML;
+			document.getElementById('idLocalAntigoItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+
 			$("#transfereModal").modal('show');
 		}else{
 			document.getElementById('patrimonioLoteTransferir').value = "";
@@ -26042,6 +26048,7 @@ function lote(){
 					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
 			}
 			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
+			preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
 			$("#transfereLoteModal").modal('show');			
 		}
 
@@ -26082,6 +26089,15 @@ function buscar(){
 
 		where += "modelo LIKE '%" + modelo + "%'";
 	}
+
+	if(document.getElementById('localItemBuscar').value != '0'){
+		let local = document.getElementById('localItemBuscar').value;
+
+		if(where != "")
+			where += " AND ";
+
+		where += "lt.codLocal = " + local;
+	}	
 
 	if(document.getElementById('setorItemBuscar').value != '0'){
 		let setor = document.getElementById('setorItemBuscar').value;
@@ -26138,11 +26154,12 @@ function buscar(){
 	}else{
 		//console.log("O where da busca é: " + where);
 		var argumentos = {
-			selectCampos: ["TBItem.*", "ti.nome tipoNome", "s.local setorLocal", "s.nome setorNome", "s.id setorId"], 
+			selectCampos: ["TBItem.*", "ti.nome tipoNome", "l.nome localNome", "s.nome setorNome", "s.id setorId"], 
 			joins: [
 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor"}
+				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 			], 
 			where: "lt.atual = 1 AND " + where, 
 			orderBy: [{campo: "patrimonio", sentido: "asc"}]
@@ -26380,7 +26397,6 @@ function preencheLocal(){
 				
 				$("#localItemCadastrar").append("<option value='0'>Local</option");
 				$("#localItemBuscar").append("<option value='0'>Local</option");
-				$("#localLoteTransferir").append("<option value='0'>Local</option");
 
 
 				for(let i = 0; i < vetorLocal.length; i++){
@@ -31946,10 +31962,6 @@ module.exports = {
 		let chave = JSON.parse(chaveString);
 		let aes = require('aes-js');
 		let textoBytes = aes.utils.utf8.toBytes(msg);
-
-		console.log("utilsCliente::criptoAES, chave = " + chave);
-		console.log("utilsCliente::criptoAES, chave[0] = " + chave[0]);
-
 
 		var aesCtr = new aes.ModeOfOperation.ctr(chave, new aes.Counter());
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
