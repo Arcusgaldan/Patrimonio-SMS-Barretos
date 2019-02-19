@@ -1,0 +1,1 @@
+select i.patrimonio itemPatrimonio, ti.nome tipoNome, l.nome localNome, s.nome setorNome FROM TBLogTransferencia lt JOIN TBItem i ON i.id = lt.codItem JOIN TBTipoItem ti ON ti.id = i.codTipoItem JOIN TBLocal l ON l.id = lt.codLocal LEFT JOIN TBSetor s ON s.id = lt.codSetor WHERE lt.atual = 1 AND lt.codLocal = [%ID_LOCAL] ORDER BY setorNome ASC;
