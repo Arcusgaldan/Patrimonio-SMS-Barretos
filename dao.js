@@ -18,7 +18,7 @@ module.exports = {
 			con.query(comando, function(err, res){
 				if(err){ console.log("Erro: " + err); cb(400); return;}				
 				// console.log("Deu bom inserindo");
-				con.destroy();
+				con.end();
 				cb(200);
 			});
 		});
@@ -31,7 +31,7 @@ module.exports = {
 			con.query(comando, function(err, res){
 				if(err){console.log("Erro " + err); cb(null); return;}
 				// console.log("Deu bom buscando");
-				con.destroy();
+				con.end();
 				cb(res);
 			});
 		});

@@ -70,7 +70,42 @@ function geraRelatorioEquipamentoUnidade(){
 					$("#erroModal").modal('show');
 					return;
 				}
-				//Organizar informações e gerar PDF
+				let setorAtual = "";
+				var conteudo = {
+					content: [{text: "Levantamento de Equipamentos de Informática\n" + $('#localRelatorioPatrimonio').children("option:selected").text() + "\n\n", style: "header", alignment: "center"}], 
+					styles: {
+						header: {
+							fontSize: 18,
+							bold: true
+						},
+						subheader: {
+							fontSize: 15,
+							bold: true
+						}
+					}
+				};
+				var lista = [];
+				for(let i = 0; i < relatorio.length; i++){
+					if(setorAtual == "" || setorAtual != relatorio[i].setorNome){
+						if(relatorio[i].setorNome == null){
+							setorAtual = "Sem setor definido";
+						}else{
+							setorAtual = relatorio[i].setorNome;
+						}
+						conteudo.content.push({text: relatorio[i].setorNome, style: "subheader"});
+						if(lista.length != 0){
+							conteudo.content.push({ul: lista});
+							conteudo.content.push({text: "\n"});
+						}
+						lista = [];
+					}
+					lista.push(relatorio[i].itemPatrimonio + " - " + relatorio[i].tipoNome);
+				}
+				var pdfMake = require('pdfmake/build/pdfmake.js');
+				var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+				pdfMake.vfs = pdfFonts.pdfMake.vfs;
+				var janela = 
+				pdfMake.createPdf(conteudo).print({}, window);
 			});
 		}else{
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
