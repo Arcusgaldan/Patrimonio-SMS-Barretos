@@ -71,8 +71,9 @@ function geraRelatorioEquipamentoUnidade(){
 					return;
 				}
 				let setorAtual = "";
+				let nomeLocal = $('#localRelatorioPatrimonio').children("option:selected").text();
 				var conteudo = {
-					content: [{text: "Levantamento de Equipamentos de Informática\n" + $('#localRelatorioPatrimonio').children("option:selected").text() + "\n\n", style: "header", alignment: "center"}], 
+					content: [{text: "Levantamento de Equipamentos de Informática\n" + nomeLocal + "\n\n", style: "header", alignment: "center"}], 
 					styles: {
 						header: {
 							fontSize: 18,
@@ -101,11 +102,13 @@ function geraRelatorioEquipamentoUnidade(){
 					}
 					lista.push(relatorio[i].itemPatrimonio + " - " + relatorio[i].tipoNome);
 				}
+				conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.'});
+				conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador do(a) ' + nomeLocal, alignment: 'right'}]});				
 				var pdfMake = require('pdfmake/build/pdfmake.js');
 				var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 				pdfMake.vfs = pdfFonts.pdfMake.vfs;
 				var janela = 
-				pdfMake.createPdf(conteudo).print({}, window);
+				pdfMake.createPdf(conteudo).open({}, window);
 			});
 		}else{
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
