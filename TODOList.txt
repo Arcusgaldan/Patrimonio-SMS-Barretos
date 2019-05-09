@@ -11,10 +11,11 @@
 [V] Implementar sistema de log para todas as ações (ID do usuario, nome da tabela, operação, data e mudanças);
 [V] Corrigir enter em formulários para abranger selects também (e trocar o dropdown por algum outro botão que não o enter)
 [V] Adicionar campo "Ativo" a TBItem para poder descartar itens sem excluí-los do banco
+[V] Aplicar modelo de criptografia
+![V] Melhorar interface para cadastro de computador junto a cadastro de item
+[V] Considerar criar uma tabela de locais para setor
 
 -- PENDENTES
-[-] Considerar criar uma tabela de locais para setor
-![-] Melhorar interface para cadastro de computador junto a cadastro de item
 [-] Fazer validação campo-a-campo em todos os formulários
 [-] Considerar paginação para listagens
 [-] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco
@@ -24,7 +25,8 @@
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
 [-] Estudar defesas para SQL Injection
 [-] Estudar melhoramento para log de transferência em lote (usar laço)
-[-] Aplicar modelo de criptografia
+[-] Verificar e corrigir bug de dois modais abertos ao mesmo tempo causando o scroll a não funcionar corretamente (classe modal-open no body)
+![-] Configurar política de backup do banco de dados
 
 -- EM ANDAMENTO
 
