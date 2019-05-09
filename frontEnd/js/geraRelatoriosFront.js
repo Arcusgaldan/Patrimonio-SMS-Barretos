@@ -26198,6 +26198,7 @@ function geraRelatorioEquipamentoUnidade(){
 				msg += chunk;
 			});
 			res.on('end', function(){
+				//console.log("A resposta de relatorio recebida foi: " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				let relatorio = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				if(relatorio.length == 0){
 					document.getElementById('msgErroModal').innerHTML = "Não há registro de equipamentos na unidade selecionada.";
@@ -26221,21 +26222,36 @@ function geraRelatorioEquipamentoUnidade(){
 				};
 				var lista = [];
 				for(let i = 0; i < relatorio.length; i++){
-					if(setorAtual == "" || setorAtual != relatorio[i].setorNome){
+					console.log("No loop do relatório, estou no item de patrimonio: " + relatorio[i].itemPatrimonio);
+					if(setorAtual == ""){
 						if(relatorio[i].setorNome == null){
 							setorAtual = "Sem setor definido";
 						}else{
 							setorAtual = relatorio[i].setorNome;
 						}
-						conteudo.content.push({text: relatorio[i].setorNome, style: "subheader"});
-						if(lista.length != 0){
-							conteudo.content.push({ul: lista});
-							conteudo.content.push({text: "\n"});
+						conteudo.content.push({text: setorAtual, style: "subheader"});						
+					}else if(setorAtual != relatorio[i].setorNome && !(setorAtual == "Sem setor definido" && relatorio[i].setorNome == null)){
+						if(relatorio[i].setorNome == null){
+							setorAtual = "Sem setor definido";
+						}else{
+							setorAtual = relatorio[i].setorNome;
 						}
+
+						conteudo.content.push({ul: lista});
+						conteudo.content.push({text: "\n"});
 						lista = [];
+
+						conteudo.content.push({text: setorAtual, style: "subheader"});
 					}
+					
 					lista.push(relatorio[i].itemPatrimonio + " - " + relatorio[i].tipoNome);
 				}
+				
+				if(lista.length != 0){
+					conteudo.content.push({ul: lista});
+					conteudo.content.push({text: "\n"});
+				}
+				lista = [];
 				conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.'});
 				conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador do(a) ' + nomeLocal, alignment: 'right'}]});				
 				var pdfMake = require('pdfmake/build/pdfmake.js');
