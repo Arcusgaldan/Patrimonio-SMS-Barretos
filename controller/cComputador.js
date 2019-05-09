@@ -1,5 +1,6 @@
 module.exports = {
 	trataOperacao: function(usuario, operacao, msg, cb){ //Encaminha a execução para a operação passada pelo servidor (esta função também é responsável por fazer o controle de acesso às funções restritas apenas a usuários logados)
+		console.log("Entrando no switch do cComputador::trataOperacao");
 		var resposta = {};
 		switch(operacao){
 			case 'INSERIR':
@@ -106,6 +107,7 @@ module.exports = {
 				});
 				break;
 			case 'LISTAR':
+				console.log("Entrei no case de listar em cComputador::trataOperacao");
 				this.listar(function(res){
 					if(res){
 						resposta.codigo = 200;
@@ -179,6 +181,7 @@ module.exports = {
 	},
 
 	listar: function(cb){ //Lista todos os registros da tabela;
+		console.log("Entrei em cComputador::listar");
 		require('./controller.js').listar("Computador", function(res){
 			cb(res);
 		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, l.nome localNome, s.id setorId", 
@@ -188,7 +191,7 @@ module.exports = {
 			{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
 			{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
 			{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
-			{tabela: "TBLocal l", on "l.id = lt.codLocal"}
+			{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 		], 
 		where: "lt.atual = 1 AND i.ativo = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
 	},

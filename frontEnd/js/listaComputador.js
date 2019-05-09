@@ -206,6 +206,7 @@ function preencheSetor(){
 				}
 			});
 		}else if(res.statusCode != 747){
+			console.log("O problema foi no setor.");
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
 			$("#erroModal").modal('show');
 			return;
@@ -360,6 +361,7 @@ function preenchePatrimonio(){
 				}
 			});
 		}else if(res.statusCode != 747){
+			console.log("O problema foi no patrimonio com código = " + res.statusCode);
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível buscar patrimônios";
 			$("#erroModal").modal('show');
 			return;
@@ -394,6 +396,7 @@ function preencheProcessador(){
 				}
 			});
 		}else if(res.statusCode != 747){
+			console.log("O problema foi no processador com código = " + res.statusCode);
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível buscar processadores";
 			$("#erroModal").modal('show');
 			return;
@@ -428,6 +431,7 @@ function preencheSO(){
 				}
 			});
 		}else if(res.statusCode != 747){
+			console.log("O problema foi no sistema com código = " + res.statusCode);
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível buscar processadores";
 			$("#erroModal").modal('show');
 			return;
@@ -455,6 +459,7 @@ utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, funct
 			preencheTabela(vetorComputador);
 		});
 	}else if(res.statusCode != 747){
+		console.log("O problema foi no computador com código = " + res.statusCode);
 		document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar computadores";
 		$("#erroModal").modal('show');
 		return;

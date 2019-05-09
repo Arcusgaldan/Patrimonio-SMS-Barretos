@@ -36,8 +36,8 @@ module.exports = {
 		sql += campos + ") values (" + valores + ");"; //Finaliza a string de comando sql
 		console.log("Em controller:inserir, SQL = " + sql);
 		var dao = require('./../dao.js'); //Puxa o módulo DAO, responsável pela conexão com o BD
-		dao.inserir(dao.criaConexao(), sql, function(codRes){ //Executa o comando de inserção (sql com retorno apenas de status)
-			cb(codRes); //Executa o callback com o código retornado pelo callback do DAO.
+		dao.inserir(dao.criaConexao(), sql, function(codRes, id){ //Executa o comando de inserção (sql com retorno apenas de status)
+			cb(codRes, id); //Executa o callback com o código retornado pelo callback do DAO.
 		});
 	},
 
@@ -82,6 +82,7 @@ module.exports = {
 	},
 
 	listar: function(alvo, cb, argumentos){ //Lista todos os registros da tabela;
+		console.log("Entrei em controler::listar");
 		var sql;
 		if(!argumentos)
 			sql = "SELECT * FROM TB" + alvo;

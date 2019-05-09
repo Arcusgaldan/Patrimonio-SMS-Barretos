@@ -1,4 +1,4 @@
-document.getElementById('btnCadastrar').addEventListener('click', cadastrar, false);
+document.getElementById('btnCadastrarComputador').addEventListener('click', cadastrarComputador, false);
 document.getElementById('btnCadastrarProcessador').addEventListener('click', cadastrarProcessador, false);
 document.getElementById('btnCadastrarSO').addEventListener('click', cadastrarSO, false);
 document.getElementById('copiarComputadorCadastrar').addEventListener('change', copiarComputador, false);
@@ -37,7 +37,7 @@ function copiarComputador(){
 	}
 }
 
-function cadastrar(){
+function cadastrarComputador(){
 	var computador = require('./../../model/mComputador.js').novo();
 	computador.codItem = document.getElementById('patrimonioComputadorCadastrar').value;
 	if(computador.codItem == '0'){

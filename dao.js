@@ -19,7 +19,7 @@ module.exports = {
 				if(err){ console.log("Erro: " + err); cb(400); return;}				
 				// console.log("Deu bom inserindo");
 				con.end();
-				cb(200);
+				cb(200, res.insertId);
 			});
 		});
 	},

@@ -7,8 +7,9 @@ module.exports = {
 					resposta.codigo = 413;
 					cb(resposta);
 				}
-				this.inserir(msg, function(codRes){
+				this.inserir(msg, function(codRes, id){
 					resposta.codigo = codRes;
+					resposta.msg = id;
 					if(resposta.codigo == 200){
 						require('./controller.js').proximoID("Item", function(id){						
 							msg.id = parseInt(id) - 1;
@@ -181,8 +182,8 @@ module.exports = {
 			cb(412);
 			return;
 		}
-		require('./controller.js').inserir("Item", item, function(codRes){
-			cb(codRes);
+		require('./controller.js').inserir("Item", item, function(codRes, id){
+			cb(codRes, id);
 		});
 	},
 
