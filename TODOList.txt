@@ -14,6 +14,8 @@
 [V] Aplicar modelo de criptografia
 ![V] Melhorar interface para cadastro de computador junto a cadastro de item
 [V] Considerar criar uma tabela de locais para setor
+[V] Verificar e corrigir bug de dois modais abertos ao mesmo tempo causando o scroll a não funcionar corretamente (classe modal-open no body) //Resolvido com script direto no HTML, com a classe modal-open no body
+[V] Adicionar erro para tentativa de duplicar campo único //Adicionado o erro 418 para duplicata.
 
 -- PENDENTES
 [-] Fazer validação campo-a-campo em todos os formulários
@@ -25,7 +27,6 @@
 [-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
 [-] Estudar defesas para SQL Injection
 [-] Estudar melhoramento para log de transferência em lote (usar laço)
-[-] Verificar e corrigir bug de dois modais abertos ao mesmo tempo causando o scroll a não funcionar corretamente (classe modal-open no body)
 ![-] Configurar política de backup do banco de dados
 
 -- EM ANDAMENTO

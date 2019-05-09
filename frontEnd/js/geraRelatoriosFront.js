@@ -26222,7 +26222,7 @@ function geraRelatorioEquipamentoUnidade(){
 				};
 				var lista = [];
 				for(let i = 0; i < relatorio.length; i++){
-					console.log("No loop do relatório, estou no item de patrimonio: " + relatorio[i].itemPatrimonio);
+					//console.log("No loop do relatório, estou no item de patrimonio: " + relatorio[i].itemPatrimonio);
 					if(setorAtual == ""){
 						if(relatorio[i].setorNome == null){
 							setorAtual = "Sem setor definido";

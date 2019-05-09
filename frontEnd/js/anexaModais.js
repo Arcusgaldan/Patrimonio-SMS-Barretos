@@ -49,3 +49,11 @@ $("body").append('<div class="modal fade" id="erroModal" tabindex="-1" role="dia
     </div>\
   </div>\
 </div>');
+
+$('#sucessoModal').on('hidden.bs.modal', function (e) {
+    $('body').addClass('modal-open');
+});
+
+$('#erroModal').on('hidden.bs.modal', function (e) {
+    $('body').addClass('modal-open');
+});

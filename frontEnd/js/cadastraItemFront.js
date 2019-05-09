@@ -34244,7 +34244,7 @@ function cadastrarItem(){
 													
 													$('#sucessoModal').on('hide.bs.modal', function(){
 														$('#cadastraModal').modal('hide');
-														setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500);
+														setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500); //Delay para não bugar o scroll do modal
 													});
 
 												}else{

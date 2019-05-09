@@ -171,6 +171,7 @@ function cadastrarItem(){
 														$('#cadastraModal').modal('hide');
 														setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500); //Delay para não bugar o scroll do modal
 													});
+													document.getElementById('formCadastroItem').reset()
 
 												}else{
 													$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
