@@ -183,7 +183,7 @@ module.exports = {
 			cb(res);
 		}, {campos: "TBSetor.*, l.nome localNome, l.id localId",
 			joins: [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}],
-			orderBy: [{campo: 'l.id', sentido: 'asc'}]
+			orderBy: [{campo: 'l.id', sentido: 'asc'}, {campo: 'nome', sentido: 'asc'}]
 		});
 	},
 

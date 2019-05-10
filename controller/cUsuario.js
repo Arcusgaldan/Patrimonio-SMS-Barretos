@@ -186,7 +186,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Usuario", function(res){
 			cb(res);
-		});
+		}, {campo: 'nome', sentido: 'asc'});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

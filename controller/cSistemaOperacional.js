@@ -181,7 +181,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("SistemaOperacional", function(res){
 			cb(res);
-		});
+		}, {orderBy: [{campo: 'nome', sentido: 'asc'}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

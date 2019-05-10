@@ -1098,6 +1098,12 @@
         $('body').addClass('modal-open');
       });
     </script>    
+
+    <script type="text/javascript">
+      $('#cadastraPCModal').on('hidden.bs.modal', function (e) {
+        location.reload();
+      });
+    </script> 
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

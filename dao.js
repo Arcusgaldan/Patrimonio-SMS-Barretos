@@ -23,7 +23,7 @@ module.exports = {
 							cb(418);
 							return;
 						default:
-							console.log(err + "\nErrno: " + errno);
+							console.log(err + "\nErrno: " + err.errno);
 							cb(400);
 							return;
 					}

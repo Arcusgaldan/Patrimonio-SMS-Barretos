@@ -28,6 +28,10 @@
 [-] Estudar defesas para SQL Injection
 [-] Estudar melhoramento para log de transferência em lote (usar laço)
 ![-] Configurar política de backup do banco de dados
+![-] Permitir cadastro de item sem patrimônio (só para sair no relatório da unidade)
+[-] Permitir cadastro de nome de coordenador de local
+[-] Colocar order by alfabético nas funções de listar
+[-] Fazer caixa de confirmação antes de mostrar modal de cadastro de PC após cadastro de item
 
 -- EM ANDAMENTO
 

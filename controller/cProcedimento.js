@@ -217,7 +217,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Procedimento", function(res){
 			cb(res);
-		});
+		}, {orderBy: [{campo: 'peca', sentido: 'asc'}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
