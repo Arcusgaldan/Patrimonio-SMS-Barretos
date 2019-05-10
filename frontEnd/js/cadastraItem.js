@@ -90,20 +90,24 @@ function cadastrarTipo(){
 
 function cadastrarItem(){
 	var item = require('./../../model/mItem.js').novo();
-	item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
-	if(item.patrimonio == ""){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
-		$("#erroModal").modal('show');
-		return;
-	}
-	while(item.patrimonio.length < 6){
-		item.patrimonio = "0" + item.patrimonio;
-	}
-	var regex = /\d{6}/;
-	if(!item.patrimonio.match(regex)){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
-		$("#erroModal").modal('show');
-		return;
+	if(document.getElementById('semPatrimonioItemCadastrar').checked == false){
+		item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
+		if(item.patrimonio.trim() == ""){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+		while(item.patrimonio.length < 6){
+			item.patrimonio = "0" + item.patrimonio;
+		}
+		var regex = /\d{6}/;
+		if(!item.patrimonio.match(regex)){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+	}else{
+		item.patrimonio = "000000";
 	}
 
 	if(document.getElementById('localItemCadastrar').value == '0'){

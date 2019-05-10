@@ -133,7 +133,7 @@
               Neste formulário serão inseridas as informações para o cadastro de item.
             </p>
 
-            <form id="formCadastroItem" action='' method="post" encType="multipart/form-data">
+            <form id="formCadastroItem" action='' method="post" encType="multipart/form-data"> 
               <div class="form-group">
                 <div class="form-label-group">
                   <select id="copiarItemCadastrar" class="form-control" name="copiar" placeholder="Copiar">
@@ -142,10 +142,21 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="text" id="patrimonioItemCadastrar" class="form-control" name="patrimonioCadastrar" placeholder="patrimonio" maxlength="6">
-                  <label for="patrimonioItemCadastrar">Patrimônio</label>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioItemCadastrar" class="form-control" name="patrimonioCadastrar" placeholder="patrimonio" maxlength="6">
+                    <label for="patrimonioItemCadastrar">Patrimônio</label>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4 mt-3 text-right">
+                  <div class="checkbox">
+                    <label>                      
+                      <input type="checkbox" id="semPatrimonioItemCadastrar">
+                      Sem Patrimônio
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -227,10 +238,21 @@
               Neste formulário serão inseridas as informações para a alteração de itens
             </p>
             <form id="formAlteraItem" action='' method="post" encType="multipart/form-data">
-               <div class="form-group">
-                <div class="form-label-group">
-                  <input type="text" id="patrimonioItemAlterar" class="form-control" name="patrimonioAlterar" placeholder="patrimonio" maxlength="6">
-                  <label for="patrimonioItemAlterar">Patrimônio</label>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioItemAlterar" class="form-control" name="patrimonioAlterar" placeholder="Patrimonio" maxlength="6">
+                    <label for="patrimonioItemAlterar">Patrimônio</label>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4 mt-3 text-right">
+                  <div class="checkbox">
+                    <label>                      
+                      <input type="checkbox" id="semPatrimonioItemAlterar">
+                      Sem Patrimônio
+                    </label>
+                  </div>
                 </div>
               </div>
 

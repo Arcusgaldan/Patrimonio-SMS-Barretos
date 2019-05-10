@@ -35,16 +35,24 @@ function preencheTipo(){
 function alterar(){
 	var item = require('./../../model/mItem.js').novo();
 	item.id = document.getElementById('idItemAlterar').value;
-	item.patrimonio = document.getElementById('patrimonioItemAlterar').value;
-	console.log("Patrimonio.length = " + item.patrimonio.length);
-	while(item.patrimonio.length < 6){
-		item.patrimonio = "0" + item.patrimonio;
-	}
-	var regex = /\d{6}/;
-	if(!item.patrimonio.match(regex)){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
-		$("#erroModal").modal('show');
-		return;
+	if(document.getElementById('semPatrimonioItemAlterar').checked == false){
+		item.patrimonio = document.getElementById('patrimonioItemAlterar').value;	
+		if(item.patrimonio.trim() == ""){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+		while(item.patrimonio.length < 6){
+			item.patrimonio = "0" + item.patrimonio;
+		}
+		var regex = /\d{6}/;
+		if(!item.patrimonio.match(regex)){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+	}else{
+		item.patrimonio = "000000";
 	}
 	item.marca = document.getElementById('marcaItemAlterar').value;
 	item.modelo = document.getElementById('modeloItemAlterar').value;

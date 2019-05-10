@@ -32,6 +32,8 @@ function geraRelatorioEquipamentoUnidade(){
 		return;
 	}
 
+	var contSP = 0;
+
 	// select i.patrimonio itemPatrimonio, ti.nome tipoNome, l.nome localNome, s.nome setorNome 
 	// FROM TBLogTransferencia lt 
 	// JOIN TBItem i ON i.id = lt.codItem 
@@ -42,7 +44,7 @@ function geraRelatorioEquipamentoUnidade(){
 	// ORDER BY setorNome ASC, tipoNome ASC;
 
 	let argumentos = {
-		selectCampos: ['i.patrimonio itemPatrimonio', 'ti.nome tipoNome', 'l.nome localNome', 's.nome setorNome'],
+		selectCampos: ['i.patrimonio itemPatrimonio', 'ti.nome tipoNome', 'l.nome localNome', 'l.coordenador localCoordenador', 's.nome setorNome'],
 		aliasTabela: 'lt',
 		joins: [
 			{tabela: "TBItem i", on: "i.id = lt.codItem"},
@@ -53,7 +55,8 @@ function geraRelatorioEquipamentoUnidade(){
 		where: "lt.atual = 1 AND i.ativo = 1 AND lt.codLocal = " + idLocal,
 		orderBy: [
 			{campo: 'setorNome', sentido: "ASC"},
-			{campo: 'tipoNome', sentido: "ASC"}
+			{campo: 'tipoNome', sentido: "ASC"},
+			{campo: 'itemPatrimonio', sentido: "ASC"}
 		]
 	};
 
@@ -88,6 +91,10 @@ function geraRelatorioEquipamentoUnidade(){
 				};
 				var lista = [];
 				for(let i = 0; i < relatorio.length; i++){
+					if(relatorio[i].itemPatrimonio == '000000'){
+						relatorio[i].itemPatrimonio = 'S/P';
+						contSP++;
+					}
 					//console.log("No loop do relatório, estou no item de patrimonio: " + relatorio[i].itemPatrimonio);
 					if(setorAtual == ""){
 						if(relatorio[i].setorNome == null){
@@ -118,8 +125,11 @@ function geraRelatorioEquipamentoUnidade(){
 					conteudo.content.push({text: "\n"});
 				}
 				lista = [];
+				if(contSP > 0){
+					conteudo.content.push({text: '\nExistem ' + contSP + ' itens sem patrimônio nesta unidade.'});	
+				}
 				conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.'});
-				conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador do(a) ' + nomeLocal, alignment: 'right'}]});				
+				conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\n' + relatorio[0].localCoordenador + '\nCoordenador do(a) ' + nomeLocal, alignment: 'right'}]});				
 				var pdfMake = require('pdfmake/build/pdfmake.js');
 				var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 				pdfMake.vfs = pdfFonts.pdfMake.vfs;

@@ -8,10 +8,12 @@ function preencheAlterarLocal(){
 		document.getElementById('nomeLocalAlterar').disabled = true;
 		document.getElementById('enderecoLocalAlterar').disabled = true;
 		document.getElementById('telefoneLocalAlterar').disabled = true;
+		document.getElementById('coordenadorLocalAlterar').disabled = true;
 	}else{
 		document.getElementById('nomeLocalAlterar').disabled = false;
 		document.getElementById('enderecoLocalAlterar').disabled = false;
 		document.getElementById('telefoneLocalAlterar').disabled = false;
+		document.getElementById('coordenadorLocalAlterar').disabled = false;
 
 		require('./../../utilsCliente.js').enviaRequisicao('Local', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + select.value}}, function(res){
 			if(res.statusCode == 200){
@@ -24,6 +26,7 @@ function preencheAlterarLocal(){
 					document.getElementById('nomeLocalAlterar').value = local.nome;
 					document.getElementById('enderecoLocalAlterar').value = local.endereco;
 					document.getElementById('telefoneLocalAlterar').value = local.telefone;
+					document.getElementById('coordenadorLocalAlterar').value = local.coordenador;
 				});
 			}
 		});
@@ -37,6 +40,7 @@ function alterarLocal(){
 	modelo.nome = document.getElementById('nomeLocalAlterar').value;
 	modelo.endereco = document.getElementById('enderecoLocalAlterar').value;
 	modelo.telefone = document.getElementById('telefoneLocalAlterar').value;
+	modelo.coordenador = document.getElementById('coordenadorLocalAlterar').value;
 
 	let controller = require('./../../controller/cLocal.js');
 

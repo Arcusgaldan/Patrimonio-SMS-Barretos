@@ -33550,7 +33550,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("Usuario", function(res){
 			cb(res);
-		});
+		}, {campo: 'nome', sentido: 'asc'});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
@@ -33782,7 +33782,18 @@ module.exports = {
 			if(err){console.log(err); cb(400); return;}
 			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
-				if(err){ console.log("Erro: " + err); cb(400); return;}				
+				if(err){ 
+					switch(err.errno){
+						case 1062:
+							console.log("Erro de entrada duplicada: " + err);
+							cb(418);
+							return;
+						default:
+							console.log(err + "\nErrno: " + err.errno);
+							cb(400);
+							return;
+					}
+				}				
 				// console.log("Deu bom inserindo");
 				con.end();
 				cb(200, res.insertId);

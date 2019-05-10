@@ -33458,7 +33458,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.endereco) || !validates.req(local.telefone)){
+		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.endereco) || !validates.req(local.telefone) || !validates.req(local.coordenador)){
 			return false;
 		}else{
 			return true;
@@ -33740,7 +33740,7 @@ module.exports = {
 			cb(res);
 		}, {campos: "TBSetor.*, l.nome localNome, l.id localId",
 			joins: [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}],
-			orderBy: [{campo: 'l.id', sentido: 'asc'}]
+			orderBy: [{campo: 'l.id', sentido: 'asc'}, {campo: 'nome', sentido: 'asc'}]
 		});
 	},
 
@@ -33973,7 +33973,18 @@ module.exports = {
 			if(err){console.log(err); cb(400); return;}
 			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
-				if(err){ console.log("Erro: " + err); cb(400); return;}				
+				if(err){ 
+					switch(err.errno){
+						case 1062:
+							console.log("Erro de entrada duplicada: " + err);
+							cb(418);
+							return;
+						default:
+							console.log(err + "\nErrno: " + err.errno);
+							cb(400);
+							return;
+					}
+				}				
 				// console.log("Deu bom inserindo");
 				con.end();
 				cb(200, res.insertId);
@@ -34033,10 +34044,12 @@ function preencheAlterarLocal(){
 		document.getElementById('nomeLocalAlterar').disabled = true;
 		document.getElementById('enderecoLocalAlterar').disabled = true;
 		document.getElementById('telefoneLocalAlterar').disabled = true;
+		document.getElementById('coordenadorLocalAlterar').disabled = true;
 	}else{
 		document.getElementById('nomeLocalAlterar').disabled = false;
 		document.getElementById('enderecoLocalAlterar').disabled = false;
 		document.getElementById('telefoneLocalAlterar').disabled = false;
+		document.getElementById('coordenadorLocalAlterar').disabled = false;
 
 		require('./../../utilsCliente.js').enviaRequisicao('Local', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + select.value}}, function(res){
 			if(res.statusCode == 200){
@@ -34049,6 +34062,7 @@ function preencheAlterarLocal(){
 					document.getElementById('nomeLocalAlterar').value = local.nome;
 					document.getElementById('enderecoLocalAlterar').value = local.endereco;
 					document.getElementById('telefoneLocalAlterar').value = local.telefone;
+					document.getElementById('coordenadorLocalAlterar').value = local.coordenador;
 				});
 			}
 		});
@@ -34062,6 +34076,7 @@ function alterarLocal(){
 	modelo.nome = document.getElementById('nomeLocalAlterar').value;
 	modelo.endereco = document.getElementById('enderecoLocalAlterar').value;
 	modelo.telefone = document.getElementById('telefoneLocalAlterar').value;
+	modelo.coordenador = document.getElementById('coordenadorLocalAlterar').value;
 
 	let controller = require('./../../controller/cLocal.js');
 
@@ -34126,13 +34141,14 @@ module.exports = {
 		var final = {};
 		final.id = 0;
 		final.nome = '';
+		final.coordenador = '';
 		final.endereco = '';
 		final.telefone = '';
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['nome', 'endereco', 'telefone'];
+		var strings = ['nome', 'endereco', 'telefone', 'coordenador'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;

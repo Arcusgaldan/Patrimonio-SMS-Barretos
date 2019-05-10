@@ -16,6 +16,8 @@
 [V] Considerar criar uma tabela de locais para setor
 [V] Verificar e corrigir bug de dois modais abertos ao mesmo tempo causando o scroll a não funcionar corretamente (classe modal-open no body) //Resolvido com script direto no HTML, com a classe modal-open no body
 [V] Adicionar erro para tentativa de duplicar campo único //Adicionado o erro 418 para duplicata.
+[V] Colocar order by alfabético nas funções de listar
+[V] Permitir cadastro de nome de coordenador de local
 
 -- PENDENTES
 [-] Fazer validação campo-a-campo em todos os formulários
@@ -28,10 +30,9 @@
 [-] Estudar defesas para SQL Injection
 [-] Estudar melhoramento para log de transferência em lote (usar laço)
 ![-] Configurar política de backup do banco de dados
-![-] Permitir cadastro de item sem patrimônio (só para sair no relatório da unidade)
-[-] Permitir cadastro de nome de coordenador de local
-[-] Colocar order by alfabético nas funções de listar
+![-] Permitir cadastro de item sem patrimônio (só para sair no relatório da unidade) //Tirar o Unique do campo, adicionar checkbox "Sem Patrimônio" no form, cadastrar como 000000 e puxar no relatório se for 000000 colocar S/P ou Sem Patrimônio.
 [-] Fazer caixa de confirmação antes de mostrar modal de cadastro de PC após cadastro de item
+[-] Implementar unificação de itens duplicados ou validação se já existe aquele tipo de item com aquele patrimônio
 
 -- EM ANDAMENTO
 

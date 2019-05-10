@@ -26382,6 +26382,10 @@ function preencheTabela(listaComputador){
 		  </tr>\
 		");
 
+		if(listaComputador[i].itemPatrimonio == '000000'){
+			listaComputador[i].itemPatrimonio = "S/P";
+		}
+
 		document.getElementById('backupComputadorDados' + i).addEventListener('click', function(){location.href = "/backup/" + listaComputador[i].itemPatrimonio;}, false);
 		document.getElementById('procedimentoComputadorDados' + i).addEventListener('click', function(){location.href = "/procedimento/" + listaComputador[i].itemPatrimonio;}, false);
 

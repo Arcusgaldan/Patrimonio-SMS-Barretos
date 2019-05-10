@@ -33547,7 +33547,7 @@ module.exports = {
 			cb(res);
 		}, {campos: "TBSetor.*, l.nome localNome, l.id localId",
 			joins: [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}],
-			orderBy: [{campo: 'l.id', sentido: 'asc'}]
+			orderBy: [{campo: 'l.id', sentido: 'asc'}, {campo: 'nome', sentido: 'asc'}]
 		});
 	},
 
@@ -33780,7 +33780,18 @@ module.exports = {
 			if(err){console.log(err); cb(400); return;}
 			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
-				if(err){ console.log("Erro: " + err); cb(400); return;}				
+				if(err){ 
+					switch(err.errno){
+						case 1062:
+							console.log("Erro de entrada duplicada: " + err);
+							cb(418);
+							return;
+						default:
+							console.log(err + "\nErrno: " + err.errno);
+							cb(400);
+							return;
+					}
+				}				
 				// console.log("Deu bom inserindo");
 				con.end();
 				cb(200, res.insertId);
@@ -33903,6 +33914,7 @@ function cadastrarLocal(){
 	modelo.nome = document.getElementById('nomeLocalCadastrar').value;
 	modelo.endereco = document.getElementById('enderecoLocalCadastrar').value;
 	modelo.telefone = document.getElementById('telefoneLocalCadastrar').value;
+	modelo.coordenador = document.getElementById('coordenadorLocalCadastrar').value;
 
 	require('./../../utilsCliente.js').enviaRequisicao("Local", "INSERIR", {token: localStorage.token, msg: modelo}, function(res){
 		if(res.statusCode == 200){
@@ -33927,13 +33939,14 @@ module.exports = {
 		var final = {};
 		final.id = 0;
 		final.nome = '';
+		final.coordenador = '';
 		final.endereco = '';
 		final.telefone = '';
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['nome', 'endereco', 'telefone'];
+		var strings = ['nome', 'endereco', 'telefone', 'coordenador'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;

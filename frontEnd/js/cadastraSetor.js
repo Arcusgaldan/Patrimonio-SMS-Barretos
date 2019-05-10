@@ -71,6 +71,7 @@ function cadastrarLocal(){
 	modelo.nome = document.getElementById('nomeLocalCadastrar').value;
 	modelo.endereco = document.getElementById('enderecoLocalCadastrar').value;
 	modelo.telefone = document.getElementById('telefoneLocalCadastrar').value;
+	modelo.coordenador = document.getElementById('coordenadorLocalCadastrar').value;
 
 	require('./../../utilsCliente.js').enviaRequisicao("Local", "INSERIR", {token: localStorage.token, msg: modelo}, function(res){
 		if(res.statusCode == 200){

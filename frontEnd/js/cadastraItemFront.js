@@ -33791,7 +33791,7 @@ module.exports = {
 	listar: function(cb){ //Lista todos os registros da tabela;
 		require('./controller.js').listar("TipoItem", function(res){
 			cb(res);
-		});
+		}, {orderBy: [{campo: "nome", sentido: "asc"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor
@@ -34023,7 +34023,18 @@ module.exports = {
 			if(err){console.log(err); cb(400); return;}
 			// console.log("Conectado ao banco!");
 			con.query(comando, function(err, res){
-				if(err){ console.log("Erro: " + err); cb(400); return;}				
+				if(err){ 
+					switch(err.errno){
+						case 1062:
+							console.log("Erro de entrada duplicada: " + err);
+							cb(418);
+							return;
+						default:
+							console.log(err + "\nErrno: " + err.errno);
+							cb(400);
+							return;
+					}
+				}				
 				// console.log("Deu bom inserindo");
 				con.end();
 				cb(200, res.insertId);
@@ -34165,20 +34176,24 @@ function cadastrarTipo(){
 
 function cadastrarItem(){
 	var item = require('./../../model/mItem.js').novo();
-	item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
-	if(item.patrimonio == ""){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
-		$("#erroModal").modal('show');
-		return;
-	}
-	while(item.patrimonio.length < 6){
-		item.patrimonio = "0" + item.patrimonio;
-	}
-	var regex = /\d{6}/;
-	if(!item.patrimonio.match(regex)){
-		document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
-		$("#erroModal").modal('show');
-		return;
+	if(document.getElementById('semPatrimonioItemCadastrar').checked == false){
+		item.patrimonio = document.getElementById('patrimonioItemCadastrar').value;
+		if(item.patrimonio.trim() == ""){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+		while(item.patrimonio.length < 6){
+			item.patrimonio = "0" + item.patrimonio;
+		}
+		var regex = /\d{6}/;
+		if(!item.patrimonio.match(regex)){
+			document.getElementById('msgErroModal').innerHTML = "Por favor, insira um patrimônio válido";
+			$("#erroModal").modal('show');
+			return;
+		}
+	}else{
+		item.patrimonio = "000000";
 	}
 
 	if(document.getElementById('localItemCadastrar').value == '0'){
@@ -34246,6 +34261,7 @@ function cadastrarItem(){
 														$('#cadastraModal').modal('hide');
 														setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500); //Delay para não bugar o scroll do modal
 													});
+													document.getElementById('formCadastroItem').reset()
 
 												}else{
 													$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});

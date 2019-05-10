@@ -26151,6 +26151,22 @@ document.getElementById('localLoteTransferir').addEventListener('change', functi
 	preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
 }, false);
 
+document.getElementById('semPatrimonioItemCadastrar').addEventListener('change', function(){
+	if(document.getElementById('semPatrimonioItemCadastrar').checked == true){
+		document.getElementById('patrimonioItemCadastrar').disabled = true;
+	}else{
+		document.getElementById('patrimonioItemCadastrar').disabled = false;
+	}
+}, false);
+
+document.getElementById('semPatrimonioItemAlterar').addEventListener('change', function(){
+	if(document.getElementById('semPatrimonioItemAlterar').checked == true){
+		document.getElementById('patrimonioItemAlterar').disabled = true;
+	}else{
+		document.getElementById('patrimonioItemAlterar').disabled = false;
+	}
+}, false);
+
 function lote(){
 	var selecao = document.getElementById('selectAcaoItem').value;
 	if(selecao === 'transferir'){
@@ -26377,6 +26393,10 @@ function preencheTabela(listaItem){
 		    </td>\
 		  </tr>\
 		");
+
+		if(listaItem[i].patrimonio == '000000'){
+			listaItem[i].patrimonio = "S/P";
+		}
 
 		document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
 		document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;

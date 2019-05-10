@@ -140,7 +140,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.endereco) || !validates.req(local.telefone)){
+		if(!validates.req(local.id) || !validates.req(local.nome) || !validates.req(local.endereco) || !validates.req(local.telefone) || !validates.req(local.coordenador)){
 			return false;
 		}else{
 			return true;
