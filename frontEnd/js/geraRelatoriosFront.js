@@ -26178,7 +26178,7 @@ function geraRelatorioEquipamentoUnidade(){
 	// ORDER BY setorNome ASC, tipoNome ASC;
 
 	let argumentos = {
-		selectCampos: ['i.patrimonio itemPatrimonio', 'ti.nome tipoNome', 'l.nome localNome', 'l.coordenador localCoordenador', 's.nome setorNome'],
+		selectCampos: ['i.id itemId', 'i.patrimonio itemPatrimonio', 'ti.nome tipoNome', 'l.nome localNome', 'l.coordenador localCoordenador', 's.nome setorNome'],
 		aliasTabela: 'lt',
 		joins: [
 			{tabela: "TBItem i", on: "i.id = lt.codItem"},
@@ -26201,7 +26201,7 @@ function geraRelatorioEquipamentoUnidade(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				//console.log("A resposta de relatorio recebida foi: " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+				console.log("A resposta de relatorio recebida foi: " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				let relatorio = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				if(relatorio.length == 0){
 					document.getElementById('msgErroModal').innerHTML = "Não há registro de equipamentos na unidade selecionada.";

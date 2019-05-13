@@ -33291,6 +33291,12 @@ module.exports = {
 				resposta.msg = this.dataHoraAtual();
 				cb(resposta);
 				break;
+
+			case 'DATAEXTENSO':
+				resposta.codigo = 200;
+				resposta.msg = this.dataExtenso();
+				cb(resposta);
+				break;
 		}			
 	},
 
@@ -33302,6 +33308,38 @@ module.exports = {
 		return data;
 	},
 
+	mesExtenso: function(numMes){
+		numMes++;
+		switch(numMes){
+			case 1:
+				return "Janeiro";
+			case 2:
+				return "Fevereiro";
+			case 3:
+				return "Março";
+			case 4:
+				return "Abril";
+			case 5:
+				return "Maio";
+			case 6:
+				return "Junho";
+			case 7:
+				return "Julho";
+			case 8:
+				return "Agosto";
+			case 9:
+				return "Setembro";
+			case 10:
+				return "Outubro";
+			case 11:
+				return "Novembro";
+			case 12:
+				return "Dezembro";
+			default:
+				return "";
+		}
+	},
+
 	dataAtual: function(){
 		var d = new Date();
 		var data = "" + d.getFullYear() + "-" + this.completaZero(2, (d.getMonth() + 1)) + "-" + this.completaZero(2, d.getDate());
@@ -33311,6 +33349,15 @@ module.exports = {
 	dataHoraAtual: function(){
 		var d = new Date();
 		var data = "" + d.getFullYear() + "-" + this.completaZero(2, (d.getMonth() + 1)) + "-" + this.completaZero(2, d.getDate()) + " " + this.completaZero(2, d.getHours()) + ":" + this.completaZero(2, d.getMinutes()) + ":" + this.completaZero(2, d.getSeconds());
+		return data;
+	},
+
+	dataExtenso: function(){
+		var d = new Date();
+		var mesExtenso = this.mesExtenso(d.getMonth());
+		if(mesExtenso == "")
+			return;
+		var data = "" + this.completaZero(2, d.getDate()) + " de " + mesExtenso + " de " + this.completaZero(4, d.getFullYear());
 		return data;
 	}
 
@@ -34220,10 +34267,10 @@ function cadastrarItem(){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				console.log(console.log("Teste do ID cadastrado: " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg)));
+				item.id = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
 				console.log("Passo 1 - Inserir item feito com sucesso!");
 				var logTransferencia = require('./../../model/mLogTransferencia.js').novo();
-				logTransferencia.atual = 1;
+				logTransferencia.atual = 1
 				require('./../../utilsCliente.js').enviaRequisicao("Data", "DATAHORA", {token: localStorage.token}, function(res){
 					if(res.statusCode == 200){
 						console.log("Passo 2 - Buscar DataHora feito com sucesso!");
@@ -34234,60 +34281,44 @@ function cadastrarItem(){
 						res.on('end', function(){
 							//console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 							logTransferencia.data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
-							require('./../../utilsCliente.js').enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: {where: "patrimonio = " + item.patrimonio}}, function(res){
+							logTransferencia.codItem = item.id;
+							logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
+							if(document.getElementById('setorItemCadastrar').value != '0'){
+								logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+							}else{
+								logTransferencia.codSetor = null;
+							}
+							require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
 								if(res.statusCode == 200){
-									console.log("Passo 3 - Buscar ID do item feito com sucesso!");
-									var msg = "";
-									res.on('data', function(chunk){
-										msg += chunk;
-									});
-									res.on('end', function(){
-										item.id = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0].id;
-										logTransferencia.codItem = item.id;
-										logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
-										if(document.getElementById('setorItemCadastrar').value != '0'){
-											logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
-										}else{
-											logTransferencia.codSetor = null;
-										}
-										require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
-											if(res.statusCode == 200){
-												console.log("Passo 4 - Inserir logTransferencia feito com sucesso!");
-												$("#sucessoModal").modal('show');
-												if(item.codTipoItem == '1'){
-													$('#patrimonioComputadorCadastrar').append("<option value='"+item.id+"'>"+item.patrimonio+"</option>")
-													
-													$('#sucessoModal').on('hide.bs.modal', function(){
-														$('#cadastraModal').modal('hide');
-														setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500); //Delay para não bugar o scroll do modal
-													});
-													document.getElementById('formCadastroItem').reset()
-
-												}else{
-													$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-											  		setTimeout(function(){location.reload();} , 2000);
-											  	}
-											}else{
-												console.log("Passo 4 - FALHA ao inserir logTransferencia.\nCodigo do Erro: " + res.statusCode + " Objeto = " + JSON.stringify(logTransferencia));
-												document.getElementById('msgErroModal').innerHTML = "Falha ao inserir o log de transferência";
-												$("#erroModal").modal('show');								
-												require('./../../utilsCliente.js').enviaRequisicao("Item", "EXCLUIR", {token: localStorage.token, msg: {id: logTransferencia.codItem}}, function(res){
-													if(res.statusCode != 200){
-														document.getElementById('msgErroModal').innerHTML = "Falha ao excluir o item sem setor. Contate o suporte";
-														$("#erroModal").modal('show');
-														return;
-													}
-												});
-												return;
-											}
+									console.log("Passo 4 - Inserir logTransferencia feito com sucesso!");
+									$("#sucessoModal").modal('show');
+									if(item.codTipoItem == '1'){
+										$('#patrimonioComputadorCadastrar').append("<option value='"+item.id+"'>"+item.patrimonio+"</option>")
+										
+										$('#sucessoModal').on('hide.bs.modal', function(){
+											$('#cadastraModal').modal('hide');
+											setTimeout(function(){$('#cadastraPCModal').modal('show');} , 500); //Delay para não bugar o scroll do modal
 										});
-									});
+										document.getElementById('formCadastroItem').reset()
+
+									}else{
+										$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+								  		setTimeout(function(){location.reload();} , 2000);
+								  	}
 								}else{
-									document.getElementById('msgErroModal').innerHTML = "Falha ao buscar ID do item cadastrado. Contate o suporte";
+									console.log("Passo 4 - FALHA ao inserir logTransferencia.\nCodigo do Erro: " + res.statusCode + " Objeto = " + JSON.stringify(logTransferencia));
+									document.getElementById('msgErroModal').innerHTML = "Falha ao inserir o log de transferência";
 									$("#erroModal").modal('show');								
+									require('./../../utilsCliente.js').enviaRequisicao("Item", "EXCLUIR", {token: localStorage.token, msg: {id: logTransferencia.codItem}}, function(res){
+										if(res.statusCode != 200){
+											document.getElementById('msgErroModal').innerHTML = "Falha ao excluir o item sem setor. Contate o suporte";
+											$("#erroModal").modal('show');
+											return;
+										}
+									});
 									return;
 								}
-							});
+							});							
 						});
 					}else{
 						document.getElementById('msgErroModal').innerHTML = "Falha ao buscar data do servidor";
