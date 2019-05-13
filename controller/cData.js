@@ -34,29 +34,29 @@ module.exports = {
 		numMes++;
 		switch(numMes){
 			case 1:
-				return "Janeiro";
+				return "janeiro";
 			case 2:
-				return "Fevereiro";
+				return "fevereiro";
 			case 3:
-				return "Março";
+				return "março";
 			case 4:
-				return "Abril";
+				return "abril";
 			case 5:
-				return "Maio";
+				return "maio";
 			case 6:
-				return "Junho";
+				return "junho";
 			case 7:
-				return "Julho";
+				return "julho";
 			case 8:
-				return "Agosto";
+				return "agosto";
 			case 9:
-				return "Setembro";
+				return "setembro";
 			case 10:
-				return "Outubro";
+				return "outubro";
 			case 11:
-				return "Novembro";
+				return "novembro";
 			case 12:
-				return "Dezembro";
+				return "dezembro";
 			default:
 				return "";
 		}
