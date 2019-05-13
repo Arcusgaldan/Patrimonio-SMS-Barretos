@@ -26208,9 +26208,13 @@ function geraRelatorioEquipamentoUnidade(){
 					$("#erroModal").modal('show');
 					return;
 				}
+				let coordenador = relatorio[0].localCoordenador;
 				let setorAtual = "";
 				let nomeLocal = $('#localRelatorioPatrimonio').children("option:selected").text();
 				var conteudo = {
+					footer: function(currentPage){
+						return [{text: currentPage.toString(), alignment: "right", margin: [0, 0, 10, 0]}];
+					},
 					content: [{text: "Levantamento de Equipamentos de Informática\n" + nomeLocal + "\n\n", style: "header", alignment: "center"}], 
 					styles: {
 						header: {
@@ -26262,13 +26266,22 @@ function geraRelatorioEquipamentoUnidade(){
 				if(contSP > 0){
 					conteudo.content.push({text: '\nExistem ' + contSP + ' itens sem patrimônio nesta unidade.'});	
 				}
-				conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.'});
-				conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\n' + relatorio[0].localCoordenador + '\nCoordenador do(a) ' + nomeLocal, alignment: 'right'}]});				
-				var pdfMake = require('pdfmake/build/pdfmake.js');
-				var pdfFonts = require('pdfmake/build/vfs_fonts.js');
-				pdfMake.vfs = pdfFonts.pdfMake.vfs;
-				var janela = 
-				pdfMake.createPdf(conteudo).open({}, window);
+				require('./../../utilsCliente.js').enviaRequisicao('Data', 'DATAEXTENSO', {token: localStorage.token}, function(res){
+					var data = "";
+					res.on('data', function(chunk){
+						data += chunk;
+					});
+					res.on('end', function(){
+						data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, data);
+						conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.\n\nBarretos,\n' + data});
+						conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\n' + relatorio[0].localCoordenador + '\nCoordenador(a) do(a) ' + nomeLocal, alignment: 'right'}]});				
+						var pdfMake = require('pdfmake/build/pdfmake.js');
+						var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+						pdfMake.vfs = pdfFonts.pdfMake.vfs;
+						var janela = 
+						pdfMake.createPdf(conteudo).open({}, window);
+					});
+				});				
 			});
 		}else{
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
