@@ -26274,7 +26274,7 @@ function geraRelatorioEquipamentoUnidade(){
 					res.on('end', function(){
 						data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, data);
 						conteudo.content.push({text: '\n\nCom as assinaturas abaixo, confirmamos que os dados contidos neste documento são verdadeiros.\n\nBarretos,\n' + data});
-						conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador da Informática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\n' + relatorio[0].localCoordenador + '\nCoordenador(a) do(a) ' + nomeLocal, alignment: 'right'}]});				
+						conteudo.content.push({columns: [{text: '\n\n\n\n________________________________________\nRafael Lima\nCoordenador\nInformática', alignment: 'left'}, {text: '\n\n\n\n________________________________________\n' + relatorio[0].localCoordenador + '\nCoordenador(a)\n' + nomeLocal, alignment: 'right'}]});				
 						var pdfMake = require('pdfmake/build/pdfmake.js');
 						var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 						pdfMake.vfs = pdfFonts.pdfMake.vfs;
