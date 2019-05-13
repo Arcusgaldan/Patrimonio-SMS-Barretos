@@ -455,7 +455,7 @@ function preencheSetor(local, select, cb){
 	}
 	document.getElementById(select).disabled = false;
 	var utils = require('./../../utilsCliente.js');
-	utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: {where: "codLocal = " + local}}, function(res){
+	utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: {where: "codLocal = " + local, orderBy: [{campo: "nome", sentido: "asc"}]}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";
 			res.on('data', function(chunk){

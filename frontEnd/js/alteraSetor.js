@@ -71,7 +71,7 @@ function alterar(){
 	var modelo = require('./../../model/mSetor.js').novo();
 	modelo.id = document.getElementById('idSetorAlterar').value;
 	modelo.nome = document.getElementById('nomeSetorAlterar').value;
-	modelo.local = document.getElementById('localSetorAlterar').value;
+	modelo.codLocal = document.getElementById('localSetorAlterar').value;
 	modelo.sigla = document.getElementById('siglaSetorAlterar').value;
 
 	var controller = require('./../../controller/cSetor.js');

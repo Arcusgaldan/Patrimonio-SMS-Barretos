@@ -33312,29 +33312,29 @@ module.exports = {
 		numMes++;
 		switch(numMes){
 			case 1:
-				return "Janeiro";
+				return "janeiro";
 			case 2:
-				return "Fevereiro";
+				return "fevereiro";
 			case 3:
-				return "Março";
+				return "março";
 			case 4:
-				return "Abril";
+				return "abril";
 			case 5:
-				return "Maio";
+				return "maio";
 			case 6:
-				return "Junho";
+				return "junho";
 			case 7:
-				return "Julho";
+				return "julho";
 			case 8:
-				return "Agosto";
+				return "agosto";
 			case 9:
-				return "Setembro";
+				return "setembro";
 			case 10:
-				return "Outubro";
+				return "outubro";
 			case 11:
-				return "Novembro";
+				return "novembro";
 			case 12:
-				return "Dezembro";
+				return "dezembro";
 			default:
 				return "";
 		}
@@ -34154,7 +34154,7 @@ function alterar(){
 	var modelo = require('./../../model/mSetor.js').novo();
 	modelo.id = document.getElementById('idSetorAlterar').value;
 	modelo.nome = document.getElementById('nomeSetorAlterar').value;
-	modelo.local = document.getElementById('localSetorAlterar').value;
+	modelo.codLocal = document.getElementById('localSetorAlterar').value;
 	modelo.sigla = document.getElementById('siglaSetorAlterar').value;
 
 	var controller = require('./../../controller/cSetor.js');
