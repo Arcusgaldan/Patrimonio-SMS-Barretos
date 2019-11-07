@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBItem` (
   `modelo` VARCHAR(100) NULL,
   `descricao` TEXT NULL,
   `codTipoItem` INT NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`, `codTipoItem`),
   UNIQUE INDEX `patrimonio_UNIQUE` (`patrimonio` ASC),
   INDEX `fk_TBItem_TBTipoItem_idx` (`codTipoItem` ASC),
