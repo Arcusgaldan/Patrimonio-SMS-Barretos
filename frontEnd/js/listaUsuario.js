@@ -247,7 +247,11 @@ function preencheTabela(listaUsuario){
 
 		document.getElementById('nomeUsuarioLista' + i).innerHTML = listaUsuario[i].nome;
 		document.getElementById('nomeUsuarioDados' + i).innerHTML = listaUsuario[i].nome;
-		document.getElementById('cpfUsuarioDados' + i).innerHTML = listaUsuario[i].cpf;
+		if(listaUsuario[i].cpf != ''){
+			document.getElementById('cpfUsuarioDados' + i).innerHTML = listaUsuario[i].cpf;
+		}else{
+			document.getElementById('cpfUsuarioDados' + i).innerHTML = '-';
+		}
 		document.getElementById('emailUsuarioDados' + i).innerHTML = listaUsuario[i].email;
 
 		(function(){

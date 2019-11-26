@@ -144,7 +144,7 @@ module.exports = {
 
 		var validates = require('./../validates.js');
 
-		if(!validates.req(usuario.id) || !validates.req(usuario.nome) || !validates.req(usuario.email) || !validates.exact(usuario.cpf, 14) || 
+		if(!validates.req(usuario.id) || !validates.req(usuario.nome) || !validates.req(usuario.email) || (!validates.exact(usuario.cpf, 14) && usuario.cpf != '') || 
 			!validates.exact(usuario.senha, 64)){
 			return false;
 		}else{
