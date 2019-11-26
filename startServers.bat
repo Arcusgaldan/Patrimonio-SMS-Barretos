@@ -1,0 +1,1 @@
+start cmd /k "cd D:\Desenvolvimento\patrimonios-sms-barretos & node serverReq.js" & start cmd /k "cd D:\Desenvolvimento\patrimonios-sms-barretos & node serverRouter.js"

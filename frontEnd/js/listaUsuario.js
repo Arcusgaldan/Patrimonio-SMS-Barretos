@@ -6,7 +6,7 @@ document.getElementById('btnLimparBusca').addEventListener('click', function(){
 function validaCpf(cpf){
 	cpf = cpf.replace(/[^\d]+/g, '');
 	if(cpf == '')
-		return false;	
+		return false; //True para permitir a ausência de um CPF
 	// console.log("Passei pelo 1 return false!");
 	if(cpf.length != 11)
 		return false;
@@ -63,6 +63,10 @@ function validaCpf(cpf){
 }
 
 document.getElementById('cpfUsuarioCadastrar').addEventListener('focusout', function(){
+	if(document.getElementById('cpfUsuarioCadastrar').value == ''){
+		document.getElementById('cpfUsuarioCadastrar').classList.remove('border', 'border-danger');
+		return;
+	}
 	if(document.getElementById('cpfUsuarioCadastrar').value.match(/\d{11}/g)){
 		let antigoCpf = document.getElementById('cpfUsuarioCadastrar').value;
 		let vetorCpf = [antigoCpf.slice(0, 3), antigoCpf.slice(3, 6), antigoCpf.slice(6, 9), antigoCpf.slice(9, 11)];
@@ -87,6 +91,10 @@ document.getElementById('cpfUsuarioCadastrar').addEventListener('focusout', func
 }, false);
 
 document.getElementById('cpfUsuarioAlterar').addEventListener('focusout', function(){
+	if(document.getElementById('cpfUsuarioAlterar').value == ''){
+		document.getElementById('cpfUsuarioAlterar').classList.remove('border', 'border-danger');
+		return;
+	}
 	if(document.getElementById('cpfUsuarioAlterar').value.match(/\d{11}/g)){
 		let antigoCpf = document.getElementById('cpfUsuarioAlterar').value;
 		let vetorCpf = [antigoCpf.slice(0, 3), antigoCpf.slice(3, 6), antigoCpf.slice(6, 9), antigoCpf.slice(9, 11)];
