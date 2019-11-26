@@ -258,7 +258,7 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBUsuario` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `cpf` CHAR(14) NOT NULL,
+  `cpf` CHAR(14) NULL,
   `email` VARCHAR(100) NOT NULL,
   `senha` CHAR(64) NOT NULL,
   `senhaExpirada` TINYINT NOT NULL,
