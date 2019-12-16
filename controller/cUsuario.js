@@ -8,6 +8,7 @@ module.exports = {
 					cb(resposta);
 				}
 				this.inserir(msg, function(codRes){
+					//console.log("Em cUsuario:trataOperacao, recebi o callback do cUsuario:inserir com código " + codRes + "\n"); (Testando a conexão por pool)
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
 						require('./controller.js').proximoID("Usuario", function(id){						
@@ -158,6 +159,7 @@ module.exports = {
 			return;
 		}
 		require('./controller.js').inserir("Usuario", usuario, function(codRes){
+			//console.log("Em cUsuario:inserir, recebi o callback do controller com código " + codRes + "\n"); (Testando a conexão por pool)
 			cb(codRes);
 		});
 	},

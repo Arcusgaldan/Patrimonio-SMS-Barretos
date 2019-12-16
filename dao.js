@@ -1,50 +1,58 @@
 module.exports = {
 	criaConexao: function(){
 		var mysql = require('mysql');
-
+		
 		var con = mysql.createConnection({
 			host: 'localhost',
 			user: 'root',
 			password: '',
 			database: 'DBPatrimonioSMS'
 		});
+
 		return con;
 	},
 
-	inserir: function(con, comando, cb){
-		con.connect(function(err){
-			if(err){console.log(err); cb(400); return;}
-			// console.log("Conectado ao banco!");
-			con.query(comando, function(err, res){
-				if(err){ 
-					switch(err.errno){
-						case 1062:
-							console.log("Erro de entrada duplicada: " + err);
-							cb(418);
-							return;
-						default:
-							console.log(err + "\nErrno: " + err.errno);
-							cb(400);
-							return;
-					}
-				}				
-				// console.log("Deu bom inserindo");
-				con.end();
+	pool:
+		require('mysql').createPool({
+		connectionLimit: 10,
+		host: 'localhost',
+		user: 'root',
+		password: '',
+		database: 'DBPatrimonioSMS'
+	}),
+
+	inserir: function(comando, cb){		
+		console.log("dao:inserir, comando = " + comando + "\n");
+		this.pool.query(comando, function(err, res){
+			//console.log("Dentro de pool.query, comando = " + comando + "\n"); (Testando a conexão por pool)
+			if(err){ 
+				switch(err.errno){
+					case 1062:
+						console.log("Erro de entrada duplicada: " + err);
+						cb(418);
+						return;
+					default:
+						console.log(err + "\nErrno: " + err.errno);
+						cb(400);
+						return;
+				}
+			}else{				
+				//console.log("Deu bom inserindo");
 				cb(200, res.insertId);
-			});
+				return;
+			}			
 		});
 	},
 
-	buscar: function(con, comando, cb){
-		con.connect(function(err){
-			if(err) throw err;
-			// console.log("Conectado ao banco!");
-			con.query(comando, function(err, res){
-				if(err){console.log("Erro " + err); cb(null); return;}
-				// console.log("Deu bom buscando");
-				con.end();
+	buscar: function(comando, cb){
+		this.pool.query(comando, function(err, res){
+			console.log("Entrei em pool.query dentro de dao:buscar\n");
+			if(err){console.log("Erro " + err); cb(null); return;}
+			else{				
+				console.log("Deu bom buscando");
 				cb(res);
-			});
+				return;
+			}
 		});
 	},
 
@@ -59,7 +67,7 @@ module.exports = {
 		});
 
 		const mailOptions = {
-			from: 'sistema.pronn@gmail.com',
+			from: 'email@gmail.com',
 			to: email,
 			subject: assunto,
 			html: mensagem
