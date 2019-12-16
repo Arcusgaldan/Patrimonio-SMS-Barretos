@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLocal` (
   `nome` VARCHAR(100) NOT NULL,
   `endereco` TEXT NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
+  `coordenador` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
 ENGINE = InnoDB;
