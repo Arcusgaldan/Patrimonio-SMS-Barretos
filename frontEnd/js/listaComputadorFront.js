@@ -29411,18 +29411,43 @@ function preencheSetor(){
 				$("#setorComputadorBuscar > option").remove();
 				$("#setorItemTransferir > option").remove();
 								
-				$("#setorItemTransferir").append("<option value='0'>Setor</option");
+				$("#setorItemTransferir").append("<option value='0'>Sem setor</option");
 				$("#setorComputadorBuscar").append("<option value='0'>Setor</option");
 
 
 				for(let i = 0; i < vetorSetor.length; i++){					
-					$("#setorComputadorBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");					
+					$("#setorComputadorBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].localNome + " - " + vetorSetor[i].nome+"</option");
+					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].nome+"</option");					
 				}
 			});
 		}else if(res.statusCode != 747){
 			console.log("O problema foi no setor.");
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function preencheLocal(){
+	var utils = require('./../../utilsCliente.js');
+	utils.enviaRequisicao("Local", "LISTAR", {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var vetorLocal = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+				$("#localItemTransferir > option").remove();
+
+
+				for(let i = 0; i < vetorLocal.length; i++){					
+					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");					
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar locais";
 			$("#erroModal").modal('show');
 			return;
 		}
@@ -29528,11 +29553,35 @@ function preencheModalAlterar(computador){
 	document.getElementById('patrimonioComputadorAlterar').value = computador.codItem;
 	document.getElementById('patrimonioComputadorAlterar').innerHTML = "<option value='"+computador.codItem+"'>"+computador.itemPatrimonio+"</option>";
 	document.getElementById('patrimonioComputadorAlterar').disabled = true;
-	document.getElementById('processadorComputadorAlterar').value = computador.codProcessador;
+	
+	if(computador.codProcessador == null){		
+		document.getElementById('processadorComputadorAlterar').value = '0';
+	}else{		
+		document.getElementById('processadorComputadorAlterar').value = computador.codProcessador;
+	}
+
 	document.getElementById('qtdMemoriaComputadorAlterar').value = computador.qtdMemoria;
-	document.getElementById('tipoMemoriaComputadorAlterar').value = computador.tipoMemoria;
+
+	if(computador.tipoMemoria == null){
+		document.getElementById('tipoMemoriaComputadorAlterar').value = '0';
+	}else{
+		document.getElementById('tipoMemoriaComputadorAlterar').value = computador.tipoMemoria;
+	}
+	
 	document.getElementById('armazenamentoComputadorAlterar').value = computador.armazenamento;
-	document.getElementById('sistemaComputadorAlterar').value = computador.codSO;
+	
+	for (var key in computador){
+		console.log(key + " = " + computador[key])
+	}
+
+	if(computador.codSO == null){
+		//console.log("Meu SO veio nulo! " + computador.codSo)
+		document.getElementById('sistemaComputadorAlterar').value = '0';
+	}else{
+		//console.log("Meu SO não veio nulo! Coloquei o value = " + computador.codSO)
+		document.getElementById('sistemaComputadorAlterar').value = computador.codSO;
+	}
+	
 
 	if(computador.reserva == 1){
 		document.getElementById('reservaComputadorAlterar').checked = true;
@@ -29554,7 +29603,9 @@ function preencheModalTransferencia(computador){
 	document.getElementById('patrimonioItemTransferir').value = computador.itemPatrimonio;
 	document.getElementById('setorItemTransferir').value = computador.setorId;
 	document.getElementById('idItemTransferir').value = computador.codItem;
-	document.getElementById('setorAntigoItemTransferir').value = computador.setorLocal + " - " + computador.setorNome;
+	document.getElementById('localAntigoItemTransferir').value = computador.localNome;
+	console.log("Em listaComputador::preencheModalTransferencia, meu setorLocal = " + computador.localNome)
+	document.getElementById('setorAntigoItemTransferir').value = computador.setorNome;
 	document.getElementById('idSetorAntigoItemTransferir').value = computador.setorId;
 }
 
@@ -29662,6 +29713,7 @@ preenchePatrimonio();
 preencheProcessador();
 preencheSO();
 preencheSetor();
+preencheLocal();
 var utils = require('./../../utilsCliente.js');
 utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, function(res){
 	if(res.statusCode == 200){

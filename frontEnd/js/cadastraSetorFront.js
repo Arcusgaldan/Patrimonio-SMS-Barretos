@@ -36726,7 +36726,8 @@ module.exports = {
 		sql += campos + ") values (" + valores + ");"; //Finaliza a string de comando sql
 		console.log("Em controller:inserir, SQL = " + sql);
 		var dao = require('./../dao.js'); //Puxa o módulo DAO, responsável pela conexão com o BD
-		dao.inserir(dao.criaConexao(), sql, function(codRes, id){ //Executa o comando de inserção (sql com retorno apenas de status)
+		dao.inserir(sql, function(codRes, id){ //Executa o comando de inserção (sql com retorno apenas de status)
+			//console.log("Em controller:inserir, obtive o callback do DAO, com codigo " + codRes + "\n"); (Testando a conexão por pool)
 			cb(codRes, id); //Executa o callback com o código retornado pelo callback do DAO.
 		});
 	},
@@ -36758,7 +36759,7 @@ module.exports = {
 		}
 		sql += campos + " WHERE id = " + objeto['id'] + ";"; //Finaliza a string de comando SQL
 		var dao = require('./../dao.js'); //Puxa o módulo DAO, responsável pela conexão com o BD
-		dao.inserir(dao.criaConexao(), sql, function(codRes){ //Executa o comando de inserção (SQL com retorno apenas de status)
+		dao.inserir(sql, function(codRes){ //Executa o comando de inserção (SQL com retorno apenas de status)
 			cb(codRes); //Executa o callback com o código retornado pelo callback do DAO
 		});
 	},
@@ -36766,7 +36767,7 @@ module.exports = {
 	excluir: function(alvo, objeto, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
 		var sql = "DELETE FROM TB" + alvo + " WHERE id = " + objeto.id + ";";
 		var dao = require('./../dao.js');
-		dao.inserir(dao.criaConexao(), sql, function(codRes){
+		dao.inserir(sql, function(codRes){
 			cb(codRes);
 		});
 	},
@@ -36808,7 +36809,7 @@ module.exports = {
 			console.log("SQL em controller:listar = " + sql);
 		}
 		var dao = require('./../dao.js');
-		dao.buscar(dao.criaConexao(), sql, function(resultado){
+		dao.buscar(sql, function(resultado){
 			cb(resultado);
 		});
 	},
@@ -36873,7 +36874,7 @@ module.exports = {
 		console.log("Em controller::buscar, SQL:\n" + sql);
 
 		var dao = require('./../dao.js');
-		dao.buscar(dao.criaConexao(), sql, function(resultado){
+		dao.buscar(sql, function(resultado){
 			cb(resultado);
 		});
 
@@ -36885,7 +36886,7 @@ module.exports = {
 	proximoID: function(alvo, cb){
 		var sql = 'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "dbpatrimoniosms" AND TABLE_NAME = "TB' + alvo + '"';
 		var dao = require('./../dao.js');
-		dao.buscar(dao.criaConexao(), sql, function(resultado){
+		dao.buscar(sql, function(resultado){
 			let id = resultado[0].AUTO_INCREMENT;
 			cb(id);
 		});
@@ -36895,50 +36896,58 @@ module.exports = {
 module.exports = {
 	criaConexao: function(){
 		var mysql = require('mysql');
-
+		
 		var con = mysql.createConnection({
 			host: 'localhost',
 			user: 'root',
 			password: '',
 			database: 'DBPatrimonioSMS'
 		});
+
 		return con;
 	},
 
-	inserir: function(con, comando, cb){
-		con.connect(function(err){
-			if(err){console.log(err); cb(400); return;}
-			// console.log("Conectado ao banco!");
-			con.query(comando, function(err, res){
-				if(err){ 
-					switch(err.errno){
-						case 1062:
-							console.log("Erro de entrada duplicada: " + err);
-							cb(418);
-							return;
-						default:
-							console.log(err + "\nErrno: " + err.errno);
-							cb(400);
-							return;
-					}
-				}				
-				// console.log("Deu bom inserindo");
-				con.end();
+	pool:
+		require('mysql').createPool({
+		connectionLimit: 10,
+		host: 'localhost',
+		user: 'root',
+		password: '',
+		database: 'DBPatrimonioSMS'
+	}),
+
+	inserir: function(comando, cb){		
+		console.log("dao:inserir, comando = " + comando + "\n");
+		this.pool.query(comando, function(err, res){
+			//console.log("Dentro de pool.query, comando = " + comando + "\n"); (Testando a conexão por pool)
+			if(err){ 
+				switch(err.errno){
+					case 1062:
+						console.log("Erro de entrada duplicada: " + err);
+						cb(418);
+						return;
+					default:
+						console.log(err + "\nErrno: " + err.errno);
+						cb(400);
+						return;
+				}
+			}else{				
+				//console.log("Deu bom inserindo");
 				cb(200, res.insertId);
-			});
+				return;
+			}			
 		});
 	},
 
-	buscar: function(con, comando, cb){
-		con.connect(function(err){
-			if(err) throw err;
-			// console.log("Conectado ao banco!");
-			con.query(comando, function(err, res){
-				if(err){console.log("Erro " + err); cb(null); return;}
-				// console.log("Deu bom buscando");
-				con.end();
+	buscar: function(comando, cb){
+		this.pool.query(comando, function(err, res){
+			console.log("Entrei em pool.query dentro de dao:buscar\n");
+			if(err){console.log("Erro " + err); cb(null); return;}
+			else{				
+				console.log("Deu bom buscando");
 				cb(res);
-			});
+				return;
+			}
 		});
 	},
 
@@ -36953,7 +36962,7 @@ module.exports = {
 		});
 
 		const mailOptions = {
-			from: 'sistema.pronn@gmail.com',
+			from: 'email@gmail.com',
 			to: email,
 			subject: assunto,
 			html: mensagem

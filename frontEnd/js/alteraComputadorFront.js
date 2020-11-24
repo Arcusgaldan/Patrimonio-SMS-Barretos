@@ -29246,7 +29246,7 @@ function alterar(){
 		computador.armazenamento = document.getElementById('armazenamentoComputadorAlterar').value;
 	}
 
-	if(document.getElementById('sistemaComputadorAlterar').value == '0'){
+	if(document.getElementById('sistemaComputadorAlterar').value == '0' || document.getElementById('sistemaComputadorAlterar').value == ''){
 		computador.codSO = null;
 	}else{
 		computador.codSO = document.getElementById('sistemaComputadorAlterar').value;
