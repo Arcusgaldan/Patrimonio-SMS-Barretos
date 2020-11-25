@@ -37,6 +37,7 @@
 [-] Implementar unificação de itens duplicados ou validação se já existe aquele tipo de item com aquele patrimônio
 [-] Finalizar transferência de computador (singular e lote)
 [-] Corrigir falta de scroll ao cadastrar sistema operacional dentro de cadastro de PC
+[-] Na transferência de item, mostrar apenas os setores pertencentes ao local atualmente selecionado
 
 -- EM ANDAMENTO
 [-] Fazer error handling para conexões antes do serviço MySQL subir
