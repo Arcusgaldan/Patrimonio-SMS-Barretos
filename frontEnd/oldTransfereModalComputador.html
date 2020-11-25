@@ -1,0 +1,35 @@
+<!-- TRANSFERE MODAL -->
+      <div class="modal fade" id="transfereModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tituloModalBuscar">Transferência de Item</h5>
+              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="text" id="patrimonioItemTransferir" class="form-control" placeholder="Patrimônio" disabled="true">
+                    <label for="patrimonioItemTransferir">Patrimônio</label>
+                  </div>
+                </div>
+
+                <div class="form-label-group">
+                  <select id="setorItemTransferir" class="form-control"></select>
+                </div>
+              </form>
+              <div id="idItemTransferir" style="display: none;"></div>
+              <div id="setorAntigoItemTransferir" style="display: none;"></div>
+              <div id="idSetorAntigoItemTransferir" style="display: none;"></div>
+              <div class="modal-footer">
+                <button class="btn btn-success" type="button" id="btnModalTransferencia">Transferir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /TRANSFERE MODAL -->

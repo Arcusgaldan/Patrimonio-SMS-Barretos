@@ -29353,6 +29353,14 @@ document.getElementById('btnLimparBusca').addEventListener('click', function(){
 	document.getElementById('formBuscarComputador').reset();
 }, false);
 
+document.getElementById('localItemTransferir').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localItemTransferir').value, "setorItemTransferir");
+}, false);
+
+document.getElementById('localComputadorBuscar').addEventListener('change', function(){
+	preencheSetor(document.getElementById('localComputadorBuscar').value, "setorComputadorBuscar");
+}, false);
+
 function buscar(){
 	var utils = require('./../../utilsCliente.js');
 	var where = "";
@@ -29440,6 +29448,16 @@ function buscar(){
 			where += "aposentado = 1";
 		}else{
 			where += "aposentado = 0";
+		}
+	}
+
+	if(document.getElementById('localComputadorBuscar').value != '0'){
+		let local = document.getElementById('localComputadorBuscar').value;
+
+		if(where == ""){
+			where = "l.id = " + local;
+		}else{
+			where += " AND l.id = " + local;
 		}
 	}
 
@@ -29533,9 +29551,15 @@ function preencheCopiarComputador(listaComputador){
 	}
 }
 
-function preencheSetor(){
+function preencheSetor(local, select, cb){
+	if(local == '0'){
+		document.getElementById(select).value = 0;		
+		document.getElementById(select).disabled = true;
+		return;
+	}
+	document.getElementById(select).disabled = false;
 	var utils = require('./../../utilsCliente.js');
-	utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
+	utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: {where: "codLocal = " + local, orderBy: [{campo: "nome", sentido: "asc"}]}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";
 			res.on('data', function(chunk){
@@ -29543,21 +29567,47 @@ function preencheSetor(){
 			});
 			res.on('end', function(){
 				var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-				$("#setorComputadorBuscar > option").remove();
-				$("#setorItemTransferir > option").remove();
-								
-				$("#setorItemTransferir").append("<option value='0'>Setor</option");
-				$("#setorComputadorBuscar").append("<option value='0'>Setor</option");
+				
+				$("#" + select + " > option").remove();				
+				$("#" + select).append("<option value='0'>Sem setor</option");
 
-
-				for(let i = 0; i < vetorSetor.length; i++){					
-					$("#setorComputadorBuscar").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");
-					$("#setorItemTransferir").append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].local + " - " + vetorSetor[i].nome+"</option");					
+				for(let i = 0; i < vetorSetor.length; i++){
+					$("#" + select).append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].nome + "</option");					
+				}
+				if(cb){
+					cb();
 				}
 			});
 		}else if(res.statusCode != 747){
-			console.log("O problema foi no setor.");
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
+			$("#erroModal").modal('show');
+			return;
+		}
+	});
+}
+
+function preencheLocal(){
+	var utils = require('./../../utilsCliente.js');
+	utils.enviaRequisicao("Local", "LISTAR", {token: localStorage.token}, function(res){
+		if(res.statusCode == 200){
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				var vetorLocal = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+				$("#localItemTransferir > option").remove();
+				$("#localComputadorBuscar > option").remove();
+
+				$("#localComputadorBuscar").append("<option value='0'>Local</option")
+
+				for(let i = 0; i < vetorLocal.length; i++){					
+					$("#localItemTransferir").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");					
+					$("#localComputadorBuscar").append("<option value='"+vetorLocal[i].id+"'>" + vetorLocal[i].nome + "</option");					
+				}
+			});
+		}else if(res.statusCode != 747){
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar locais";
 			$("#erroModal").modal('show');
 			return;
 		}
@@ -29663,11 +29713,35 @@ function preencheModalAlterar(computador){
 	document.getElementById('patrimonioComputadorAlterar').value = computador.codItem;
 	document.getElementById('patrimonioComputadorAlterar').innerHTML = "<option value='"+computador.codItem+"'>"+computador.itemPatrimonio+"</option>";
 	document.getElementById('patrimonioComputadorAlterar').disabled = true;
-	document.getElementById('processadorComputadorAlterar').value = computador.codProcessador;
+	
+	if(computador.codProcessador == null){		
+		document.getElementById('processadorComputadorAlterar').value = '0';
+	}else{		
+		document.getElementById('processadorComputadorAlterar').value = computador.codProcessador;
+	}
+
 	document.getElementById('qtdMemoriaComputadorAlterar').value = computador.qtdMemoria;
-	document.getElementById('tipoMemoriaComputadorAlterar').value = computador.tipoMemoria;
+
+	if(computador.tipoMemoria == null){
+		document.getElementById('tipoMemoriaComputadorAlterar').value = '0';
+	}else{
+		document.getElementById('tipoMemoriaComputadorAlterar').value = computador.tipoMemoria;
+	}
+	
 	document.getElementById('armazenamentoComputadorAlterar').value = computador.armazenamento;
-	document.getElementById('sistemaComputadorAlterar').value = computador.codSO;
+	
+	for (var key in computador){
+		console.log(key + " = " + computador[key])
+	}
+
+	if(computador.codSO == null){
+		//console.log("Meu SO veio nulo! " + computador.codSo)
+		document.getElementById('sistemaComputadorAlterar').value = '0';
+	}else{
+		//console.log("Meu SO não veio nulo! Coloquei o value = " + computador.codSO)
+		document.getElementById('sistemaComputadorAlterar').value = computador.codSO;
+	}
+	
 
 	if(computador.reserva == 1){
 		document.getElementById('reservaComputadorAlterar').checked = true;
@@ -29689,8 +29763,10 @@ function preencheModalTransferencia(computador){
 	document.getElementById('patrimonioItemTransferir').value = computador.itemPatrimonio;
 	document.getElementById('setorItemTransferir').value = computador.setorId;
 	document.getElementById('idItemTransferir').value = computador.codItem;
-	document.getElementById('setorAntigoItemTransferir').value = computador.setorLocal + " - " + computador.setorNome;
+	document.getElementById('localAntigoItemTransferir').value = computador.localNome;
+	document.getElementById('setorAntigoItemTransferir').value = computador.setorNome;
 	document.getElementById('idSetorAntigoItemTransferir').value = computador.setorId;
+	preencheSetor(document.getElementById('localItemTransferir').value, "setorItemTransferir");
 }
 
 function preenchePatrimonio(){
@@ -29796,7 +29872,7 @@ function preencheSO(){
 preenchePatrimonio();
 preencheProcessador();
 preencheSO();
-preencheSetor();
+preencheLocal();
 var utils = require('./../../utilsCliente.js');
 utils.enviaRequisicao("Computador", "LISTAR", {token: localStorage.token}, function(res){
 	if(res.statusCode == 200){
