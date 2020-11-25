@@ -24,6 +24,7 @@
 ![V] Configurar política de backup do banco de dados //Usar agendador de tarefas para a cada 24h executar um mysqldump
 [V] Corrigir transferência de computador (está procurando Setor e Local, novo select é junto) (Correção foi separar novamente em local e setor)
 [V] Corrigir cadastro de local (está cobrando endereço e telefone)
+[V] Na transferência de item, mostrar apenas os setores pertencentes ao local atualmente selecionado
 
 -- PENDENTES
 [-] Fazer validação campo-a-campo em todos os formulários
@@ -37,7 +38,6 @@
 [-] Implementar unificação de itens duplicados ou validação se já existe aquele tipo de item com aquele patrimônio
 [-] Finalizar transferência de computador (singular e lote)
 [-] Corrigir falta de scroll ao cadastrar sistema operacional dentro de cadastro de PC
-[-] Na transferência de item, mostrar apenas os setores pertencentes ao local atualmente selecionado
 
 -- EM ANDAMENTO
 [-] Fazer error handling para conexões antes do serviço MySQL subir
