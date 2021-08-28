@@ -25,24 +25,25 @@
 [V] Corrigir transferência de computador (está procurando Setor e Local, novo select é junto) (Correção foi separar novamente em local e setor)
 [V] Corrigir cadastro de local (está cobrando endereço e telefone)
 [V] Na transferência de item, mostrar apenas os setores pertencentes ao local atualmente selecionado
+[V] Corrigir falta de scroll ao cadastrar sistema operacional dentro de cadastro de PC
+[V] Fazer error handling para conexões antes do serviço MySQL subir //Aparentemente OK
+[V] Adicionar tHead (e tr's neste tHead) para testar o DataTables
 
 -- PENDENTES
 [-] Fazer validação campo-a-campo em todos os formulários
-[-] Considerar paginação para listagens //Adicionar variável "tabelaAtual" em cada Listar, criar uma constante "tamanhoPagina" no utils. Ou considerar usar o módulo dataTables 
+[-] Considerar paginação para listagens //Adicionar variável "tabelaAtual" em cada Listar, criar uma constante "tamanhoPagina" no utils. Ou considerar usar o módulo dataTables
 [-] Ao finalizar CRUD's, iniciar gráficos e estatísticas na página inicial do sistema.
 [-] Permitir cadastrar itens/computadores baseado num range de patrimonio (ex: 205599 - 205619)
-[-] Criar controllers e models de placa-mãe, adicionar ao formulário de computador
 [-] Estudar defesas para SQL Injection
 [-] Estudar melhoramento para log de transferência em lote (usar laço)
 [-] Fazer caixa de confirmação antes de mostrar modal de cadastro de PC após cadastro de item
-[-] Implementar unificação de itens duplicados ou validação se já existe aquele tipo de item com aquele patrimônio
 [-] Finalizar transferência de computador (singular e lote)
-[-] Corrigir falta de scroll ao cadastrar sistema operacional dentro de cadastro de PC
 
 -- EM ANDAMENTO
-[-] Fazer error handling para conexões antes do serviço MySQL subir
 
 -- ABORTADOS
 [X] Considerar criar um campo "motivo" em TBLogTransferencia //Ia ficar cansativo para várias transações em seguida
 [X] Adicionar campo "excluído" à tabela de backup para excluir backups antigos sem perder seu registro e continuar calculando espaço disponível em disco //Abandonando a ideia de cadastro de backup
 [X] Adicionar campo IP em computador //Irrelevante para o motivo geral do sistema
+[X] Implementar unificação de itens duplicados ou validação se já existe aquele tipo de item com aquele patrimônio //Campo patrimônio já é UNIQUE
+[X] Criar controllers e models de placa-mãe, adicionar ao formulário de computador //Irrelevante para o motivo geral do sistema

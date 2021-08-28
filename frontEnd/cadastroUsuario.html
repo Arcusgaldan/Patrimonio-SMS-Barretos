@@ -24,6 +24,9 @@
     <link href="/css/sb-admin.css" rel="stylesheet">
     <script type="text/javascript" src="/js/verificaLoginFront.js"></script>
 
+    <!-- DataTables -->
+    <link href="/vendor/datatables2/datatables.css" rel="stylesheet">
+
   </head>
 
   <body id="page-top">
@@ -71,21 +74,9 @@
                 <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
               </div>  
               <div class="card-body">
-                <p>
-
-                </p>
-
-                <table class="table table-bordered table-dark text-center">
-
-
-                  <tbody id="tabelaUsuario">
-
-
-
-
-                  </tbody>
+                <p></p>
+                <table id="tabelaUsuarioMaster" class="display nowrap" style="width:100%">                  
                 </table>
-
               </div>
             </div>
           </div>
@@ -340,6 +331,9 @@
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="/vendor/datatables2/datatables.min.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>

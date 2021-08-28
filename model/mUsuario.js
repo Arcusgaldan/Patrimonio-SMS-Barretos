@@ -17,5 +17,20 @@ module.exports = {
 				return true;
 		}
 		return false;
-	}
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Nome", "data": "nome"},
+		{"title": "CPF", "data": "cpf"},
+		{"title": "E-mail", "data": "email"}
+	],
+
+	defColunas: [
+		{
+			"targets": [0],
+			"visible": false,
+			"searchable": false
+		}
+	]
 }
