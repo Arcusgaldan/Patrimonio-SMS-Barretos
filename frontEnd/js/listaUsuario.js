@@ -3,6 +3,8 @@ document.getElementById('btnLimparBusca').addEventListener('click', function(){
 	document.getElementById('formBuscarUsuario').reset();
 }, false);
 
+var utils = require('./../../utilsCliente.js');
+
 function validaCpf(cpf){
 	cpf = cpf.replace(/[^\d]+/g, '');
 	if(cpf == '')
@@ -225,45 +227,40 @@ function preencheTabela(listaUsuario){
 	if(!listaUsuario){
 		return;
 	}
+	console.log(listaUsuario);
 	$("#tabelaUsuario").empty();
-	for(let i = 0; i < listaUsuario.length; i++){
-		$("#tabelaUsuario").append("\
-		<tr>\
-		    <th id='nomeUsuarioLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info' scope='row' data-toggle='collapse' href='#collapseUsuarioLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarUsuarioLista"+ i +"' class='btn btn-warning' data-toggle='modal' data-target='#alteraModal' >Alterar Usuário</button>\
-				<button id='excluirUsuarioLista"+ i +"' class='btn btn-danger' data-toggle='modal' data-target='#excluirModal'>Excluir Usuário</button>\
-				<div id='collapseUsuarioLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Nome: </strong><span id='nomeUsuarioDados"+i+"'></span></p>\
-				    <p><strong>CPF: </strong> <span id='cpfUsuarioDados"+i+"'></span></p>\
-				    <p><strong>E-Mail: </strong> <span id='emailUsuarioDados"+i+"'></span></p>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
+	// for(let i = 0; i < listaUsuario.length; i++){
+	// 	$("#tabelaUsuario").append("\
+	// 	<tr>\
+	// 	    <th id='nomeUsuarioLista"+ i +"'></th>\
+	// 	    <td id='emailUsuarioLista" + i + "'>\
+	// 		</td>\
+	// 		<td>\
+	// 			Teste2\
+	// 		</td>\
+	// 	  </tr>\
+	// 	");
 
-		document.getElementById('nomeUsuarioLista' + i).innerHTML = listaUsuario[i].nome;
-		document.getElementById('nomeUsuarioDados' + i).innerHTML = listaUsuario[i].nome;
-		if(listaUsuario[i].cpf != ''){
-			document.getElementById('cpfUsuarioDados' + i).innerHTML = listaUsuario[i].cpf;
-		}else{
-			document.getElementById('cpfUsuarioDados' + i).innerHTML = '-';
-		}
-		document.getElementById('emailUsuarioDados' + i).innerHTML = listaUsuario[i].email;
-
-		(function(){
-			var usuario = listaUsuario[i];		
-			document.getElementById("alterarUsuarioLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(usuario);
-			}, false);
-			document.getElementById("excluirUsuarioLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(usuario);
-			}, false);
-		}());
-	}
+	// 	document.getElementById('nomeUsuarioLista' + i).innerHTML = listaUsuario[i].nome;
+	// 	document.getElementById('emailUsuarioLista' + i).innerHTML = listaUsuario[i].email;
+		// (function(){
+		// 	var usuario = listaUsuario[i];		
+		// 	document.getElementById("alterarUsuarioLista"+ i).addEventListener("click", function(){
+		// 		preencheModalAlterar(usuario);
+		// 	}, false);
+		// 	document.getElementById("excluirUsuarioLista"+ i).addEventListener("click", function(){
+		// 		preencheModalExcluir(usuario);
+		// 	}, false);
+		// }());		
+	//}
+	model = require('./../../model/mUsuario')
+	$("#tabelaUsuarioMaster").DataTable({
+		language: utils.linguagemTabela, 
+		data: listaUsuario,
+		columns: model.colunas,
+		scrollX: true,
+		columnDefs: model.defColunas
+	});
 }
 
 function preencheModalAlterar(usuario){
