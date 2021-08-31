@@ -6,7 +6,6 @@ function altera(){
 
 	modelo.id = document.getElementById('idUsuarioAlterar').value;
 	modelo.nome = document.getElementById('nomeUsuarioAlterar').value;
-	modelo.cpf = document.getElementById('cpfUsuarioAlterar').value;
 	modelo.email = document.getElementById('emailUsuarioAlterar').value;
 
 	if(document.getElementById('senhaUsuarioAlterar').value == ""){

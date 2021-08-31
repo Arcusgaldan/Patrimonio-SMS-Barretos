@@ -12,8 +12,10 @@ var http = require('http');
 
 var vetorTokens = [];
 
+ip = require('./IpServer.js').ip
+
 http.createServer(function(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', 'http://172.17.16.2');
+	res.setHeader('Access-Control-Allow-Origin', 'http://' + ip);
     res.setHeader('Access-Control-Allow-Credentials', "true");
     res.setHeader('Access-Control-Allow-Methods', 'OPTION, GET, POST');    
     res.setHeader('Accept-Encoding', 'gzip, deflate, br');

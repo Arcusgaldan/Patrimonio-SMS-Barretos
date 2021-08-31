@@ -51,7 +51,7 @@ module.exports = {
 
 	opcoesHTTP: function(texto){
 		var retorno = {
-			hostname: "172.17.16.2",
+			hostname: require('./IpServer.js').ip,
 		    port: 8080,
 		    //mode: 'no-cors',
 		    //Access-Control-Allow-Origin: "http://localhost",
