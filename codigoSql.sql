@@ -259,13 +259,11 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBUsuario` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `cpf` CHAR(14) NULL,
   `email` VARCHAR(100) NOT NULL,
   `senha` CHAR(64) NOT NULL,
   `senhaExpirada` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC),
-  UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC))
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC)
 ENGINE = InnoDB;
 
 

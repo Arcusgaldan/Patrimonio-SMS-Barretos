@@ -6,7 +6,6 @@ function cadastra(){
 	var modelo = require('./../../model/mUsuario.js').novo();
 
 	modelo.nome = document.getElementById('nomeUsuarioCadastrar').value;
-	modelo.cpf = document.getElementById('cpfUsuarioCadastrar').value;
 	modelo.email = document.getElementById('emailUsuarioCadastrar').value;
 
 	if(document.getElementById('senhaUsuarioCadastrar').value !== document.getElementById('confirmaSenhaUsuarioCadastrar').value){
