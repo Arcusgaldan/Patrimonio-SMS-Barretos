@@ -30401,11 +30401,11 @@ module.exports = {
     ip: "172.17.16.2"
 }
 },{}],221:[function(require,module,exports){
-document.getElementById('btnBuscar').addEventListener('click', buscar, false);
-document.getElementById('btnLimparBusca').addEventListener('click', function(){
-	document.getElementById('formBuscarItem').reset();
-}, false);
-document.getElementById('btnAcaoItem').addEventListener('click', lote, false);
+//document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+// document.getElementById('btnLimparBusca').addEventListener('click', function(){
+// 	document.getElementById('formBuscarItem').reset();
+// }, false);
+// document.getElementById('btnAcaoItem').addEventListener('click', lote, false);
 
 document.getElementById('localItemCadastrar').addEventListener('change', function(){
 	preencheSetor(document.getElementById('localItemCadastrar').value, "setorItemCadastrar");
@@ -30436,189 +30436,192 @@ document.getElementById('semPatrimonioItemAlterar').addEventListener('change', f
 	}
 }, false);
 
-function lote(){
-	var selecao = document.getElementById('selectAcaoItem').value;
-	if(selecao === 'transferir'){
-		//Passar com for por todos os registros, guardar os patrimônios marcados, mostrar no campo disabled separado por vírgula (?), selecionar o setor de destino, iniciar o multItem
-		//Fazer uma função no controller de LogTransferencia para itens multiplos, que além do retorno numerico também retorna em texto os patrimonios que não foram transferidos porque o setor de destino é igual à origem
-		//Se possível fazer essa validação primeiro a nível cliente e depois a nível servidor
-		var vetorMarcados = [];
-		var vetorID = [];
-		for(let i = 0; true; i++){
-			var cboxAtual = document.getElementById('cboxItemLista' + i);
-			if(cboxAtual == null)
-				break;
+const numSP = "000000"
+const strSP = "S/P"
 
-			if(cboxAtual.checked == true){
-				vetorMarcados.push(i);
-				vetorID.push(cboxAtual.value);
-			}
-		}
+// function lote(){
+// 	var selecao = document.getElementById('selectAcaoItem').value;
+// 	if(selecao === 'transferir'){
+// 		//Passar com for por todos os registros, guardar os patrimônios marcados, mostrar no campo disabled separado por vírgula (?), selecionar o setor de destino, iniciar o multItem
+// 		//Fazer uma função no controller de LogTransferencia para itens multiplos, que além do retorno numerico também retorna em texto os patrimonios que não foram transferidos porque o setor de destino é igual à origem
+// 		//Se possível fazer essa validação primeiro a nível cliente e depois a nível servidor
+// 		var vetorMarcados = [];
+// 		var vetorID = [];
+// 		for(let i = 0; true; i++){
+// 			var cboxAtual = document.getElementById('cboxItemLista' + i);
+// 			if(cboxAtual == null)
+// 				break;
 
-		if(vetorMarcados.length == 0){
-			document.getElementById('msgErroModal').innerHTML = "Selecione ao menos um item!";
-			$("#erroModal").modal('show');
-			return;
-		}else if(vetorMarcados.length == 1){
-			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('localItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
-			preencheSetor(document.getElementById('idLocalItemDados' + vetorMarcados[0]).value, "setorItemTransferir", function(){
-				document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
-			});
-			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
-			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
-			document.getElementById('localAntigoItemTransferir').value = document.getElementById('localItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('idLocalAntigoItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+// 			if(cboxAtual.checked == true){
+// 				vetorMarcados.push(i);
+// 				vetorID.push(cboxAtual.value);
+// 			}
+// 		}
 
-			$("#transfereModal").modal('show');
-		}else{
-			document.getElementById('patrimonioLoteTransferir').value = "";
-			for(let i = 0; i < vetorMarcados.length; i++){
-				if(i < vetorMarcados.length - 1)
-					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
-				else
-					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
-			}
-			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
-			preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
-			$("#transfereLoteModal").modal('show');			
-		}
+// 		if(vetorMarcados.length == 0){
+// 			document.getElementById('msgErroModal').innerHTML = "Selecione ao menos um item!";
+// 			$("#erroModal").modal('show');
+// 			return;
+// 		}else if(vetorMarcados.length == 1){
+// 			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('localItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+// 			preencheSetor(document.getElementById('idLocalItemDados' + vetorMarcados[0]).value, "setorItemTransferir", function(){
+// 				document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+// 			});
+// 			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
+// 			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+// 			document.getElementById('localAntigoItemTransferir').value = document.getElementById('localItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('idLocalAntigoItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
 
-	}
-}
+// 			$("#transfereModal").modal('show');
+// 		}else{
+// 			document.getElementById('patrimonioLoteTransferir').value = "";
+// 			for(let i = 0; i < vetorMarcados.length; i++){
+// 				if(i < vetorMarcados.length - 1)
+// 					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
+// 				else
+// 					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
+// 			}
+// 			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
+// 			preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
+// 			$("#transfereLoteModal").modal('show');			
+// 		}
 
-function buscar(){
-	var utils = require('./../../utilsCliente.js');
-	var where = "";
+// 	}
+// }
 
-	if(document.getElementById('patrimonioItemBuscar').value != ""){
-		let patrimonio = document.getElementById('patrimonioItemBuscar').value;
+// function buscar(){
+// 	var utils = require('./../../utilsCliente.js');
+// 	var where = "";
 
-		while(patrimonio.length < 6){
-			patrimonio = "0" + patrimonio;
-		}
+// 	if(document.getElementById('patrimonioItemBuscar').value != ""){
+// 		let patrimonio = document.getElementById('patrimonioItemBuscar').value;
 
-		if(where != "")
-			where += " AND ";
+// 		while(patrimonio.length < 6){
+// 			patrimonio = "0" + patrimonio;
+// 		}
 
-		where += "patrimonio = '" + patrimonio + "'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('marcaItemBuscar').value != ""){
-		let marca = document.getElementById('marcaItemBuscar').value;
+// 		where += "patrimonio = '" + patrimonio + "'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('marcaItemBuscar').value != ""){
+// 		let marca = document.getElementById('marcaItemBuscar').value;
 
-		where += "marca LIKE '%" + marca + "%'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('modeloItemBuscar').value != ""){
-		let modelo = document.getElementById('modeloItemBuscar').value;
+// 		where += "marca LIKE '%" + marca + "%'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('modeloItemBuscar').value != ""){
+// 		let modelo = document.getElementById('modeloItemBuscar').value;
 
-		where += "modelo LIKE '%" + modelo + "%'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('localItemBuscar').value != '0'){
-		let local = document.getElementById('localItemBuscar').value;
+// 		where += "modelo LIKE '%" + modelo + "%'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('localItemBuscar').value != '0'){
+// 		let local = document.getElementById('localItemBuscar').value;
 
-		where += "lt.codLocal = " + local;
-	}	
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('setorItemBuscar').value != '0'){
-		let setor = document.getElementById('setorItemBuscar').value;
+// 		where += "lt.codLocal = " + local;
+// 	}	
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('setorItemBuscar').value != '0'){
+// 		let setor = document.getElementById('setorItemBuscar').value;
 
-		where += "codSetor = " + setor;
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('tipoItemBuscar').value != '0'){
-		let tipo = document.getElementById('tipoItemBuscar').value;
+// 		where += "codSetor = " + setor;
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('tipoItemBuscar').value != '0'){
+// 		let tipo = document.getElementById('tipoItemBuscar').value;
 
-		where += "codTipoItem = " + tipo;
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('ativoItemBuscar').checked == true){
-		if(where != ""){
-			where += " AND ";
-		}
+// 		where += "codTipoItem = " + tipo;
+// 	}
 
-		where += "(ativo = 1 or ativo = 0)";
-	}else{
-		if(where != ""){
-			where += " AND ";
-		}
+// 	if(document.getElementById('ativoItemBuscar').checked == true){
+// 		if(where != ""){
+// 			where += " AND ";
+// 		}
 
-		where += "ativo = 1";
-	}
+// 		where += "(ativo = 1 or ativo = 0)";
+// 	}else{
+// 		if(where != ""){
+// 			where += " AND ";
+// 		}
 
-	if(where == ""){
-		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaItem);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaItem").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}else{
-		//console.log("O where da busca é: " + where);
-		var argumentos = {
-			selectCampos: ["TBItem.*", "ti.nome tipoNome", "l.nome localNome", "s.nome setorNome", "s.id setorId"], 
-			joins: [
-				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
-				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
-				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
-			], 
-			where: "lt.atual = 1 AND " + where, 
-			orderBy: [{campo: "patrimonio", sentido: "asc"}]
-		};
+// 		where += "ativo = 1";
+// 	}
+
+// 	if(where == ""){
+// 		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
+// 			if(res.statusCode == 200){
+// 				var msg = "";
+// 				res.on('data', function(chunk){
+// 					msg += chunk;
+// 				});
+// 				res.on('end', function(){
+// 					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+// 					preencheTabela(listaItem);
+// 				});
+// 			}else if(res.statusCode == 747){
+// 				$("#tabelaItem").empty();
+// 			}else{
+// 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+// 				$("#erroModal").modal('show');
+// 				return;
+// 			}
+// 			$("#buscaModal").modal('toggle');
+// 		});
+// 	}else{
+// 		//console.log("O where da busca é: " + where);
+// 		var argumentos = {
+// 			selectCampos: ["TBItem.*", "ti.nome tipoNome", "l.nome localNome", "s.nome setorNome", "s.id setorId"], 
+// 			joins: [
+// 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
+// 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
+// 				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+// 				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
+// 			], 
+// 			where: "lt.atual = 1 AND " + where, 
+// 			orderBy: [{campo: "patrimonio", sentido: "asc"}]
+// 		};
 		
-		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaItem);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaItem").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}
-}
+// 		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+// 			if(res.statusCode == 200){
+// 				var msg = "";
+// 				res.on('data', function(chunk){
+// 					msg += chunk;
+// 				});
+// 				res.on('end', function(){
+// 					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+// 					preencheTabela(listaItem);
+// 				});
+// 			}else if(res.statusCode == 747){
+// 				$("#tabelaItem").empty();
+// 			}else{
+// 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+// 				$("#erroModal").modal('show');
+// 				return;
+// 			}
+// 			$("#buscaModal").modal('toggle');
+// 		});
+// 	}
+// }
 
 function preencheCopiarItem(listaItem){
 	$("#copiarItemCadastrar > option").remove();
@@ -30633,84 +30636,97 @@ function preencheTabela(listaItem){
 	if(!listaItem){
 		return;
 	}
-	$("#tabelaItem").empty();
-	for(let i = 0; i < listaItem.length; i++){
-		$("#tabelaItem").append("\
-		<tr>\
-			<td><input id='cboxItemLista" + i + "' type='checkbox'></td>\
-		    <th id='patrimonioItemLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarItemLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
-				<button id='excluirItemLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
-				<button id='transferirItemLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
-				<div id='collapseItemLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Patrimônio: </strong><span id='patrimonioItemDados"+i+"'></span></p>\
-				    <p><strong>Marca: </strong> <span id='marcaItemDados"+i+"'></span></p>\
-				    <p><strong>Modelo: </strong> <span id='modeloItemDados"+i+"'></span></p>\
-				    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
-				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
-				    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
-				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
-				    <div style='display: none;' id='idLocalItemDados"+i+"'></div>\
-				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
-				    <br>\
-				    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
-
-		if(listaItem[i].patrimonio == '000000'){
-			listaItem[i].patrimonio = "S/P";
+	listaItem.forEach(function(obj){
+		if(obj['patrimonio'] == numSP){
+			obj['patrimonio'] = strSP
 		}
+	});
+	$("#tabelaItem").empty();
+	// for(let i = 0; i < listaItem.length; i++){
+	// 	$("#tabelaItem").append("\
+	// 	<tr>\
+	// 		<td><input id='cboxItemLista" + i + "' type='checkbox'></td>\
+	// 	    <th id='patrimonioItemLista"+ i +"'></th>\
+	// 	    <td>\
+	// 			<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
+	// 			<button id='alterarItemLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
+	// 			<button id='excluirItemLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
+	// 			<button id='transferirItemLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
+	// 			<div id='collapseItemLista"+ i +"' class='collapse mostraLista' >\
+	// 			  <div class='card card-body'>\
+	// 			    <p><strong>Patrimônio: </strong><span id='patrimonioItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Marca: </strong> <span id='marcaItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Modelo: </strong> <span id='modeloItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
+	// 			    <div style='display: none;' id='idLocalItemDados"+i+"'></div>\
+	// 			    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
+	// 			    <br>\
+	// 			    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
+	// 			  </div>\
+	// 			</div>\
+	// 	    </td>\
+	// 	  </tr>\
+	// 	");
 
-		document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
-		document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;
-		document.getElementById('patrimonioItemDados' + i).innerHTML = listaItem[i].patrimonio;
-		if(listaItem[i].marca)
-			document.getElementById('marcaItemDados' + i).innerHTML = listaItem[i].marca;
-		else
-			document.getElementById('marcaItemDados' + i).innerHTML = "-";
-		if(listaItem[i].modelo)
-			document.getElementById('modeloItemDados' + i).innerHTML = listaItem[i].modelo;
-		else
-			document.getElementById('modeloItemDados' + i).innerHTML = "-";
-		if(listaItem[i].descricao != " " && listaItem[i].descricao != "")
-			document.getElementById('descricaoItemDados' + i).innerHTML = listaItem[i].descricao;
-		else
-			document.getElementById('descricaoItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].patrimonio == '000000'){
+	// 		listaItem[i].patrimonio = "S/P";
+	// 	}
 
-		document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
+	// 	document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
+	// 	document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;
+	// 	document.getElementById('patrimonioItemDados' + i).innerHTML = listaItem[i].patrimonio;
+	// 	if(listaItem[i].marca)
+	// 		document.getElementById('marcaItemDados' + i).innerHTML = listaItem[i].marca;
+	// 	else
+	// 		document.getElementById('marcaItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].modelo)
+	// 		document.getElementById('modeloItemDados' + i).innerHTML = listaItem[i].modelo;
+	// 	else
+	// 		document.getElementById('modeloItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].descricao != " " && listaItem[i].descricao != "")
+	// 		document.getElementById('descricaoItemDados' + i).innerHTML = listaItem[i].descricao;
+	// 	else
+	// 		document.getElementById('descricaoItemDados' + i).innerHTML = "-";
 
-		document.getElementById('localItemDados' + i).innerHTML = listaItem[i].localNome;		
+	// 	document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
 
-		if(listaItem[i].setorNome)
-			document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorNome;
-		else
-			document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
+	// 	document.getElementById('localItemDados' + i).innerHTML = listaItem[i].localNome;		
 
-		document.getElementById('idLocalItemDados' + i).value = listaItem[i].localId;
-		document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
+	// 	if(listaItem[i].setorNome)
+	// 		document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorNome;
+	// 	else
+	// 		document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
 
-		(function(){
-			var item = listaItem[i];		
-			document.getElementById("alterarItemLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(item);
-			}, false);
-			document.getElementById("excluirItemLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(item);
-			}, false);
-			document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
-				preencheModalTransferencia(item);
-			}, false);
-			document.getElementById("historicoItemDados" + i).addEventListener("click", function(){
-				preencheModalHistorico(item);
-			}, false);
-		}());
-	}	
+	// 	document.getElementById('idLocalItemDados' + i).value = listaItem[i].localId;
+	// 	document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
+
+	// 	(function(){
+	// 		var item = listaItem[i];		
+	// 		document.getElementById("alterarItemLista"+ i).addEventListener("click", function(){
+	// 			preencheModalAlterar(item);
+	// 		}, false);
+	// 		document.getElementById("excluirItemLista"+ i).addEventListener("click", function(){
+	// 			preencheModalExcluir(item);
+	// 		}, false);
+	// 		document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
+	// 			preencheModalTransferencia(item);
+	// 		}, false);
+	// 		document.getElementById("historicoItemDados" + i).addEventListener("click", function(){
+	// 			preencheModalHistorico(item);
+	// 		}, false);
+	// 	}());
+	// }
+	model = require('./../../model/mItem')
+	var table = $("#tabelaItem").DataTable({
+		language: utils.linguagemTabela, 
+		data: listaItem,
+		columns: model.colunas,
+		scrollX: true,
+		columnDefs: model.defColunas()
+	});
 }
 
 function preencheModalAlterar(item){
@@ -30983,9 +30999,9 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 		});
 		res.on('end', function(){
 			var vetorItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-			(function(){
-				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
-			}());
+			// (function(){
+			// 	document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
+			// }());
 			preencheTabela(vetorItem);
 			preencheCopiarItem(vetorItem);
 		});
@@ -30995,7 +31011,77 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 		return;
 	}
 });
-},{"./../../utilsCliente.js":246}],222:[function(require,module,exports){
+},{"./../../model/mItem":222,"./../../utilsCliente.js":248}],222:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.patrimonio = '';
+		final.marca = '';
+		final.modelo = '';
+		final.descricao = '';
+		final.codTipoItem = 0;
+		final.nomeTipoItem = '';
+		final.ativo = 1;
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['patrimonio', 'marca', 'descricao', 'modelo', 'nomeTipoItem'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Marca", "data": "marca"},
+		{"title": "Modelo", "data": "modelo"},
+		{"title": "Descrição", "data": "descricao"},
+		{"title": "Cod Tipo Item", "data": "codTipoItem"},
+		{"title": "Ativo", "data": "ativo"},
+		{"title": "Patrimonio", "data": "patrimonio"},
+		{"title": "Tipo do Item", "data": "tipoNome"},
+		{"title": "Ações", "data": null}
+	],
+
+	// defColunas: function(){
+	// 	let colunasBotoes = require('./model.js').colunasBotoes
+	// 	colunasBotoes[0]["defaultContent"] += "<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transferirModal'><i class='fa fa-exchange' aria-hidden='true'></i></button>" 
+	// 	return colunasBotoes.concat([
+	// 	{
+	// 		"targets": [0, 1, 2, 3, 4, 5],
+	// 		"visible": false,
+	// 		"searchable": false
+	// 	}
+	// 	])
+	// }
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
+		{
+			"targets": [0, 1, 2, 3, 4, 5],
+			"visible": false,
+			"searchable": false
+		}
+		])
+	}
+}
+},{"./model.js":223}],223:[function(require,module,exports){
+module.exports = {
+    colunasBotoes:[
+        {
+            "targets": -1,
+            "data": null,
+            "defaultContent": "<button class='btn btnExcluir btn-danger' data-toggle='modal' data-target='#excluirModal'><i class='fas fa-times'></i></button>\
+            <button class='btn btnEditar btn-warning' data-toggle='modal' data-target='#alteraModal'><i class='fas fa-edit'></i></button>\
+            <button class='btn btnInfo btn-info' data-toggle='modal' data-target='#infoModal'><i class='fas fa-info'></i></button>"
+        }
+    ]
+
+}
+},{}],224:[function(require,module,exports){
 /*! MIT License. Copyright 2015-2018 Richard Moore <me@ricmoo.com>. See LICENSE.txt. */
 (function(root) {
     "use strict";
@@ -31800,7 +31886,7 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 
 })(this);
 
-},{}],223:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -31815,7 +31901,7 @@ module.exports = {
 
 };
 
-},{}],224:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var errors = require('./errors');
@@ -31844,7 +31930,7 @@ for (var e in errors) {
     module.exports[e] = errors[e];
 }
 
-},{"./errors":223,"./reader":225,"./types":226,"./writer":227}],225:[function(require,module,exports){
+},{"./errors":225,"./reader":227,"./types":228,"./writer":229}],227:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -32108,7 +32194,7 @@ Reader.prototype._readTag = function (tag) {
 
 module.exports = Reader;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],226:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],228:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -32146,7 +32232,7 @@ module.exports = {
   Context: 128
 };
 
-},{}],227:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -32465,7 +32551,7 @@ Writer.prototype._ensure = function (len) {
 
 module.exports = Writer;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],228:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],230:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 // If you have no idea what ASN.1 or BER is, see this:
@@ -32487,7 +32573,7 @@ module.exports = {
 
 };
 
-},{"./ber/index":224}],229:[function(require,module,exports){
+},{"./ber/index":226}],231:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * RSA library for Node.js
@@ -32889,7 +32975,7 @@ module.exports = (function () {
 })();
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./formats/formats.js":235,"./libs/rsa.js":239,"./schemes/schemes.js":243,"./utils":244,"asn1":228,"buffer":67,"constants":70,"crypto":77}],230:[function(require,module,exports){
+},{"./formats/formats.js":237,"./libs/rsa.js":241,"./schemes/schemes.js":245,"./utils":246,"asn1":230,"buffer":67,"constants":70,"crypto":77}],232:[function(require,module,exports){
 var crypt = require('crypto');
 
 module.exports = {
@@ -32907,7 +32993,7 @@ module.exports = {
         return engine(keyPair, options);
     }
 };
-},{"./io.js":231,"./js.js":232,"./node12.js":233,"crypto":77}],231:[function(require,module,exports){
+},{"./io.js":233,"./js.js":234,"./node12.js":235,"crypto":77}],233:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -32980,7 +33066,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"constants":70,"crypto":77}],232:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"constants":70,"crypto":77}],234:[function(require,module,exports){
 var BigInteger = require('../libs/jsbn.js');
 var schemes = require('../schemes/schemes.js');
 
@@ -33015,7 +33101,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../libs/jsbn.js":238,"../schemes/schemes.js":243}],233:[function(require,module,exports){
+},{"../libs/jsbn.js":240,"../schemes/schemes.js":245}],235:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -33072,7 +33158,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"./js.js":232,"constants":70,"crypto":77}],234:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"./js.js":234,"constants":70,"crypto":77}],236:[function(require,module,exports){
 var _ = require('../utils')._;
 var utils = require('../utils');
 
@@ -33145,7 +33231,7 @@ module.exports = {
     }
 };
 
-},{"../utils":244}],235:[function(require,module,exports){
+},{"../utils":246}],237:[function(require,module,exports){
 var _ = require('../utils')._;
 
 function formatParse(format) {
@@ -33242,7 +33328,7 @@ module.exports = {
         }
     }
 };
-},{"../utils":244,"./components":234,"./pkcs1":236,"./pkcs8":237}],236:[function(require,module,exports){
+},{"../utils":246,"./components":236,"./pkcs1":238,"./pkcs8":239}],238:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -33393,7 +33479,7 @@ module.exports = {
     }
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],237:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],239:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -33584,7 +33670,7 @@ module.exports = {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],238:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],240:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * Basic JavaScript BN library - subset useful for RSA encryption.
@@ -35127,7 +35213,7 @@ BigInteger.prototype.square = bnSquare;
 
 module.exports = BigInteger;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"buffer":67,"crypto":77}],239:[function(require,module,exports){
+},{"../utils":246,"buffer":67,"crypto":77}],241:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * RSA Encryption / Decryption with PKCS1 v2 Padding.
@@ -35447,7 +35533,7 @@ module.exports.Key = (function () {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../encryptEngines/encryptEngines.js":230,"../schemes/schemes.js":243,"../utils":244,"../utils.js":244,"./jsbn.js":238,"buffer":67,"crypto":77}],240:[function(require,module,exports){
+},{"../encryptEngines/encryptEngines.js":232,"../schemes/schemes.js":245,"../utils":246,"../utils.js":246,"./jsbn.js":240,"buffer":67,"crypto":77}],242:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS_OAEP signature scheme
@@ -35630,7 +35716,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"crypto":77}],241:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"crypto":77}],243:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS1 padding and signature scheme
@@ -35872,7 +35958,7 @@ module.exports.makeScheme = function (key, options) {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"constants":70,"crypto":77}],242:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"constants":70,"crypto":77}],244:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PSS signature scheme
@@ -36059,7 +36145,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"./schemes":243,"buffer":67,"crypto":77}],243:[function(require,module,exports){
+},{"../libs/jsbn":240,"./schemes":245,"buffer":67,"crypto":77}],245:[function(require,module,exports){
 module.exports = {
     pkcs1: require('./pkcs1'),
     pkcs1_oaep: require('./oaep'),
@@ -36083,7 +36169,7 @@ module.exports = {
         return module.exports[scheme] && module.exports[scheme].isSignature;
     }
 };
-},{"./oaep":240,"./pkcs1":241,"./pss":242}],244:[function(require,module,exports){
+},{"./oaep":242,"./pkcs1":243,"./pss":244}],246:[function(require,module,exports){
 (function (process){(function (){
 /*
  * Utils functions
@@ -36194,9 +36280,9 @@ module.exports.trimSurroundingText = function (data, opening, closing) {
     return data.substring(trimStartIndex, trimEndIndex);
 }
 }).call(this)}).call(this,require('_process'))
-},{"_process":156,"crypto":77}],245:[function(require,module,exports){
+},{"_process":156,"crypto":77}],247:[function(require,module,exports){
 arguments[4][172][0].apply(exports,arguments)
-},{"_process":156,"buffer":67,"dup":172}],246:[function(require,module,exports){
+},{"_process":156,"buffer":67,"dup":172}],248:[function(require,module,exports){
 (function (Buffer){(function (){
 module.exports = {
 	senhaHash: function(senha){
@@ -36483,4 +36569,4 @@ module.exports = {
 	}
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./IpServer.js":220,"aes-js":222,"buffer":67,"crypto":77,"http":196,"node-rsa":229}]},{},[221]);
+},{"./IpServer.js":220,"aes-js":224,"buffer":67,"crypto":77,"http":196,"node-rsa":231}]},{},[221]);

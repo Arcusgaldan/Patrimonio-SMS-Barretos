@@ -30409,29 +30409,26 @@ function preencheTabela(listaUsuario){
 	}
 	$("#tabelaUsuario").empty();
 	model = require('./../../model/mUsuario')
-	var table = $("#tabelaUsuarioMaster").DataTable({
+	var table = $("#tabelaUsuario").DataTable({
 		language: utils.linguagemTabela, 
 		data: listaUsuario,
 		columns: model.colunas,
 		scrollX: true,
-		columnDefs: model.defColunas
+		columnDefs: model.defColunas()
 	});
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
-		let usuario = model.tableDataToObj(data)
-		preencheModalAlterar(usuario)        
+		preencheModalAlterar(data)        
     } );
 	
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnExcluir', function () {
         let data = table.row( $(this).parents('tr') ).data();
-        let usuario = model.tableDataToObj(data)
-		preencheModalExcluir(usuario)
+		preencheModalExcluir(data)
     } );
 
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnInfo', function () {
 		let data = table.row( $(this).parents('tr') ).data();
-		let usuario = model.tableDataToObj(data)
-		preencheModalInfo(usuario)
+		preencheModalInfo(data)
 	} );
 }
 
@@ -30454,9 +30451,6 @@ function preencheModalInfo(usuario){
 	if(usuario.senhaExpirada == 1){		
 		document.getElementById('senhaExpiradaUsuarioInfo').checked = true;
 	}
-
-	document.getElementById('idUsuarioInfo').value = usuario.id;
-	document.getElementById('senhaAntigaUsuarioInfo').value = usuario.senha;
 }
 
 function preencheModalExcluir(usuario){
@@ -30513,27 +30507,14 @@ module.exports = {
 		{"title": "Ações", "data": null}
 	],
 
-	defColunas: require('./model.js').colunasBotoes.concat([
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
 		{
 			"targets": [0, 1, 2],
 			"visible": false,
 			"searchable": false
 		}
-	]),
-
-	tableDataToObj: function(data){
-		if(!data){
-			return null
-		}
-
-		obj = this.novo()
-		obj.id = data['id']
-		obj.nome = data['nome']
-		obj.email = data['email']
-		obj.senha = data['senha']
-		obj.senhaExpirada = data['senhaExpirada']
-
-		return obj
+		])
 	}
 }
 },{"./model.js":223}],223:[function(require,module,exports){

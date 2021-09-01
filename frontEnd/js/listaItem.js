@@ -1,8 +1,8 @@
-document.getElementById('btnBuscar').addEventListener('click', buscar, false);
-document.getElementById('btnLimparBusca').addEventListener('click', function(){
-	document.getElementById('formBuscarItem').reset();
-}, false);
-document.getElementById('btnAcaoItem').addEventListener('click', lote, false);
+//document.getElementById('btnBuscar').addEventListener('click', buscar, false);
+// document.getElementById('btnLimparBusca').addEventListener('click', function(){
+// 	document.getElementById('formBuscarItem').reset();
+// }, false);
+// document.getElementById('btnAcaoItem').addEventListener('click', lote, false);
 
 document.getElementById('localItemCadastrar').addEventListener('change', function(){
 	preencheSetor(document.getElementById('localItemCadastrar').value, "setorItemCadastrar");
@@ -33,189 +33,192 @@ document.getElementById('semPatrimonioItemAlterar').addEventListener('change', f
 	}
 }, false);
 
-function lote(){
-	var selecao = document.getElementById('selectAcaoItem').value;
-	if(selecao === 'transferir'){
-		//Passar com for por todos os registros, guardar os patrimônios marcados, mostrar no campo disabled separado por vírgula (?), selecionar o setor de destino, iniciar o multItem
-		//Fazer uma função no controller de LogTransferencia para itens multiplos, que além do retorno numerico também retorna em texto os patrimonios que não foram transferidos porque o setor de destino é igual à origem
-		//Se possível fazer essa validação primeiro a nível cliente e depois a nível servidor
-		var vetorMarcados = [];
-		var vetorID = [];
-		for(let i = 0; true; i++){
-			var cboxAtual = document.getElementById('cboxItemLista' + i);
-			if(cboxAtual == null)
-				break;
+const numSP = "000000"
+const strSP = "S/P"
 
-			if(cboxAtual.checked == true){
-				vetorMarcados.push(i);
-				vetorID.push(cboxAtual.value);
-			}
-		}
+// function lote(){
+// 	var selecao = document.getElementById('selectAcaoItem').value;
+// 	if(selecao === 'transferir'){
+// 		//Passar com for por todos os registros, guardar os patrimônios marcados, mostrar no campo disabled separado por vírgula (?), selecionar o setor de destino, iniciar o multItem
+// 		//Fazer uma função no controller de LogTransferencia para itens multiplos, que além do retorno numerico também retorna em texto os patrimonios que não foram transferidos porque o setor de destino é igual à origem
+// 		//Se possível fazer essa validação primeiro a nível cliente e depois a nível servidor
+// 		var vetorMarcados = [];
+// 		var vetorID = [];
+// 		for(let i = 0; true; i++){
+// 			var cboxAtual = document.getElementById('cboxItemLista' + i);
+// 			if(cboxAtual == null)
+// 				break;
 
-		if(vetorMarcados.length == 0){
-			document.getElementById('msgErroModal').innerHTML = "Selecione ao menos um item!";
-			$("#erroModal").modal('show');
-			return;
-		}else if(vetorMarcados.length == 1){
-			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('localItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
-			preencheSetor(document.getElementById('idLocalItemDados' + vetorMarcados[0]).value, "setorItemTransferir", function(){
-				document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
-			});
-			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
-			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
-			document.getElementById('localAntigoItemTransferir').value = document.getElementById('localItemDados' + vetorMarcados[0]).innerHTML;
-			document.getElementById('idLocalAntigoItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+// 			if(cboxAtual.checked == true){
+// 				vetorMarcados.push(i);
+// 				vetorID.push(cboxAtual.value);
+// 			}
+// 		}
 
-			$("#transfereModal").modal('show');
-		}else{
-			document.getElementById('patrimonioLoteTransferir').value = "";
-			for(let i = 0; i < vetorMarcados.length; i++){
-				if(i < vetorMarcados.length - 1)
-					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
-				else
-					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
-			}
-			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
-			preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
-			$("#transfereLoteModal").modal('show');			
-		}
+// 		if(vetorMarcados.length == 0){
+// 			document.getElementById('msgErroModal').innerHTML = "Selecione ao menos um item!";
+// 			$("#erroModal").modal('show');
+// 			return;
+// 		}else if(vetorMarcados.length == 1){
+// 			document.getElementById('patrimonioItemTransferir').value = document.getElementById('patrimonioItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('localItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
+// 			preencheSetor(document.getElementById('idLocalItemDados' + vetorMarcados[0]).value, "setorItemTransferir", function(){
+// 				document.getElementById('setorItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+// 			});
+// 			document.getElementById('idItemTransferir').value = document.getElementById('cboxItemLista' + vetorMarcados[0]).value;
+// 			document.getElementById('setorAntigoItemTransferir').value = document.getElementById('setorItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('idSetorAntigoItemTransferir').value = document.getElementById('idSetorItemDados' + vetorMarcados[0]).value;
+// 			document.getElementById('localAntigoItemTransferir').value = document.getElementById('localItemDados' + vetorMarcados[0]).innerHTML;
+// 			document.getElementById('idLocalAntigoItemTransferir').value = document.getElementById('idLocalItemDados' + vetorMarcados[0]).value;
 
-	}
-}
+// 			$("#transfereModal").modal('show');
+// 		}else{
+// 			document.getElementById('patrimonioLoteTransferir').value = "";
+// 			for(let i = 0; i < vetorMarcados.length; i++){
+// 				if(i < vetorMarcados.length - 1)
+// 					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML + ", ";
+// 				else
+// 					document.getElementById('patrimonioLoteTransferir').value = document.getElementById('patrimonioLoteTransferir').value + document.getElementById('patrimonioItemDados' + vetorMarcados[i]).innerHTML;				
+// 			}
+// 			document.getElementById('idItemTransferirLote').value = JSON.stringify(vetorID);
+// 			preencheSetor(document.getElementById('localLoteTransferir').value, "setorLoteTransferir");
+// 			$("#transfereLoteModal").modal('show');			
+// 		}
 
-function buscar(){
-	var utils = require('./../../utilsCliente.js');
-	var where = "";
+// 	}
+// }
 
-	if(document.getElementById('patrimonioItemBuscar').value != ""){
-		let patrimonio = document.getElementById('patrimonioItemBuscar').value;
+// function buscar(){
+// 	var utils = require('./../../utilsCliente.js');
+// 	var where = "";
 
-		while(patrimonio.length < 6){
-			patrimonio = "0" + patrimonio;
-		}
+// 	if(document.getElementById('patrimonioItemBuscar').value != ""){
+// 		let patrimonio = document.getElementById('patrimonioItemBuscar').value;
 
-		if(where != "")
-			where += " AND ";
+// 		while(patrimonio.length < 6){
+// 			patrimonio = "0" + patrimonio;
+// 		}
 
-		where += "patrimonio = '" + patrimonio + "'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('marcaItemBuscar').value != ""){
-		let marca = document.getElementById('marcaItemBuscar').value;
+// 		where += "patrimonio = '" + patrimonio + "'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('marcaItemBuscar').value != ""){
+// 		let marca = document.getElementById('marcaItemBuscar').value;
 
-		where += "marca LIKE '%" + marca + "%'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('modeloItemBuscar').value != ""){
-		let modelo = document.getElementById('modeloItemBuscar').value;
+// 		where += "marca LIKE '%" + marca + "%'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('modeloItemBuscar').value != ""){
+// 		let modelo = document.getElementById('modeloItemBuscar').value;
 
-		where += "modelo LIKE '%" + modelo + "%'";
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('localItemBuscar').value != '0'){
-		let local = document.getElementById('localItemBuscar').value;
+// 		where += "modelo LIKE '%" + modelo + "%'";
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('localItemBuscar').value != '0'){
+// 		let local = document.getElementById('localItemBuscar').value;
 
-		where += "lt.codLocal = " + local;
-	}	
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('setorItemBuscar').value != '0'){
-		let setor = document.getElementById('setorItemBuscar').value;
+// 		where += "lt.codLocal = " + local;
+// 	}	
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('setorItemBuscar').value != '0'){
+// 		let setor = document.getElementById('setorItemBuscar').value;
 
-		where += "codSetor = " + setor;
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('tipoItemBuscar').value != '0'){
-		let tipo = document.getElementById('tipoItemBuscar').value;
+// 		where += "codSetor = " + setor;
+// 	}
 
-		if(where != "")
-			where += " AND ";
+// 	if(document.getElementById('tipoItemBuscar').value != '0'){
+// 		let tipo = document.getElementById('tipoItemBuscar').value;
 
-		where += "codTipoItem = " + tipo;
-	}
+// 		if(where != "")
+// 			where += " AND ";
 
-	if(document.getElementById('ativoItemBuscar').checked == true){
-		if(where != ""){
-			where += " AND ";
-		}
+// 		where += "codTipoItem = " + tipo;
+// 	}
 
-		where += "(ativo = 1 or ativo = 0)";
-	}else{
-		if(where != ""){
-			where += " AND ";
-		}
+// 	if(document.getElementById('ativoItemBuscar').checked == true){
+// 		if(where != ""){
+// 			where += " AND ";
+// 		}
 
-		where += "ativo = 1";
-	}
+// 		where += "(ativo = 1 or ativo = 0)";
+// 	}else{
+// 		if(where != ""){
+// 			where += " AND ";
+// 		}
 
-	if(where == ""){
-		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaItem);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaItem").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}else{
-		//console.log("O where da busca é: " + where);
-		var argumentos = {
-			selectCampos: ["TBItem.*", "ti.nome tipoNome", "l.nome localNome", "s.nome setorNome", "s.id setorId"], 
-			joins: [
-				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
-				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
-				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
-				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
-			], 
-			where: "lt.atual = 1 AND " + where, 
-			orderBy: [{campo: "patrimonio", sentido: "asc"}]
-		};
+// 		where += "ativo = 1";
+// 	}
+
+// 	if(where == ""){
+// 		utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(res){
+// 			if(res.statusCode == 200){
+// 				var msg = "";
+// 				res.on('data', function(chunk){
+// 					msg += chunk;
+// 				});
+// 				res.on('end', function(){
+// 					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+// 					preencheTabela(listaItem);
+// 				});
+// 			}else if(res.statusCode == 747){
+// 				$("#tabelaItem").empty();
+// 			}else{
+// 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+// 				$("#erroModal").modal('show');
+// 				return;
+// 			}
+// 			$("#buscaModal").modal('toggle');
+// 		});
+// 	}else{
+// 		//console.log("O where da busca é: " + where);
+// 		var argumentos = {
+// 			selectCampos: ["TBItem.*", "ti.nome tipoNome", "l.nome localNome", "s.nome setorNome", "s.id setorId"], 
+// 			joins: [
+// 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
+// 				{tabela: "TBLogTransferencia lt", on: "lt.codItem = TBItem.id"}, 
+// 				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+// 				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
+// 			], 
+// 			where: "lt.atual = 1 AND " + where, 
+// 			orderBy: [{campo: "patrimonio", sentido: "asc"}]
+// 		};
 		
-		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaItem);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaItem").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}
-}
+// 		utils.enviaRequisicao("Item", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
+// 			if(res.statusCode == 200){
+// 				var msg = "";
+// 				res.on('data', function(chunk){
+// 					msg += chunk;
+// 				});
+// 				res.on('end', function(){
+// 					let listaItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+// 					preencheTabela(listaItem);
+// 				});
+// 			}else if(res.statusCode == 747){
+// 				$("#tabelaItem").empty();
+// 			}else{
+// 				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar itens";
+// 				$("#erroModal").modal('show');
+// 				return;
+// 			}
+// 			$("#buscaModal").modal('toggle');
+// 		});
+// 	}
+// }
 
 function preencheCopiarItem(listaItem){
 	$("#copiarItemCadastrar > option").remove();
@@ -230,84 +233,97 @@ function preencheTabela(listaItem){
 	if(!listaItem){
 		return;
 	}
-	$("#tabelaItem").empty();
-	for(let i = 0; i < listaItem.length; i++){
-		$("#tabelaItem").append("\
-		<tr>\
-			<td><input id='cboxItemLista" + i + "' type='checkbox'></td>\
-		    <th id='patrimonioItemLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarItemLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
-				<button id='excluirItemLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
-				<button id='transferirItemLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
-				<div id='collapseItemLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Patrimônio: </strong><span id='patrimonioItemDados"+i+"'></span></p>\
-				    <p><strong>Marca: </strong> <span id='marcaItemDados"+i+"'></span></p>\
-				    <p><strong>Modelo: </strong> <span id='modeloItemDados"+i+"'></span></p>\
-				    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
-				    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
-				    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
-				    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
-				    <div style='display: none;' id='idLocalItemDados"+i+"'></div>\
-				    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
-				    <br>\
-				    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
-
-		if(listaItem[i].patrimonio == '000000'){
-			listaItem[i].patrimonio = "S/P";
+	listaItem.forEach(function(obj){
+		if(obj['patrimonio'] == numSP){
+			obj['patrimonio'] = strSP
 		}
+	});
+	$("#tabelaItem").empty();
+	// for(let i = 0; i < listaItem.length; i++){
+	// 	$("#tabelaItem").append("\
+	// 	<tr>\
+	// 		<td><input id='cboxItemLista" + i + "' type='checkbox'></td>\
+	// 	    <th id='patrimonioItemLista"+ i +"'></th>\
+	// 	    <td>\
+	// 			<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseItemLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
+	// 			<button id='alterarItemLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Item</button>\
+	// 			<button id='excluirItemLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Item</button>\
+	// 			<button id='transferirItemLista"+ i +"' class='btn btn-success mb-1' data-toggle='modal' data-target='#transfereModal'>Transferir Item</button>\
+	// 			<div id='collapseItemLista"+ i +"' class='collapse mostraLista' >\
+	// 			  <div class='card card-body'>\
+	// 			    <p><strong>Patrimônio: </strong><span id='patrimonioItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Marca: </strong> <span id='marcaItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Modelo: </strong> <span id='modeloItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Descrição: </strong> <span id='descricaoItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Tipo: </strong> <span id='tipoItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Local: </strong> <span id='localItemDados"+i+"'></span></p>\
+	// 			    <p><strong>Setor: </strong> <span id='setorItemDados"+i+"'></span></p>\
+	// 			    <div style='display: none;' id='idLocalItemDados"+i+"'></div>\
+	// 			    <div style='display: none;' id='idSetorItemDados"+i+"'></div>\
+	// 			    <br>\
+	// 			    <button class='btn btn-info mb-1' id='historicoItemDados"+i+"'>Ver Histórico de Movimentações</button>\
+	// 			  </div>\
+	// 			</div>\
+	// 	    </td>\
+	// 	  </tr>\
+	// 	");
 
-		document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
-		document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;
-		document.getElementById('patrimonioItemDados' + i).innerHTML = listaItem[i].patrimonio;
-		if(listaItem[i].marca)
-			document.getElementById('marcaItemDados' + i).innerHTML = listaItem[i].marca;
-		else
-			document.getElementById('marcaItemDados' + i).innerHTML = "-";
-		if(listaItem[i].modelo)
-			document.getElementById('modeloItemDados' + i).innerHTML = listaItem[i].modelo;
-		else
-			document.getElementById('modeloItemDados' + i).innerHTML = "-";
-		if(listaItem[i].descricao != " " && listaItem[i].descricao != "")
-			document.getElementById('descricaoItemDados' + i).innerHTML = listaItem[i].descricao;
-		else
-			document.getElementById('descricaoItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].patrimonio == '000000'){
+	// 		listaItem[i].patrimonio = "S/P";
+	// 	}
 
-		document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
+	// 	document.getElementById('cboxItemLista' + i).value = listaItem[i].id;
+	// 	document.getElementById('patrimonioItemLista' + i).innerHTML = listaItem[i].tipoNome + " - " + listaItem[i].patrimonio;
+	// 	document.getElementById('patrimonioItemDados' + i).innerHTML = listaItem[i].patrimonio;
+	// 	if(listaItem[i].marca)
+	// 		document.getElementById('marcaItemDados' + i).innerHTML = listaItem[i].marca;
+	// 	else
+	// 		document.getElementById('marcaItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].modelo)
+	// 		document.getElementById('modeloItemDados' + i).innerHTML = listaItem[i].modelo;
+	// 	else
+	// 		document.getElementById('modeloItemDados' + i).innerHTML = "-";
+	// 	if(listaItem[i].descricao != " " && listaItem[i].descricao != "")
+	// 		document.getElementById('descricaoItemDados' + i).innerHTML = listaItem[i].descricao;
+	// 	else
+	// 		document.getElementById('descricaoItemDados' + i).innerHTML = "-";
 
-		document.getElementById('localItemDados' + i).innerHTML = listaItem[i].localNome;		
+	// 	document.getElementById('tipoItemDados' + i).innerHTML = listaItem[i].tipoNome;
 
-		if(listaItem[i].setorNome)
-			document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorNome;
-		else
-			document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
+	// 	document.getElementById('localItemDados' + i).innerHTML = listaItem[i].localNome;		
 
-		document.getElementById('idLocalItemDados' + i).value = listaItem[i].localId;
-		document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
+	// 	if(listaItem[i].setorNome)
+	// 		document.getElementById('setorItemDados' + i).innerHTML = listaItem[i].setorNome;
+	// 	else
+	// 		document.getElementById('setorItemDados' + i).innerHTML = "Não definido";			
 
-		(function(){
-			var item = listaItem[i];		
-			document.getElementById("alterarItemLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(item);
-			}, false);
-			document.getElementById("excluirItemLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(item);
-			}, false);
-			document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
-				preencheModalTransferencia(item);
-			}, false);
-			document.getElementById("historicoItemDados" + i).addEventListener("click", function(){
-				preencheModalHistorico(item);
-			}, false);
-		}());
-	}	
+	// 	document.getElementById('idLocalItemDados' + i).value = listaItem[i].localId;
+	// 	document.getElementById('idSetorItemDados' + i).value = listaItem[i].setorId;
+
+	// 	(function(){
+	// 		var item = listaItem[i];		
+	// 		document.getElementById("alterarItemLista"+ i).addEventListener("click", function(){
+	// 			preencheModalAlterar(item);
+	// 		}, false);
+	// 		document.getElementById("excluirItemLista"+ i).addEventListener("click", function(){
+	// 			preencheModalExcluir(item);
+	// 		}, false);
+	// 		document.getElementById("transferirItemLista" + i).addEventListener("click", function(){
+	// 			preencheModalTransferencia(item);
+	// 		}, false);
+	// 		document.getElementById("historicoItemDados" + i).addEventListener("click", function(){
+	// 			preencheModalHistorico(item);
+	// 		}, false);
+	// 	}());
+	// }
+	model = require('./../../model/mItem')
+	var table = $("#tabelaItem").DataTable({
+		language: utils.linguagemTabela, 
+		data: listaItem,
+		columns: model.colunas,
+		scrollX: true,
+		columnDefs: model.defColunas()
+	});
 }
 
 function preencheModalAlterar(item){
@@ -580,9 +596,9 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 		});
 		res.on('end', function(){
 			var vetorItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-			(function(){
-				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
-			}());
+			// (function(){
+			// 	document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorItem)}, false);
+			// }());
 			preencheTabela(vetorItem);
 			preencheCopiarItem(vetorItem);
 		});

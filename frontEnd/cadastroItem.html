@@ -24,6 +24,9 @@
     <link href="/css/sb-admin.css" rel="stylesheet">
     <script type="text/javascript" src="/js/verificaLoginFront.js"></script>
 
+    <!-- DataTables -->
+    <link href="/vendor/datatables2/datatables.css" rel="stylesheet">
+
   </head>
 
   <body id="page-top">
@@ -60,9 +63,7 @@
       </ul>
 
       <div id="content-wrapper">
-
         <div class="container-fluid">
-
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">Gerenciamento de Item
@@ -71,30 +72,15 @@
                   <option value="excluir">Excluir</option>
                 </select>
                 <button class="btn btn-warning ml-1" id="btnAcaoItem">Ir</button>
-                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
-                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
-              </div>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><b>Cadastrar</b> <i class="fas fa-plus"></i></button>
+              </div>  
               <div class="card-body">
-                <p>
-
-                </p>
-
-                <table class="table table-bordered table-dark text-center">
-
-
-                  <tbody id="tabelaItem">
-
-
-
-
-                  </tbody>
+                <p></p>
+                <table id="tabelaItem" class="display nowrap" style="width:100%; text-align: center;">
                 </table>
-
               </div>
             </div>
           </div>
-
         </div>
 
         <!-- Sticky Footer -->
@@ -105,7 +91,6 @@
             </div>
           </div>
         </footer>
-
       </div>
       <!-- /.content-wrapper -->
 

@@ -6,29 +6,26 @@ function preencheTabela(listaUsuario){
 	}
 	$("#tabelaUsuario").empty();
 	model = require('./../../model/mUsuario')
-	var table = $("#tabelaUsuarioMaster").DataTable({
+	var table = $("#tabelaUsuario").DataTable({
 		language: utils.linguagemTabela, 
 		data: listaUsuario,
 		columns: model.colunas,
 		scrollX: true,
-		columnDefs: model.defColunas
+		columnDefs: model.defColunas()
 	});
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
-		let usuario = model.tableDataToObj(data)
-		preencheModalAlterar(usuario)        
+		preencheModalAlterar(data)        
     } );
 	
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnExcluir', function () {
         let data = table.row( $(this).parents('tr') ).data();
-        let usuario = model.tableDataToObj(data)
-		preencheModalExcluir(usuario)
+		preencheModalExcluir(data)
     } );
 
 	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnInfo', function () {
 		let data = table.row( $(this).parents('tr') ).data();
-		let usuario = model.tableDataToObj(data)
-		preencheModalInfo(usuario)
+		preencheModalInfo(data)
 	} );
 }
 
@@ -51,9 +48,6 @@ function preencheModalInfo(usuario){
 	if(usuario.senhaExpirada == 1){		
 		document.getElementById('senhaExpiradaUsuarioInfo').checked = true;
 	}
-
-	document.getElementById('idUsuarioInfo').value = usuario.id;
-	document.getElementById('senhaAntigaUsuarioInfo').value = usuario.senha;
 }
 
 function preencheModalExcluir(usuario){
