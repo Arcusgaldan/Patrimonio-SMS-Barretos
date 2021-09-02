@@ -406,85 +406,100 @@
       </div> 
       <!-- /EXCLUI tipo modal -->
 
-      <!-- BUSCA MODAL -->
-      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="tituloModalBuscar">Buscar Itens</h5>
-              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <p>
-                Insira os dados para buscar itens
-              </p>
-
-              <form id="formBuscarItem">
-                <div class="form-group">
+      <!-- INFO MODAL -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Informações do Item</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <p>
+              Neste modal são exibidas as informações do item
+            </p>
+            <form id="formInfoItem">
+              <div class="form-row">
+                <div class="form-group col-md-8">
                   <div class="form-label-group">
-                    <input type="text" id="patrimonioItemBuscar" class="form-control" name="patrimonioBuscar" placeholder="Patrimonio" maxlength='6'>
-                    <label for="patrimonioItemBuscar">Patrimônio</label>
+                    <input type="text" id="patrimonioItemInfo" class="form-control border-dark" disabled>
+                    <label for="patrimonioItemInfo">Patrimônio</label>
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <input type="text" id="marcaItemBuscar" class="form-control" name="marcaBuscar" placeholder="Marca">
-                    <label for="marcaItemBuscar">Marca</label>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <input type="text" id="modeloItemBuscar" class="form-control" name="modeloBuscar" placeholder="Modelo">
-                    <label for="modeloItemBuscar">Modelo</label>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <select id="localItemBuscar" class="form-control" name="localItemBuscar" placeholder="Local">
-                      <option value="0">Local</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <select id="setorItemBuscar" class="form-control" name="setorItemBuscar" placeholder="Setor" disabled>
-                      <option value="0">Setor</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="form-label-group">
-                  <select id="tipoItemBuscar" class="form-control" name="tipoItemBuscar" placeholder="Tipo">
-                    <option value="0">Tipo</option>
-                  </select>
-                </div>
-
-                 <div class="form-group col-md-6 mt-1">
+                <div class="form-group col-md-4 mt-3 text-right">
                   <div class="checkbox">
-                    <label>
-                      <input type="checkbox" id="ativoItemBuscar">
-                      Incluir itens descartados
+                    <label>                      
+                      <input type="checkbox" id="semPatrimonioItemInfo" disabled>
+                      Sem Patrimônio
                     </label>
                   </div>
                 </div>
-
-              </form>
-              <div class="modal-footer">
-                <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
-                <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
               </div>
-            </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="marcaItemInfo" class="form-control" disabled>
+                  <label for="marcaItemInfo">Marca</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="modeloItemInfo" class="form-control" disabled>
+                  <label for="modeloItemInfo">Modelo</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="descricaoItemInfo">Descrição</label>
+                <textarea id="descricaoItemInfo" rows="4" class="form-control" name="descricaoItemInfo" disabled></textarea>
+              </div>
+
+              
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="tipoItemInfo" class="form-control border-dark" name="tipoItemInfo" disabled>
+                    <option value="0">Tipo</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="localItemInfo" class="form-control border-dark" name="localItemInfo" disabled>
+                    <option value="0">Local</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="setorItemInfo" class="form-control border-dark" name="setorItemInfo" disabled>
+                    <option value="0">Setor</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <button class="btn btn-info w-100" type="button" data-toggle="modal" data-target="#historicoModal" id="btnHistorico"><b>Visualizar Histórico de Transferências</b></button>
+                </div>
+              </div>
+
+              <div style="display: none;" id="idItemInfo"></div>
+            </form>                   
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button " data-dismiss="modal" aria-label="Close">Fechar</button>            
           </div>
         </div>
       </div>
-      <!-- /BUSCA MODAL -->
+    </div>    
+    <!-- /INFO MODAL -->
 
       <!-- TRANSFERE MODAL -->
       <div class="modal fade" id="transfereModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

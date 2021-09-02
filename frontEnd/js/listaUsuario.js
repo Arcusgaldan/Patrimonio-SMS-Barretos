@@ -13,17 +13,17 @@ function preencheTabela(listaUsuario){
 		scrollX: true,
 		columnDefs: model.defColunas()
 	});
-	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnEditar', function () {
+	$('#tabelaUsuario tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
 		preencheModalAlterar(data)        
     } );
 	
-	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnExcluir', function () {
+	$('#tabelaUsuario tbody').on( 'click', '.btnExcluir', function () {
         let data = table.row( $(this).parents('tr') ).data();
 		preencheModalExcluir(data)
     } );
 
-	$('#tabelaUsuarioMaster tbody').on( 'click', '.btnInfo', function () {
+	$('#tabelaUsuario tbody').on( 'click', '.btnInfo', function () {
 		let data = table.row( $(this).parents('tr') ).data();
 		preencheModalInfo(data)
 	} );

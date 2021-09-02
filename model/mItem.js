@@ -35,7 +35,8 @@ module.exports = {
 
 	defColunas: function(){
 		let colunasBotoes = require('./model.js').colunasBotoes
-		colunasBotoes[0]["defaultContent"] += "<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transferirModal'><i class='fa fa-exchange' aria-hidden='true'></i></button>" 
+		colunasBotoes[0]["defaultContent"] += "\
+		<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transfereModal'><i class='fas fa-exchange-alt'></i></button>" 
 		return colunasBotoes.concat([
 		{
 			"targets": [0, 1, 2, 3, 4, 5],
