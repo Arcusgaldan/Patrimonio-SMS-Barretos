@@ -24,6 +24,9 @@
     <link href="/css/sb-admin.css" rel="stylesheet">
     <script type="text/javascript" src="/js/verificaLoginFront.js"></script>
 
+    <!-- DataTables -->
+    <link href="/vendor/datatables2/datatables.css" rel="stylesheet">
+
   </head>
 
   <body id="page-top">
@@ -66,26 +69,12 @@
           <div class="container">
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">Gerenciamento de Setor 
-                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
-                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><b>Cadastrar</b> <i class="fas fa-plus"></i></button>
               </div>
               <div class="card-body">
-                <p>
-
-                </p>
-
-                <table class="table table-bordered table-dark text-center">
-
-
-                  <tbody id="tabelaSetor">
-
-
-
-
-                  </tbody>
+                <p></p>
+                <table class="display nowrap" style="width:100%; text-align: center;" id="tabelaSetor">
                 </table>
-
               </div>
             </div>
           </div>
@@ -149,14 +138,7 @@
                   <button class="btn btn-success" type="button" data-toggle="modal" data-target="#cadastraLocalModal"><i class="fas fa-plus"></i></button>
                   <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraLocalModal"><i class="fas fa-edit"></i></button>
                 </div>
-              </div>
-
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="text" id="siglaSetorCadastrar" class="form-control" name="siglaCadastrar" placeholder="Sigla">
-                  <label for="siglaSetorCadastrar">Sigla</label>
-                </div>
-              </div>              
+              </div>             
             </form>
             <div class="modal-footer">
               <button class="btn btn-success" type="button" id="btnCadastrar">Cadastrar</button>
@@ -203,13 +185,6 @@
                   <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#alteraLocalModal"><i class="fas fa-edit"></i></button>
                 </div>
               </div>
-
-              <div class="form-group">
-                <div class="form-label-group">
-                  <input type="text" id="siglaSetorAlterar" class="form-control" name="siglaAlterar" placeholder="Sigla">
-                  <label for="siglaSetorAlterar">Sigla</label>
-                </div>
-              </div>
               <div style="display: none;" id="idSetorAlterar"></div>
             </form>                   
 
@@ -222,6 +197,46 @@
       </div>
     </div>    
     <!-- /ALTERA MODAL -->
+
+    <!-- INFO MODAL -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Informações do Setor</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <p>
+              Neste modal são exibidas as informações do Setor
+            </p>
+            <form id="formAlteraSetor">
+              <div class="form-group">
+                <div class="form-label-group">
+                  <input type="text" id="nomeSetorInfo" class="form-control border-dark" name="nomeInfo" disabled>
+                  <label for="nomeSetorInfo">Nome</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-label-group">
+                  <select id="localSetorInfo" class="form-control border-dark" name="local" disabled>
+                    <option value="0">Local</option>
+                  </select>
+                </div>
+              </div>
+            </form>                   
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>    
+    <!-- /INFO MODAL -->
 
     <!-- EXCLUIR MODAL-->
       <div class="modal fade" id="excluirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -242,56 +257,7 @@
           </div>
         </div>
       </div>   
-      <!-- /EXCLUIR MODAL  -->
-
-      <!-- BUSCA MODAL -->
-      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="tituloModalCadastrar">Buscar Setores</h5>
-              <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <p>
-                Insira os dados para buscar setores
-              </p>
-
-              <form id="formBuscarSetor">
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <input type="text" id="nomeSetorBuscar" class="form-control" name="nomeBuscar" placeholder="Nome">
-                    <label for="nomeSetorBuscar">Nome</label>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <select id="localSetorBuscar" class="form-control">
-                      <option value="0">Local</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <input type="text" id="siglaSetorBuscar" class="form-control" name="siglaBuscar" placeholder="Sigla">
-                    <label for="siglaSetorBuscar">Sigla</label>
-                  </div>
-                </div>              
-              </form>
-              <div class="modal-footer">
-                <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
-                <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /BUSCA MODAL -->
+      <!-- /EXCLUIR MODAL  -->     
 
       <!-- CADASTRA LOCAL MODAL -->
       <div class="modal fade" id="cadastraLocalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

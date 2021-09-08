@@ -30401,100 +30401,7 @@ module.exports = {
     ip: "172.17.16.2"
 }
 },{}],221:[function(require,module,exports){
-document.getElementById('btnBuscar').addEventListener('click', buscar, false);
-document.getElementById('btnLimparBusca').addEventListener('click', function(){
-	document.getElementById('formBuscarProcedimento').reset();
-}, false);
-
-function buscar(){
-	var utils = require('./../../utilsCliente.js');
-	var where = "";
-
-	if(document.getElementById('dataProcedimentoBuscar').value != ""){
-		let data = document.getElementById('dataProcedimentoBuscar').value;
-		let operador = utils.enumOperador(document.getElementById('argumentoDataProcedimentoBuscar').value);
-
-		if(where != "")
-			where += " AND ";
-
-		where += "data " + operador + " '" + data + "'";
-	}
-
-	if(document.getElementById('pecaProcedimentoBuscar').value != "0"){
-		let peca = document.getElementById('pecaProcedimentoBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "peca = '" + peca + "'";
-	}	
-
-	if(where == ""){
-		buscaComputador(function(idComputador){
-			if(!idComputador){
-				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
-				$("#erroModal").modal('show');
-				return;
-			}
-			utils.enviaRequisicao("Procedimento", "LISTARCOMPUTADOR", {token: localStorage.token, msg: {idComputador: idComputador}}, function(res){
-				if(res.statusCode == 200){
-					var msg = "";
-					res.on('data', function(chunk){
-						msg += chunk;
-					});
-					res.on('end', function(){
-						let listaProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-						preencheTabela(listaProcedimento);
-					});
-				}else if(res.statusCode == 747){
-					$("#tabelaProcedimento").empty();
-				}else{
-					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar procedimentos";
-					$("#erroModal").modal('show');
-					return;
-				}
-				$("#buscaModal").modal('toggle');
-			});
-		});
-	}else{
-		buscaComputador(function(idComputador){
-			if(!idComputador){
-				document.getElementById('msgErroModal').innerHTML = "Não foi possível buscar computador";
-				$("#erroModal").modal('show');
-				return;
-			}
-			var argumentos = {};
-			argumentos.where = "codComputador = " + idComputador + " AND " + where;
-			argumentos.orderBy = [{campo: "p.data", sentido: "DESC"}, {campo: "p.peca", sentido: "ASC"}];
-			argumentos.aliasTabela = "p";
-			argumentos.selectCampos = ["p.*", "i.patrimonio patrimonioComputador"];
-			argumentos.joins = [
-				{tabela: "TBComputador c", on: "c.id = p.codComputador"},
-				{tabela: "TBItem i", on: "i.id = c.codItem"}
-			];
-			
-			utils.enviaRequisicao("Procedimento", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-				if(res.statusCode == 200){
-					var msg = "";
-					res.on('data', function(chunk){
-						msg += chunk;
-					});
-					res.on('end', function(){
-						let listaProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-						preencheTabela(listaProcedimento);
-					});
-				}else if(res.statusCode == 747){
-					$("#tabelaBackup").empty();
-				}else{
-					document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar procedimentos";
-					$("#erroModal").modal('show');
-					return;
-				}
-				$("#buscaModal").modal('toggle');
-			});
-		});
-	}
-}
+var utils = require('./../../utilsCliente.js');
 
 function buscaComputador(cb){
 	var patrimonio = window.location.pathname.split("/")[2];
@@ -30529,47 +30436,34 @@ function preencheTabela(listaProcedimento){
 	if(!listaProcedimento){
 		return;
 	}
-	
-	var utils = require('./../../utilsCliente.js');
-
+	listaProcedimento.forEach(function(obj){
+		if(obj['data']){
+			obj['data'] = utils.formataData(obj['data'])
+		}
+	});
 	$("#tabelaProcedimento").empty();
-	for(let i = 0; i < listaProcedimento.length; i++){
-		$("#tabelaProcedimento").append("\
-		<tr>\
-		    <th id='identidadeProcedimentoLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info mb-1' scope='row' data-toggle='collapse' href='#collapseProcedimentoLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarProcedimentoLista"+ i +"' class='btn btn-warning mb-1' data-toggle='modal' data-target='#alteraModal' >Alterar Procedimento</button>\
-				<button id='excluirProcedimentoLista"+ i +"' class='btn btn-danger mb-1' data-toggle='modal' data-target='#excluirModal'>Excluir Procedimento</button>\
-				<div id='collapseProcedimentoLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Peça: </strong> <span id='pecaProcedimentoDados"+i+"'></span></p>\
-				    <p><strong>Descrição: </strong> <span id='descricaoProcedimentoDados"+i+"'></span></p>\
-				    <p><strong>Data: </strong><span id='dataProcedimentoDados"+i+"'></span></p>\
-				    <p><strong>Computador: </strong> <span id='computadorProcedimentoDados"+i+"'></span></p>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
+	model = require('./../../model/mProcedimento')
+	var table = $("#tabelaProcedimento").DataTable({
+		language: utils.linguagemTabela, 
+		data: listaProcedimento,
+		columns: model.colunas,
+		scrollX: true,
+		columnDefs: model.defColunas()
+	});
+	$('#tabelaProcedimento tbody').on( 'click', '.btnEditar', function () {
+        let data = table.row( $(this).parents('tr') ).data();
+		preencheModalAlterar(data)        
+    } );
+	
+	$('#tabelaProcedimento tbody').on( 'click', '.btnExcluir', function () {
+        let data = table.row( $(this).parents('tr') ).data();
+		preencheModalExcluir(data)
+    } );
 
-		document.getElementById('identidadeProcedimentoLista' + i).innerHTML = listaProcedimento[i].peca + " - " + utils.formataData(listaProcedimento[i].data);
-		document.getElementById('dataProcedimentoDados' + i).innerHTML = utils.formataData(listaProcedimento[i].data);
-
-		document.getElementById('pecaProcedimentoDados' + i).innerHTML = listaProcedimento[i].peca;
-		document.getElementById('descricaoProcedimentoDados' + i).innerHTML = listaProcedimento[i].descricao;
-		document.getElementById('computadorProcedimentoDados' + i).innerHTML = listaProcedimento[i].patrimonioComputador;
-
-		(function(){
-			var procedimento = listaProcedimento[i];		
-			document.getElementById("alterarProcedimentoLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(procedimento);
-			}, false);
-			document.getElementById("excluirProcedimentoLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(procedimento);
-			}, false);
-		}());
-	}	
+	$('#tabelaProcedimento tbody').on( 'click', '.btnInfo', function () {
+		let data = table.row( $(this).parents('tr') ).data();
+		preencheModalInfo(data)
+	} );
 }
 
 function preencheModalAlterar(procedimento){
@@ -30577,7 +30471,15 @@ function preencheModalAlterar(procedimento){
 	document.getElementById('computadorProcedimentoAlterar').value = procedimento.codComputador;
 	document.getElementById('pecaProcedimentoAlterar').value = procedimento.peca;
 	document.getElementById('descricaoProcedimentoAlterar').value = procedimento.descricao;
-	document.getElementById('dataProcedimentoAlterar').value = procedimento.data.substring(0, 10);
+	document.getElementById('dataProcedimentoAlterar').value = utils.formataDataSimplesDataISO(procedimento.data);
+}
+
+function preencheModalInfo(procedimento){
+	//document.getElementById('idProcedimentoInfo').value = procedimento.id;
+	//document.getElementById('computadorProcedimentoInfo').value = procedimento.codComputador;
+	document.getElementById('pecaProcedimentoInfo').value = procedimento.peca;
+	document.getElementById('descricaoProcedimentoInfo').value = procedimento.descricao;
+	document.getElementById('dataProcedimentoInfo').value = utils.formataDataSimplesDataISO(procedimento.data);
 }
 
 function preencheModalExcluir(procedimento){
@@ -30600,9 +30502,6 @@ buscaComputador(function(idComputador){
 			});
 			res.on('end', function(){
 				var vetorProcedimento = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-				(function(){
-					document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorProcedimento)}, false);
-				}());
 				preencheTabela(vetorProcedimento);
 			});
 		}else if(res.statusCode != 747){
@@ -30612,7 +30511,60 @@ buscaComputador(function(idComputador){
 		}
 	});
 });
-},{"./../../utilsCliente.js":246}],222:[function(require,module,exports){
+},{"./../../model/mProcedimento":222,"./../../utilsCliente.js":248}],222:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.peca = '';
+		final.descricao = '';
+		final.data = '';
+		final.codComputador = 0;
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['peca', 'descricao', 'data'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Id Computador", "data": "codComputador"},
+		{"title": "Descrição", "data": "descricao"},
+		{"title": "Peça", "data": "peca"},
+		{"title": "Data", "data": "data"},
+		{"title": "Ações", "data": null}
+	],
+
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
+		{
+			"targets": [0, 1, 2],
+			"visible": false,
+			"searchable": false
+		}
+		])
+	}
+}
+},{"./model.js":223}],223:[function(require,module,exports){
+module.exports = {
+    colunasBotoes:[
+        {
+            "targets": -1,
+            "data": null,
+            "defaultContent": "<button class='btn btnExcluir btn-danger' data-toggle='modal' data-target='#excluirModal'><i class='fas fa-times'></i></button>\
+            <button class='btn btnEditar btn-warning' data-toggle='modal' data-target='#alteraModal'><i class='fas fa-edit'></i></button>\
+            <button class='btn btnInfo btn-info' data-toggle='modal' data-target='#infoModal'><i class='fas fa-info'></i></button>"
+        }
+    ]
+
+}
+},{}],224:[function(require,module,exports){
 /*! MIT License. Copyright 2015-2018 Richard Moore <me@ricmoo.com>. See LICENSE.txt. */
 (function(root) {
     "use strict";
@@ -31417,7 +31369,7 @@ buscaComputador(function(idComputador){
 
 })(this);
 
-},{}],223:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -31432,7 +31384,7 @@ module.exports = {
 
 };
 
-},{}],224:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var errors = require('./errors');
@@ -31461,7 +31413,7 @@ for (var e in errors) {
     module.exports[e] = errors[e];
 }
 
-},{"./errors":223,"./reader":225,"./types":226,"./writer":227}],225:[function(require,module,exports){
+},{"./errors":225,"./reader":227,"./types":228,"./writer":229}],227:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -31725,7 +31677,7 @@ Reader.prototype._readTag = function (tag) {
 
 module.exports = Reader;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],226:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],228:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -31763,7 +31715,7 @@ module.exports = {
   Context: 128
 };
 
-},{}],227:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -32082,7 +32034,7 @@ Writer.prototype._ensure = function (len) {
 
 module.exports = Writer;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],228:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],230:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 // If you have no idea what ASN.1 or BER is, see this:
@@ -32104,7 +32056,7 @@ module.exports = {
 
 };
 
-},{"./ber/index":224}],229:[function(require,module,exports){
+},{"./ber/index":226}],231:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * RSA library for Node.js
@@ -32506,7 +32458,7 @@ module.exports = (function () {
 })();
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./formats/formats.js":235,"./libs/rsa.js":239,"./schemes/schemes.js":243,"./utils":244,"asn1":228,"buffer":67,"constants":70,"crypto":77}],230:[function(require,module,exports){
+},{"./formats/formats.js":237,"./libs/rsa.js":241,"./schemes/schemes.js":245,"./utils":246,"asn1":230,"buffer":67,"constants":70,"crypto":77}],232:[function(require,module,exports){
 var crypt = require('crypto');
 
 module.exports = {
@@ -32524,7 +32476,7 @@ module.exports = {
         return engine(keyPair, options);
     }
 };
-},{"./io.js":231,"./js.js":232,"./node12.js":233,"crypto":77}],231:[function(require,module,exports){
+},{"./io.js":233,"./js.js":234,"./node12.js":235,"crypto":77}],233:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -32597,7 +32549,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"constants":70,"crypto":77}],232:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"constants":70,"crypto":77}],234:[function(require,module,exports){
 var BigInteger = require('../libs/jsbn.js');
 var schemes = require('../schemes/schemes.js');
 
@@ -32632,7 +32584,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../libs/jsbn.js":238,"../schemes/schemes.js":243}],233:[function(require,module,exports){
+},{"../libs/jsbn.js":240,"../schemes/schemes.js":245}],235:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -32689,7 +32641,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"./js.js":232,"constants":70,"crypto":77}],234:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"./js.js":234,"constants":70,"crypto":77}],236:[function(require,module,exports){
 var _ = require('../utils')._;
 var utils = require('../utils');
 
@@ -32762,7 +32714,7 @@ module.exports = {
     }
 };
 
-},{"../utils":244}],235:[function(require,module,exports){
+},{"../utils":246}],237:[function(require,module,exports){
 var _ = require('../utils')._;
 
 function formatParse(format) {
@@ -32859,7 +32811,7 @@ module.exports = {
         }
     }
 };
-},{"../utils":244,"./components":234,"./pkcs1":236,"./pkcs8":237}],236:[function(require,module,exports){
+},{"../utils":246,"./components":236,"./pkcs1":238,"./pkcs8":239}],238:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -33010,7 +32962,7 @@ module.exports = {
     }
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],237:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],239:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -33201,7 +33153,7 @@ module.exports = {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],238:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],240:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * Basic JavaScript BN library - subset useful for RSA encryption.
@@ -34744,7 +34696,7 @@ BigInteger.prototype.square = bnSquare;
 
 module.exports = BigInteger;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"buffer":67,"crypto":77}],239:[function(require,module,exports){
+},{"../utils":246,"buffer":67,"crypto":77}],241:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * RSA Encryption / Decryption with PKCS1 v2 Padding.
@@ -35064,7 +35016,7 @@ module.exports.Key = (function () {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../encryptEngines/encryptEngines.js":230,"../schemes/schemes.js":243,"../utils":244,"../utils.js":244,"./jsbn.js":238,"buffer":67,"crypto":77}],240:[function(require,module,exports){
+},{"../encryptEngines/encryptEngines.js":232,"../schemes/schemes.js":245,"../utils":246,"../utils.js":246,"./jsbn.js":240,"buffer":67,"crypto":77}],242:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS_OAEP signature scheme
@@ -35247,7 +35199,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"crypto":77}],241:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"crypto":77}],243:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS1 padding and signature scheme
@@ -35489,7 +35441,7 @@ module.exports.makeScheme = function (key, options) {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"constants":70,"crypto":77}],242:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"constants":70,"crypto":77}],244:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PSS signature scheme
@@ -35676,7 +35628,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"./schemes":243,"buffer":67,"crypto":77}],243:[function(require,module,exports){
+},{"../libs/jsbn":240,"./schemes":245,"buffer":67,"crypto":77}],245:[function(require,module,exports){
 module.exports = {
     pkcs1: require('./pkcs1'),
     pkcs1_oaep: require('./oaep'),
@@ -35700,7 +35652,7 @@ module.exports = {
         return module.exports[scheme] && module.exports[scheme].isSignature;
     }
 };
-},{"./oaep":240,"./pkcs1":241,"./pss":242}],244:[function(require,module,exports){
+},{"./oaep":242,"./pkcs1":243,"./pss":244}],246:[function(require,module,exports){
 (function (process){(function (){
 /*
  * Utils functions
@@ -35811,9 +35763,9 @@ module.exports.trimSurroundingText = function (data, opening, closing) {
     return data.substring(trimStartIndex, trimEndIndex);
 }
 }).call(this)}).call(this,require('_process'))
-},{"_process":156,"crypto":77}],245:[function(require,module,exports){
+},{"_process":156,"crypto":77}],247:[function(require,module,exports){
 arguments[4][172][0].apply(exports,arguments)
-},{"_process":156,"buffer":67,"dup":172}],246:[function(require,module,exports){
+},{"_process":156,"buffer":67,"dup":172}],248:[function(require,module,exports){
 (function (Buffer){(function (){
 module.exports = {
 	senhaHash: function(senha){
@@ -36009,6 +35961,11 @@ module.exports = {
 		return resultado;
 	},
 
+	formataDataSimplesDataISO: function(data){ //Transforma data simples (07/09/2021) em data ISO (2021-09-07)
+		let pedacos = data.split('/')
+		return pedacos[2] + "-" + pedacos[1] + "-" + pedacos[0]
+	},
+
 	formataDataHoraSQL: function(data){
 		if(!data){
 			return "-";
@@ -36100,4 +36057,4 @@ module.exports = {
 	}
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./IpServer.js":220,"aes-js":222,"buffer":67,"crypto":77,"http":196,"node-rsa":229}]},{},[221]);
+},{"./IpServer.js":220,"aes-js":224,"buffer":67,"crypto":77,"http":196,"node-rsa":231}]},{},[221]);

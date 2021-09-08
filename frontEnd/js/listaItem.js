@@ -35,6 +35,7 @@ document.getElementById('semPatrimonioItemAlterar').addEventListener('change', f
 
 const numSP = "000000"
 const strSP = "S/P"
+const strSemSetor = "Sem setor"
 
 function lote(){
 	var selecao = document.getElementById('selectAcaoItem').value;
@@ -105,6 +106,9 @@ function preencheTabela(listaItem){
 	listaItem.forEach(function(obj){
 		if(obj['patrimonio'] == numSP){
 			obj['patrimonio'] = strSP
+		}
+		if(obj['setorNome'] == null){
+			obj['setorNome'] = strSemSetor
 		}
 	});
 	$("#tabelaItem").empty();

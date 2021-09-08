@@ -184,7 +184,7 @@ module.exports = {
 		console.log("Entrei em cComputador::listar");
 		require('./controller.js').listar("Computador", function(res){
 			cb(res);
-		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, s.nome setorNome, l.nome localNome, s.id setorId", 
+		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, i.id itemId, s.nome setorNome, l.nome localNome, s.id setorId, l.id localId", 
 		joins: [
 			{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
 			{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 

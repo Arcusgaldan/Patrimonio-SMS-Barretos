@@ -30401,90 +30401,6 @@ module.exports = {
     ip: "172.17.16.2"
 }
 },{}],221:[function(require,module,exports){
-document.getElementById('btnBuscar').addEventListener('click', buscar, false);
-document.getElementById('btnLimparBusca').addEventListener('click', function(){
-	document.getElementById('formBuscarSetor').reset();
-}, false);
-
-function buscar(){
-	var utils = require('./../../utilsCliente.js');
-	var where = "";
-
-	if(document.getElementById('nomeSetorBuscar').value != ""){
-		let nome = document.getElementById('nomeSetorBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "nome LIKE '%" + nome + "%'";
-	}
-
-	if(document.getElementById('localSetorBuscar').value != "0"){
-		let local = document.getElementById('localSetorBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "codLocal = " + local;
-	}
-
-	if(document.getElementById('siglaSetorBuscar').value != ""){
-		let sigla = document.getElementById('siglaSetorBuscar').value;
-
-		if(where != "")
-			where += " AND ";
-
-		where += "sigla LIKE '%" + sigla + "%'";
-	}
-
-	if(where == ""){
-		utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaSetor);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaSetor").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}else{
-		var argumentos = {};
-		argumentos.where = where;
-		argumentos.joins = [{tabela: "TBLocal l", on: "l.id = TBSetor.codLocal"}];
-		argumentos.selectCampos = ["TBSetor.*", "l.nome localNome", "l.id localId"];
-
-		utils.enviaRequisicao("Setor", "BUSCAR", {token: localStorage.token, msg: argumentos}, function(res){
-			if(res.statusCode == 200){
-				var msg = "";
-				res.on('data', function(chunk){
-					msg += chunk;
-				});
-				res.on('end', function(){
-					let listaSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-					preencheTabela(listaSetor);
-				});
-			}else if(res.statusCode == 747){
-				$("#tabelaSetor").empty();
-			}else{
-				document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar setores";
-				$("#erroModal").modal('show');
-				return;
-			}
-			$("#buscaModal").modal('toggle');
-		});
-	}
-}
-
 function preencheLocal(){
 	require('./../../utilsCliente.js').enviaRequisicao('Local', 'LISTAR', {token: localStorage.token}, function(res){
 		if(res.statusCode == 200){
@@ -30496,18 +30412,17 @@ function preencheLocal(){
 				let listaLocal = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				$("#localSetorCadastrar > option").remove();
 				$("#localSetorAlterar > option").remove();
-				$("#localSetorBuscar > option").remove();
 				$("#selectLocalAlterar > option").remove();
+				$("#localSetorInfo > option").remove();
 
 				$("#localSetorCadastrar").append("<option value='0'>Local</option");
 				$("#localSetorAlterar").append("<option value='0'>Local</option");
-				$("#localSetorBuscar").append("<option value='0'>Local</option");
 
-				for(let i = 0; i < listaLocal.length; i++){					
+				for(let i = 0; i < listaLocal.length; i++){
 					$("#localSetorCadastrar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
 					$("#localSetorAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
-					$("#localSetorBuscar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
 					$("#selectLocalAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
+					$("#localSetorInfo").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");	
 				}
 			});
 		}else if(res.statusCode != 747){
@@ -30523,50 +30438,39 @@ function preencheTabela(listaSetor){
 		return;
 	}
 	$("#tabelaSetor").empty();
-	for(let i = 0; i < listaSetor.length; i++){
-		$("#tabelaSetor").append("\
-		<tr>\
-		    <th id='nomeSetorLista"+ i +"'></th>\
-		    <td>\
-				<button class='btn btn-info' scope='row' data-toggle='collapse' href='#collapseSetorLista"+ i +"' role='button' aria-expanded='false' aria-controls='collapseExample'> Mostra Dados <span class='fas fa-plus'></span></button>\
-				<button id='alterarSetorLista"+ i +"' class='btn btn-warning' data-toggle='modal' data-target='#alteraModal' >Alterar Setor</button>\
-				<button id='excluirSetorLista"+ i +"' class='btn btn-danger' data-toggle='modal' data-target='#excluirModal'>Excluir Setor</button>\
-				<div id='collapseSetorLista"+ i +"' class='collapse mostraLista' >\
-				  <div class='card card-body'>\
-				    <p><strong>Nome: </strong><span id='nomeSetorDados"+i+"'></span></p>\
-				    <p><strong>Local: </strong> <span id='localSetorDados"+i+"'></span></p>\
-				    <p><strong>Sigla: </strong> <span id='siglaSetorDados"+i+"'></span></p>\
-				  </div>\
-				</div>\
-		    </td>\
-		  </tr>\
-		");
+	model = require('./../../model/mSetor')
+	var table = $("#tabelaSetor").DataTable({
+		language: utils.linguagemTabela, 
+		data: listaSetor,
+		columns: model.colunas,
+		scrollX: true,
+		columnDefs: model.defColunas()
+	});
+	$('#tabelaSetor tbody').on( 'click', '.btnEditar', function () {
+        let data = table.row( $(this).parents('tr') ).data();
+		preencheModalAlterar(data)        
+    } );
+	
+	$('#tabelaSetor tbody').on( 'click', '.btnExcluir', function () {
+        let data = table.row( $(this).parents('tr') ).data();
+		preencheModalExcluir(data)
+    } );
 
-		document.getElementById('nomeSetorLista' + i).innerHTML = listaSetor[i].localNome + " - " + listaSetor[i].nome;
-		document.getElementById('nomeSetorDados' + i).innerHTML = listaSetor[i].nome;
-		document.getElementById('localSetorDados' + i).innerHTML = listaSetor[i].localNome;
-		if(listaSetor[i].sigla)
-			document.getElementById('siglaSetorDados' + i).innerHTML = listaSetor[i].sigla;
-		else
-			document.getElementById('siglaSetorDados' + i).innerHTML = "-";
-
-		(function(){
-			var setor = listaSetor[i];		
-			document.getElementById("alterarSetorLista"+ i).addEventListener("click", function(){
-				preencheModalAlterar(setor);
-			}, false);
-			document.getElementById("excluirSetorLista"+ i).addEventListener("click", function(){
-				preencheModalExcluir(setor);
-			}, false);
-		}());
-	}
+	$('#tabelaSetor tbody').on( 'click', '.btnInfo', function () {
+		let data = table.row( $(this).parents('tr') ).data();
+		preencheModalInfo(data)
+	} );
 }
 
 function preencheModalAlterar(setor){
 	document.getElementById('nomeSetorAlterar').value = setor.nome;
 	document.getElementById('localSetorAlterar').value = setor.localId;
-	document.getElementById('siglaSetorAlterar').value = setor.sigla;
 	document.getElementById('idSetorAlterar').value = setor.id;
+}
+
+function preencheModalInfo(setor){
+	document.getElementById('nomeSetorInfo').value = setor.nome;
+	document.getElementById('localSetorInfo').value = setor.localId;
 }
 
 function preencheModalExcluir(setor){
@@ -30585,9 +30489,6 @@ utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(r
 		});
 		res.on('end', function(){
 			var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
-			(function(){
-				document.getElementById('btnResetLista').addEventListener('click', function(){preencheTabela(vetorSetor)}, false);
-			}());
 			preencheTabela(vetorSetor);
 		});
 	}else if(res.statusCode != 747){
@@ -30596,7 +30497,57 @@ utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(r
 		return;
 	}
 });
-},{"./../../utilsCliente.js":246}],222:[function(require,module,exports){
+},{"./../../model/mSetor":222,"./../../utilsCliente.js":248}],222:[function(require,module,exports){
+module.exports = {
+	novo: function(){
+		var final = {};
+		final.id = 0;
+		final.nome = '';
+		final.codLocal = 0;
+		return final;
+	},
+
+	isString: function(atributo){
+		var strings = ['nome'];
+		for(let i = 0; i < strings.length; i++){
+			if(atributo == strings[i])
+				return true;
+		}
+		return false;
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Cod Local", "data": "codLocal"},
+		{"title": "Setor", "data": "nome"},
+		{"title": "Local", "data": "localNome"},
+		{"title": "Ações", "data": null}
+	],
+
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
+		{
+			"targets": [0, 1],
+			"visible": false,
+			"searchable": false
+		}
+		])
+	}
+}
+},{"./model.js":223}],223:[function(require,module,exports){
+module.exports = {
+    colunasBotoes:[
+        {
+            "targets": -1,
+            "data": null,
+            "defaultContent": "<button class='btn btnExcluir btn-danger' data-toggle='modal' data-target='#excluirModal'><i class='fas fa-times'></i></button>\
+            <button class='btn btnEditar btn-warning' data-toggle='modal' data-target='#alteraModal'><i class='fas fa-edit'></i></button>\
+            <button class='btn btnInfo btn-info' data-toggle='modal' data-target='#infoModal'><i class='fas fa-info'></i></button>"
+        }
+    ]
+
+}
+},{}],224:[function(require,module,exports){
 /*! MIT License. Copyright 2015-2018 Richard Moore <me@ricmoo.com>. See LICENSE.txt. */
 (function(root) {
     "use strict";
@@ -31401,7 +31352,7 @@ utils.enviaRequisicao("Setor", "LISTAR", {token: localStorage.token}, function(r
 
 })(this);
 
-},{}],223:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -31416,7 +31367,7 @@ module.exports = {
 
 };
 
-},{}],224:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var errors = require('./errors');
@@ -31445,7 +31396,7 @@ for (var e in errors) {
     module.exports[e] = errors[e];
 }
 
-},{"./errors":223,"./reader":225,"./types":226,"./writer":227}],225:[function(require,module,exports){
+},{"./errors":225,"./reader":227,"./types":228,"./writer":229}],227:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -31709,7 +31660,7 @@ Reader.prototype._readTag = function (tag) {
 
 module.exports = Reader;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],226:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],228:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 
@@ -31747,7 +31698,7 @@ module.exports = {
   Context: 128
 };
 
-},{}],227:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 var assert = require('assert');
@@ -32066,7 +32017,7 @@ Writer.prototype._ensure = function (len) {
 
 module.exports = Writer;
 
-},{"./errors":223,"./types":226,"assert":16,"safer-buffer":245}],228:[function(require,module,exports){
+},{"./errors":225,"./types":228,"assert":16,"safer-buffer":247}],230:[function(require,module,exports){
 // Copyright 2011 Mark Cavage <mcavage@gmail.com> All rights reserved.
 
 // If you have no idea what ASN.1 or BER is, see this:
@@ -32088,7 +32039,7 @@ module.exports = {
 
 };
 
-},{"./ber/index":224}],229:[function(require,module,exports){
+},{"./ber/index":226}],231:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * RSA library for Node.js
@@ -32490,7 +32441,7 @@ module.exports = (function () {
 })();
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./formats/formats.js":235,"./libs/rsa.js":239,"./schemes/schemes.js":243,"./utils":244,"asn1":228,"buffer":67,"constants":70,"crypto":77}],230:[function(require,module,exports){
+},{"./formats/formats.js":237,"./libs/rsa.js":241,"./schemes/schemes.js":245,"./utils":246,"asn1":230,"buffer":67,"constants":70,"crypto":77}],232:[function(require,module,exports){
 var crypt = require('crypto');
 
 module.exports = {
@@ -32508,7 +32459,7 @@ module.exports = {
         return engine(keyPair, options);
     }
 };
-},{"./io.js":231,"./js.js":232,"./node12.js":233,"crypto":77}],231:[function(require,module,exports){
+},{"./io.js":233,"./js.js":234,"./node12.js":235,"crypto":77}],233:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -32581,7 +32532,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"constants":70,"crypto":77}],232:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"constants":70,"crypto":77}],234:[function(require,module,exports){
 var BigInteger = require('../libs/jsbn.js');
 var schemes = require('../schemes/schemes.js');
 
@@ -32616,7 +32567,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../libs/jsbn.js":238,"../schemes/schemes.js":243}],233:[function(require,module,exports){
+},{"../libs/jsbn.js":240,"../schemes/schemes.js":245}],235:[function(require,module,exports){
 var crypto = require('crypto');
 var constants = require('constants');
 var schemes = require('../schemes/schemes.js');
@@ -32673,7 +32624,7 @@ module.exports = function (keyPair, options) {
         }
     };
 };
-},{"../schemes/schemes.js":243,"./js.js":232,"constants":70,"crypto":77}],234:[function(require,module,exports){
+},{"../schemes/schemes.js":245,"./js.js":234,"constants":70,"crypto":77}],236:[function(require,module,exports){
 var _ = require('../utils')._;
 var utils = require('../utils');
 
@@ -32746,7 +32697,7 @@ module.exports = {
     }
 };
 
-},{"../utils":244}],235:[function(require,module,exports){
+},{"../utils":246}],237:[function(require,module,exports){
 var _ = require('../utils')._;
 
 function formatParse(format) {
@@ -32843,7 +32794,7 @@ module.exports = {
         }
     }
 };
-},{"../utils":244,"./components":234,"./pkcs1":236,"./pkcs8":237}],236:[function(require,module,exports){
+},{"../utils":246,"./components":236,"./pkcs1":238,"./pkcs8":239}],238:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -32994,7 +32945,7 @@ module.exports = {
     }
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],237:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],239:[function(require,module,exports){
 (function (Buffer){(function (){
 var ber = require('asn1').Ber;
 var _ = require('../utils')._;
@@ -33185,7 +33136,7 @@ module.exports = {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"asn1":228,"buffer":67}],238:[function(require,module,exports){
+},{"../utils":246,"asn1":230,"buffer":67}],240:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * Basic JavaScript BN library - subset useful for RSA encryption.
@@ -34728,7 +34679,7 @@ BigInteger.prototype.square = bnSquare;
 
 module.exports = BigInteger;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../utils":244,"buffer":67,"crypto":77}],239:[function(require,module,exports){
+},{"../utils":246,"buffer":67,"crypto":77}],241:[function(require,module,exports){
 (function (Buffer){(function (){
 /*
  * RSA Encryption / Decryption with PKCS1 v2 Padding.
@@ -35048,7 +34999,7 @@ module.exports.Key = (function () {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../encryptEngines/encryptEngines.js":230,"../schemes/schemes.js":243,"../utils":244,"../utils.js":244,"./jsbn.js":238,"buffer":67,"crypto":77}],240:[function(require,module,exports){
+},{"../encryptEngines/encryptEngines.js":232,"../schemes/schemes.js":245,"../utils":246,"../utils.js":246,"./jsbn.js":240,"buffer":67,"crypto":77}],242:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS_OAEP signature scheme
@@ -35231,7 +35182,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"crypto":77}],241:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"crypto":77}],243:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PKCS1 padding and signature scheme
@@ -35473,7 +35424,7 @@ module.exports.makeScheme = function (key, options) {
 
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"buffer":67,"constants":70,"crypto":77}],242:[function(require,module,exports){
+},{"../libs/jsbn":240,"buffer":67,"constants":70,"crypto":77}],244:[function(require,module,exports){
 (function (Buffer){(function (){
 /**
  * PSS signature scheme
@@ -35660,7 +35611,7 @@ module.exports.makeScheme = function (key, options) {
 };
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../libs/jsbn":238,"./schemes":243,"buffer":67,"crypto":77}],243:[function(require,module,exports){
+},{"../libs/jsbn":240,"./schemes":245,"buffer":67,"crypto":77}],245:[function(require,module,exports){
 module.exports = {
     pkcs1: require('./pkcs1'),
     pkcs1_oaep: require('./oaep'),
@@ -35684,7 +35635,7 @@ module.exports = {
         return module.exports[scheme] && module.exports[scheme].isSignature;
     }
 };
-},{"./oaep":240,"./pkcs1":241,"./pss":242}],244:[function(require,module,exports){
+},{"./oaep":242,"./pkcs1":243,"./pss":244}],246:[function(require,module,exports){
 (function (process){(function (){
 /*
  * Utils functions
@@ -35795,9 +35746,9 @@ module.exports.trimSurroundingText = function (data, opening, closing) {
     return data.substring(trimStartIndex, trimEndIndex);
 }
 }).call(this)}).call(this,require('_process'))
-},{"_process":156,"crypto":77}],245:[function(require,module,exports){
+},{"_process":156,"crypto":77}],247:[function(require,module,exports){
 arguments[4][172][0].apply(exports,arguments)
-},{"_process":156,"buffer":67,"dup":172}],246:[function(require,module,exports){
+},{"_process":156,"buffer":67,"dup":172}],248:[function(require,module,exports){
 (function (Buffer){(function (){
 module.exports = {
 	senhaHash: function(senha){
@@ -36084,4 +36035,4 @@ module.exports = {
 	}
 };
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"./IpServer.js":220,"aes-js":222,"buffer":67,"crypto":77,"http":196,"node-rsa":229}]},{},[221]);
+},{"./IpServer.js":220,"aes-js":224,"buffer":67,"crypto":77,"http":196,"node-rsa":231}]},{},[221]);

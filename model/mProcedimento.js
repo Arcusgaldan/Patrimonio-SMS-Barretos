@@ -16,5 +16,24 @@ module.exports = {
 				return true;
 		}
 		return false;
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Id Computador", "data": "codComputador"},
+		{"title": "Descrição", "data": "descricao"},
+		{"title": "Peça", "data": "peca"},
+		{"title": "Data", "data": "data"},
+		{"title": "Ações", "data": null}
+	],
+
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
+		{
+			"targets": [0, 1, 2],
+			"visible": false,
+			"searchable": false
+		}
+		])
 	}
 }

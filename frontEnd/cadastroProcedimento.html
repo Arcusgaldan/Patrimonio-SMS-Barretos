@@ -24,6 +24,9 @@
     <link href="/css/sb-admin.css" rel="stylesheet">
     <script type="text/javascript" src="/js/verificaLoginFront.js"></script>
 
+    <!-- DataTables -->
+    <link href="/vendor/datatables2/datatables.css" rel="stylesheet">
+
   </head>
 
   <body id="page-top">
@@ -67,30 +70,14 @@
             <div class="card mx-auto mt-5 mb-5">
               <div class="card-header">
                 <a class="btn btn-warning mr-3" href="/computadores"><i class="fas fa-arrow-left mr-1"></i><i class="fas fa-desktop"></i></a>Gerenciamento de Procedimento 
-                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><i class="fas fa-plus"></i></button> 
-                <button class="btn btn-primary float-right ml-2" data-toggle="modal" data-target="#buscaModal"><i class="fas fa-search"></i></button>
-                <button class="btn btn-secondary float-right" id="btnResetLista"><i class="fas fa-sync"></i></button>
+                <button class="btn btn-success float-right ml-2" data-toggle="modal" data-target="#cadastraModal"><b>Cadastrar</b> <i class="fas fa-plus"></i></button>
               </div>
               <div class="card-body">
-                <p>
-
-                </p>
-
-                <table class="table table-bordered table-dark text-center">
-
-
-                  <tbody id="tabelaProcedimento">
-
-
-
-
-                  </tbody>
+                <table id="tabelaProcedimento" class="display nowrap" style="width:100%; text-align: center;">
                 </table>
-
               </div>
             </div>
           </div>
-
         </div>
 
         <!-- Sticky Footer -->
@@ -250,67 +237,59 @@
       </div>   
       <!-- /EXCLUIR MODAL  -->
 
-      <!-- BUSCA MODAL -->
-      <div class="modal fade" id="buscaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="tituloModalBuscar">Buscar Procedimentos</h5>
-            <button class="close" type="button" id="fechaCadastraModal" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-
-          <div class="modal-body">
-            <p>
-              Insira os dados para buscar procedimentos
-            </p>
-
-            <form id="formBuscarProcedimento">
-              <div class="form-group">
-                <div class="form-label-group">
-                  <select id="pecaProcedimentoBuscar" class="form-control" name="peca" placeholder="Peça">
-                    <option value="0">Peça</option>
-                    <option value="Fonte">Fonte</option>
-                    <option value="Gabinete">Gabinete</option>
-                    <option value="HD">HD</option>
-                    <option value="Memória">Memória</option>
-                    <option value="Placa de Rede">Placa de Rede</option>
-                    <option value="Placa de Vídeo">Placa de Vídeo</option>
-                    <option value="Placa-Mãe">Placa-Mãe</option>
-                    <option value="Processador">Processador</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <select class="form-control" id="argumentoDataProcedimentoBuscar">
-                      <option value="0">Igual a</option>
-                      <option value="1">Diferente de</option>
-                      <option value="2">Menor que</option>
-                      <option value="3">Menor ou igual a</option>
-                      <option value="4">Maior que</option>
-                      <option value="5">Maior ou igual a</option>
+      <!-- INFO MODAL -->
+      <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Informações do Procedimento</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <p>
+                Neste modal são exibidas as informações do procedimento
+              </p>
+              <form id="formInfoProcedimento">
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <select id="pecaProcedimentoInfo" class="form-control border-dark" name="peca" placeholder="Peça" disabled>
+                      <option value="0">Peça</option>
+                      <option value="Fonte">Fonte</option>
+                      <option value="Gabinete">Gabinete</option>
+                      <option value="HD">HD</option>
+                      <option value="Memória">Memória</option>
+                      <option value="Placa de Rede">Placa de Rede</option>
+                      <option value="Placa de Vídeo">Placa de Vídeo</option>
+                      <option value="Placa-Mãe">Placa-Mãe</option>
+                      <option value="Processador">Processador</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-8">
-                    <div class="form-label-group">
-                      <input type="date" id="dataProcedimentoBuscar" class="form-control" name="data" placeholder="Data">
-                      <label for="dataProcedimentoBuscar">Data</label>
-                    </div>
-                  </div>  
-                </div>                     
-            </form>
+                </div>
+  
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <label for="descricaoProcedimentoInfo">Descrição</label>
+                    <textarea id="descricaoProcedimentoInfo" class="form-control border-dark" name="descricao" rows="4" disabled></textarea>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <div class="form-label-group">
+                    <input type="date" id="dataProcedimentoInfo" class="form-control" name="data" placeholder="Data" disabled>
+                    <label for="dataProcedimentoInfo">Data</label>
+                  </div>
+                </div>
+              </form>  
+            </div>
             <div class="modal-footer">
-              <button class="btn btn-warning mr-auto" type="button" id="btnLimparBusca">Limpar</button>              
-              <button class="btn btn-primary" type="button" id="btnBuscar">Buscar</button>
+              <button class="btn btn-danger" type="button" data-dismiss="modal">Fechar</button>              
             </div>
           </div>
         </div>
       </div>
-    </div>
-      <!-- /BUSCA MODAL -->
+      <!-- /INFO MODAL -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -387,6 +366,9 @@
         if(codigo == 13){
           e.preventDefault();
           document.getElementById('btnBuscar').click();
+        }
+      });
+    </script>
     
     <!-- Scripts Node -->
     <script type="text/javascript" src="/js/anexaModais.js"></script>

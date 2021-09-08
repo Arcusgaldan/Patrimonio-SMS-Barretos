@@ -30438,6 +30438,7 @@ document.getElementById('semPatrimonioItemAlterar').addEventListener('change', f
 
 const numSP = "000000"
 const strSP = "S/P"
+const strSemSetor = "Sem setor"
 
 function lote(){
 	var selecao = document.getElementById('selectAcaoItem').value;
@@ -30508,6 +30509,9 @@ function preencheTabela(listaItem){
 	listaItem.forEach(function(obj){
 		if(obj['patrimonio'] == numSP){
 			obj['patrimonio'] = strSP
+		}
+		if(obj['setorNome'] == null){
+			obj['setorNome'] = strSemSetor
 		}
 	});
 	$("#tabelaItem").empty();
@@ -30862,13 +30866,12 @@ module.exports = {
 		final.modelo = '';
 		final.descricao = '';
 		final.codTipoItem = 0;
-		final.nomeTipoItem = '';
 		final.ativo = 1;
 		return final;
 	},
 
 	isString: function(atributo){
-		var strings = ['patrimonio', 'marca', 'descricao', 'modelo', 'nomeTipoItem'];
+		var strings = ['patrimonio', 'marca', 'descricao', 'modelo'];
 		for(let i = 0; i < strings.length; i++){
 			if(atributo == strings[i])
 				return true;
@@ -30885,6 +30888,8 @@ module.exports = {
 		{"title": "Ativo", "data": "ativo"},
 		{"title": "Patrimonio", "data": "patrimonio"},
 		{"title": "Tipo do Item", "data": "tipoNome"},
+		{"title": "Local", "data": "localNome"},
+		{"title": "Setor", "data": "setorNome"},
 		{"title": "Ações", "data": null}
 	],
 

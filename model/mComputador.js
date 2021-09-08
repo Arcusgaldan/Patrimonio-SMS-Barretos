@@ -20,5 +20,33 @@ module.exports = {
 				return true;
 		}
 		return false;
+	},
+
+	colunas: [
+		{"title": "Id", "data": "id"},
+		{"title": "Cod Setor", "data": "setorId"},
+		{"title": "Cod Local", "data": "localId"},
+		{"title": "Processador", "data": "processadorNome"},
+		{"title": "Tipo de Memória", "data": "tipoMemoria"},
+		{"title": "Memória (GB)", "data": "qtdMemoria"},
+		{"title": "Armazenamento (GB)", "data": "armazenamento"},
+		{"title": "Sistema Operacional", "data": "sistemaNome"},
+		{"title": "Patrimonio", "data": "itemPatrimonio"},
+		{"title": "Local", "data": "localNome"},
+		{"title": "Setor", "data": "setorNome"},
+		{"title": "Ações", "data": null}
+	],
+
+	defColunas: function(){
+		let colunasBotoes = require('./model.js').colunasBotoes
+		colunasBotoes[0]["defaultContent"] += "\
+		<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transfereModal'><i class='fas fa-exchange-alt'></i></button>" 
+		return colunasBotoes.concat([
+		{
+			"targets": [0, 1, 2, 3, 4, 5, 6, 7],
+			"visible": false,
+			"searchable": false
+		}
+		])
 	}
 }

@@ -192,6 +192,11 @@ module.exports = {
 		return resultado;
 	},
 
+	formataDataSimplesDataISO: function(data){ //Transforma data simples (07/09/2021) em data ISO (2021-09-07)
+		let pedacos = data.split('/')
+		return pedacos[2] + "-" + pedacos[1] + "-" + pedacos[0]
+	},
+
 	formataDataHoraSQL: function(data){
 		if(!data){
 			return "-";

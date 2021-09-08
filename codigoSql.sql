@@ -74,7 +74,6 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSetor` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSetor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `sigla` VARCHAR(20) NULL,
   `codLocal` INT NOT NULL,
   PRIMARY KEY (`id`, `codLocal`),
   INDEX `fk_TBSetor_TBLocal1_idx` (`codLocal` ASC),

@@ -40426,27 +40426,14 @@ module.exports = {
 		{"title": "Ações", "data": null}
 	],
 
-	defColunas: require('./model.js').colunasBotoes.concat([
+	defColunas: function(){
+		return require('./model.js').colunasBotoes.concat([
 		{
 			"targets": [0, 1, 2],
 			"visible": false,
 			"searchable": false
 		}
-	]),
-
-	tableDataToObj: function(data){
-		if(!data){
-			return null
-		}
-
-		obj = this.novo()
-		obj.id = data['id']
-		obj.nome = data['nome']
-		obj.email = data['email']
-		obj.senha = data['senha']
-		obj.senhaExpirada = data['senhaExpirada']
-
-		return obj
+		])
 	}
 }
 },{"./model.js":266}],266:[function(require,module,exports){
