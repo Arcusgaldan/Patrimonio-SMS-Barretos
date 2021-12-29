@@ -43,6 +43,7 @@
 [-] Permitir undo de transferência/logTransferência (?)
 [-] Ao apertar enter no cadastro de SO dentro do cadastro de computador após cadastro de item, vai para 404 (?)
 [-] Implementar regra de "transferência para mesmo setor inválida" na tela de transferência de Computador
+[-] Corrigir Altera Local
 
 -- EM ANDAMENTO
 [-] Considerar paginação para listagens //Adicionar variável "tabelaAtual" em cada Listar, criar uma constante "tamanhoPagina" no utils. [Ou considerar usar o módulo dataTables]
