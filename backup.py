@@ -49,6 +49,6 @@ for x in tabelas:
   query.close()
   
 stringTotal = stringTotal.replace('None', 'NULL')
-with open('backup ' + paramDataAtual.strftime("%d.%m.%Y") + '.sql', 'w') as arquivo:
+with open('X:\\backup ' + paramDataAtual.strftime("%d.%m.%Y") + '.sql', 'w') as arquivo:
     arquivo.write(stringTotal)
 #print(stringTotal)
