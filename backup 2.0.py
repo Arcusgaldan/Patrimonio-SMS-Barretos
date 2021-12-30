@@ -44,8 +44,7 @@ for x in tabelas:
     stringAtual += str(resultadoFinal) + ";\n"
     stringTotal += stringAtual
   
-  stringTotal += "\n\n"
-  stringTotal += stringAtual
+  stringTotal += "\n"
   query.close()
   
 stringTotal = stringTotal.replace('None', 'NULL')
