@@ -32,7 +32,7 @@ for x in tabelas:
     resultadoList = list(resultado)
     for i in range(len(resultadoList)):
       if isinstance(resultadoList[i], datetime):
-        resultadoList[i] = resultadoList[i].strftime("%Y-%m-%dT%I%M%S") 
+        resultadoList[i] = resultadoList[i].strftime("%Y-%m-%dT%I:%M:%S") 
         print("Achei datetime")
       elif isinstance(resultadoList[i], date):
         resultadoList[i] = resultadoList[i].strftime("%Y-%m-%d")
