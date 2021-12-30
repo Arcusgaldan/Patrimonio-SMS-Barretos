@@ -19,7 +19,7 @@ function redefinir(){
 					msg += chunk;
 				});
 				res.on('end', function(){
-					var usuario = JSON.parse(msg);
+					var usuario = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 					usuario.senha = utils.senhaHash(senha);
 					usuario.senhaExpirada = 0;
 					utils.enviaRequisicao("Usuario", "ALTERAR", {token: localStorage.token, msg: usuario}, function(res){
@@ -59,7 +59,8 @@ if(localStorage.token){
 				msg += chunk;
 			});
 			res.on('end', function(){
-				var usuario = JSON.parse(msg);
+				//console.log(msg)
+				var usuario = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				if(usuario.senhaExpirada == 0){
 					document.getElementById('msgErroModal').innerHTML = "Sua senha não está expirada. Redirecionando para a página principal";
 					$("#erroModal").modal('show');
