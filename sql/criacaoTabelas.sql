@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
   `senha` CHAR(64) NOT NULL,
   `senhaExpirada` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC)
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB;
 
 
