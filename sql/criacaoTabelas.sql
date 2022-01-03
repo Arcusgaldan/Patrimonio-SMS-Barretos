@@ -7,6 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema DBPatrimonioSMS
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `DBPatrimonioSMS` ;
 
 -- -----------------------------------------------------
 -- Schema DBPatrimonioSMS
@@ -22,6 +23,7 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBTipoItem` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBTipoItem` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -40,8 +42,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBItem` (
   `codTipoItem` INT NOT NULL,
   `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`, `codTipoItem`),
-  UNIQUE INDEX `patrimonio_UNIQUE` (`patrimonio` ASC),
-  INDEX `fk_TBItem_TBTipoItem_idx` (`codTipoItem` ASC),
+  INDEX `fk_TBItem_TBTipoItem_idx` (`codTipoItem` ASC) VISIBLE,
   CONSTRAINT `fk_TBItem_TBTipoItem`
     FOREIGN KEY (`codTipoItem`)
     REFERENCES `DBPatrimonioSMS`.`TBTipoItem` (`id`)
@@ -61,8 +62,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLocal` (
   `endereco` TEXT NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
   `coordenador` VARCHAR(100) NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -75,8 +77,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSetor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   `codLocal` INT NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`, `codLocal`),
-  INDEX `fk_TBSetor_TBLocal1_idx` (`codLocal` ASC),
+  INDEX `fk_TBSetor_TBLocal1_idx` (`codLocal` ASC) VISIBLE,
   CONSTRAINT `fk_TBSetor_TBLocal1`
     FOREIGN KEY (`codLocal`)
     REFERENCES `DBPatrimonioSMS`.`TBLocal` (`id`)
@@ -93,9 +96,10 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBProcessador` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcessador` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(200) NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -107,9 +111,10 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(200) NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -129,9 +134,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBComputador` (
   `codProcessador` INT NULL,
   `codSO` INT NULL,
   PRIMARY KEY (`id`, `codItem`),
-  INDEX `fk_TBComputador_TBItem1_idx` (`codItem` ASC),
-  INDEX `fk_TBComputador_TBProcessador1_idx` (`codProcessador` ASC),
-  INDEX `fk_TBComputador_TBSistemaOperacional1_idx` (`codSO` ASC),
+  INDEX `fk_TBComputador_TBItem1_idx` (`codItem` ASC) VISIBLE,
+  INDEX `fk_TBComputador_TBProcessador1_idx` (`codProcessador` ASC) VISIBLE,
+  INDEX `fk_TBComputador_TBSistemaOperacional1_idx` (`codSO` ASC) VISIBLE,
   CONSTRAINT `fk_TBComputador_TBItem1`
     FOREIGN KEY (`codItem`)
     REFERENCES `DBPatrimonioSMS`.`TBItem` (`id`)
@@ -163,9 +168,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLogTransferencia` (
   `codSetor` INT NULL,
   `atual` TINYINT NOT NULL,
   PRIMARY KEY (`id`, `codItem`, `codLocal`),
-  INDEX `fk_TBLogTransferencia_TBItem1_idx` (`codItem` ASC),
-  INDEX `fk_TBLogTransferencia_TBLocal1_idx` (`codLocal` ASC),
-  INDEX `fk_TBLogTransferencia_TBSetor1_idx` (`codSetor` ASC),
+  INDEX `fk_TBLogTransferencia_TBItem1_idx` (`codItem` ASC) VISIBLE,
+  INDEX `fk_TBLogTransferencia_TBLocal1_idx` (`codLocal` ASC) VISIBLE,
+  INDEX `fk_TBLogTransferencia_TBSetor1_idx` (`codSetor` ASC) VISIBLE,
   CONSTRAINT `fk_TBLogTransferencia_TBItem1`
     FOREIGN KEY (`codItem`)
     REFERENCES `DBPatrimonioSMS`.`TBItem` (`id`)
@@ -195,8 +200,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBDiscoBackup` (
   `local` VARCHAR(100) NOT NULL,
   `tamanho` FLOAT NOT NULL,
   `observacao` TEXT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -214,8 +220,8 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBBackup` (
   `codDisco` INT NOT NULL,
   `observacao` TEXT NULL,
   PRIMARY KEY (`id`, `codComputador`, `codDisco`),
-  INDEX `fk_TBBackup_TBComputador1_idx` (`codComputador` ASC),
-  INDEX `fk_TBBackup_TBDiscoBackup1_idx` (`codDisco` ASC),
+  INDEX `fk_TBBackup_TBComputador1_idx` (`codComputador` ASC) VISIBLE,
+  INDEX `fk_TBBackup_TBDiscoBackup1_idx` (`codDisco` ASC) VISIBLE,
   CONSTRAINT `fk_TBBackup_TBComputador1`
     FOREIGN KEY (`codComputador`)
     REFERENCES `DBPatrimonioSMS`.`TBComputador` (`id`)
@@ -241,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcedimento` (
   `data` DATE NOT NULL,
   `codComputador` INT NOT NULL,
   PRIMARY KEY (`id`, `codComputador`),
-  INDEX `fk_TBProcedimento_TBComputador1_idx` (`codComputador` ASC),
+  INDEX `fk_TBProcedimento_TBComputador1_idx` (`codComputador` ASC) VISIBLE,
   CONSTRAINT `fk_TBProcedimento_TBComputador1`
     FOREIGN KEY (`codComputador`)
     REFERENCES `DBPatrimonioSMS`.`TBComputador` (`id`)
@@ -261,8 +267,9 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
   `email` VARCHAR(100) NOT NULL,
   `senha` CHAR(64) NOT NULL,
   `senhaExpirada` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -280,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLog` (
   `data` DATETIME NOT NULL,
   `codUsuario` INT NOT NULL,
   PRIMARY KEY (`id`, `codUsuario`),
-  INDEX `fk_TBLog_TBUsuario1_idx` (`codUsuario` ASC),
+  INDEX `fk_TBLog_TBUsuario1_idx` (`codUsuario` ASC) VISIBLE,
   CONSTRAINT `fk_TBLog_TBUsuario1`
     FOREIGN KEY (`codUsuario`)
     REFERENCES `DBPatrimonioSMS`.`TBUsuario` (`id`)
