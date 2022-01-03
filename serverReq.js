@@ -139,16 +139,19 @@ http.createServer(function(req, res) {
 
                     case 'ALTERAR': //Se a operação for alterar o usuário atrelado ao token, entra aqui
                         if(jsonRqs && jsonRqs.token && jsonRqs.msg){
+                            jsonRqs.msg = JSON.parse(require('./utilsCripto.js').descriptoAES(vetorTokens[jsonRqs.token].chave, jsonRqs.msg));                            
                             cUsuario = require('./controller/cUsuario.js');
                             if(cUsuario.validar(jsonRqs.msg)){
                                 vetorTokens[jsonRqs.token].usuario = jsonRqs.msg;
                                 res.statusCode = 200;
                                 res.end();
                             }else{
+                                //console.log("Em serverReq::Token::Alterar, cUsuario.validar retornou False\nUsuario: " + JSON.stringify(jsonRqs.msg0))
                                 res.statusCode = 412;
                                 res.end();
                             }
                         }else{
+                            //console.log("Em serverReq::Token::Alterar, não havia jsonRqs ou jsonRqs.token ou jsonRqs.msg")
                             res.statusCode = 412;
                             res.end();
                         }

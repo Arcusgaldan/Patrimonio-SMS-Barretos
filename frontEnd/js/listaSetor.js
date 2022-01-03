@@ -14,13 +14,15 @@ function preencheLocal(){
 
 				$("#localSetorCadastrar").append("<option value='0'>Local</option");
 				$("#localSetorAlterar").append("<option value='0'>Local</option");
+				$("#selectLocalAlterar").append("<option value='0'>Local</option");
 
 				for(let i = 0; i < listaLocal.length; i++){
 					$("#localSetorCadastrar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
 					$("#localSetorAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
 					$("#selectLocalAlterar").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");
 					$("#localSetorInfo").append("<option value='"+ listaLocal[i].id +"'>" + listaLocal[i].nome + "</option>");	
-				}
+				}				
+				//console.log("Ao final de preencheLocal, o value de selectLocalAlterar é " + document.getElementById('selectLocalAlterar').value)
 			});
 		}else if(res.statusCode != 747){
 			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Não foi possível listar local";

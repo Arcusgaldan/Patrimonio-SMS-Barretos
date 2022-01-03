@@ -35,6 +35,8 @@ function preencheModalAlterar(usuario){
 	
 	if(usuario.senhaExpirada == 1){		
 		document.getElementById('senhaExpiradaUsuarioAlterar').checked = true;
+	}else{
+		document.getElementById('senhaExpiradaUsuarioAlterar').checked = false;
 	}
 
 	document.getElementById('idUsuarioAlterar').value = usuario.id;
