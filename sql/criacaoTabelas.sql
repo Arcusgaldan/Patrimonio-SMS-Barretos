@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBTipoItem` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBTipoItem` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBItem` (
   `modelo` VARCHAR(100) NULL,
   `descricao` TEXT NULL,
   `codTipoItem` INT NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`, `codTipoItem`),
   INDEX `fk_TBItem_TBTipoItem_idx` (`codTipoItem` ASC) VISIBLE,
   CONSTRAINT `fk_TBItem_TBTipoItem`
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBLocal` (
   `endereco` TEXT NOT NULL,
   `telefone` VARCHAR(20) NOT NULL,
   `coordenador` VARCHAR(100) NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSetor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   `codLocal` INT NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`, `codLocal`),
   INDEX `fk_TBSetor_TBLocal1_idx` (`codLocal` ASC) VISIBLE,
   CONSTRAINT `fk_TBSetor_TBLocal1`
@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBProcessador` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcessador` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(200) NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
@@ -111,7 +111,7 @@ DROP TABLE IF EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` ;
 CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBSistemaOperacional` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(200) NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBDiscoBackup` (
   `local` VARCHAR(100) NOT NULL,
   `tamanho` FLOAT NOT NULL,
   `observacao` TEXT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBUsuario` (
   `email` VARCHAR(100) NOT NULL,
   `senha` CHAR(64) NOT NULL,
   `senhaExpirada` TINYINT NOT NULL,
-  `ativo` TINYINT NOT NULL,
+  `ativo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
