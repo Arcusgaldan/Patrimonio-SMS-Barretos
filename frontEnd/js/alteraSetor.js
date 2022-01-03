@@ -1,3 +1,7 @@
+document.getElementById('btnModalLocalAlterar').addEventListener('click', function(){
+	document.getElementById('selectLocalAlterar').value = document.getElementById('localSetorAlterar').value
+	preencheAlterarLocal()
+}, false);
 document.getElementById('btnAlterar').addEventListener('click', alterar, false);
 document.getElementById('btnAlterarLocal').addEventListener('click', alterarLocal, false);
 document.getElementById('selectLocalAlterar').addEventListener('change', preencheAlterarLocal, false);
@@ -5,10 +9,15 @@ document.getElementById('selectLocalAlterar').addEventListener('change', preench
 function preencheAlterarLocal(){
 	var select = document.getElementById('selectLocalAlterar');
 	if(select.value == '0'){
+		//console.log("Valor do select é: " + select.value)
 		document.getElementById('nomeLocalAlterar').disabled = true;
 		document.getElementById('enderecoLocalAlterar').disabled = true;
 		document.getElementById('telefoneLocalAlterar').disabled = true;
 		document.getElementById('coordenadorLocalAlterar').disabled = true;
+		document.getElementById('nomeLocalAlterar').value = "";
+		document.getElementById('enderecoLocalAlterar').value = "";
+		document.getElementById('telefoneLocalAlterar').value = "";
+		document.getElementById('coordenadorLocalAlterar').value = "";
 	}else{
 		document.getElementById('nomeLocalAlterar').disabled = false;
 		document.getElementById('enderecoLocalAlterar').disabled = false;
