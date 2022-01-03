@@ -219,8 +219,8 @@ function preencheModalTransferencia(computador){
 }
 
 function preencheModalHistorico(computador){
-	document.getElementById('patrimonioHistorico').innerHTML = computador.patrimonio;
-	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "l.nome nomeLocal", "s.sigla siglaSetor", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"}, {tabela: "TBLocal l", on: "l.id = lt.codLocal"}], where: "codItem = " + computador.itemId, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
+	document.getElementById('patrimonioHistorico').innerHTML = computador.itemPatrimonio;
+	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "l.nome nomeLocal", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"}, {tabela: "TBLocal l", on: "l.id = lt.codLocal"}], where: "codItem = " + computador.itemId, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";
 			res.on('data', function(chunk){
