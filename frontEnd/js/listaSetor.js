@@ -73,7 +73,7 @@ function preencheModalInfo(setor){
 }
 
 function preencheModalExcluir(setor){
-	document.getElementById('nomeSetorExcluir').innerHTML = setor.local + " - " + setor.nome;
+	document.getElementById('nomeSetorExcluir').innerHTML = setor.localNome + " - " + setor.nome;
 	document.getElementById('idSetorExcluir').value = setor.id;
 }
 

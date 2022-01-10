@@ -11,7 +11,11 @@ function preencheTabela(listaUsuario){
 		data: listaUsuario,
 		columns: model.colunas,
 		scrollX: true,
-		columnDefs: model.defColunas()
+		columnDefs: model.defColunas(),
+		createdRow: function(row, data, dataIndex){
+			if(data.ativo == '0')
+				$(row).css('background-color', '#f07f7f');			
+		}
 	});
 	$('#tabelaUsuario tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
@@ -53,6 +57,13 @@ function preencheModalInfo(usuario){
 }
 
 function preencheModalExcluir(usuario){
+	if(usuario.ativo == 0){
+		document.getElementById('tipoAcaoUsuarioExcluir').innerHTML = "reativar"
+		document.getElementById('btnInativar').innerHTML = "Reativar"
+	}else{
+		document.getElementById('tipoAcaoUsuarioExcluir').innerHTML = "inativar"
+		document.getElementById('btnInativar').innerHTML = "Inativar"
+	}
 	document.getElementById('nomeUsuarioExcluir').innerHTML = usuario.nome;
 	document.getElementById('idUsuarioExcluir').value = usuario.id;
 }

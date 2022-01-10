@@ -184,7 +184,7 @@ module.exports = {
 		console.log("Entrei em cComputador::listar");
 		require('./controller.js').listar("Computador", function(res){
 			cb(res);
-		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, i.id itemId, s.nome setorNome, l.nome localNome, s.id setorId, l.id localId", 
+		}, {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, i.ativo ativo, i.id itemId, s.nome setorNome, l.nome localNome, s.id setorId, l.id localId", 
 		joins: [
 			{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
 			{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 
@@ -193,7 +193,7 @@ module.exports = {
 			{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
 			{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 		], 
-		where: "lt.atual = 1 AND i.ativo = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
+		where: "lt.atual = 1", orderBy: [{campo: "i.patrimonio", sentido: "asc"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

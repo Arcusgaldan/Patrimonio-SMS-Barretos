@@ -83,7 +83,11 @@ function preencheTabela(listaComputador){
 		data: listaComputador,
 		columns: model.colunas,
 		scrollX: true,
-		columnDefs: model.defColunas()
+		columnDefs: model.defColunas(),
+		createdRow: function(row, data, dataIndex){
+			if(data.ativo == '0')
+				$(row).css('background-color', '#f07f7f');			
+		}
 	});
 	$('#tabelaComputador tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
@@ -171,16 +175,10 @@ function preencheModalInfo(computador){
 	}
 	
 	document.getElementById('armazenamentoComputadorInfo').value = computador.armazenamento;
-	
-	// for (var key in computador){
-	// 	console.log(key + " = " + computador[key])
-	// }
 
 	if(computador.codSO == null){
-		//console.log("Meu SO veio nulo! " + computador.codSo)
 		document.getElementById('sistemaComputadorInfo').value = '0';
 	}else{
-		//console.log("Meu SO não veio nulo! Coloquei o value = " + computador.codSO)
 		document.getElementById('sistemaComputadorInfo').value = computador.codSO;
 	}
 
@@ -204,6 +202,14 @@ function preencheModalInfo(computador){
 }
 
 function preencheModalExcluir(computador){
+	console.log("Em listaComputador::preencheModalExcluir, ativo = " + computador.ativo)
+	if(computador.ativo == 0){
+		document.getElementById('itemAcaoComputadorExcluir').innerHTML = "reativar"
+		document.getElementById('btnInativar').innerHTML = "Reativar"
+	}else{
+		document.getElementById('itemAcaoComputadorExcluir').innerHTML = "inativar"
+		document.getElementById('btnInativar').innerHTML = "Inativar"
+	}
 	document.getElementById('patrimonioComputadorExcluir').innerHTML = computador.itemPatrimonio;
 	document.getElementById('idComputadorExcluir').value = computador.id;
 }
@@ -242,8 +248,6 @@ function preencheModalHistorico(computador){
 							<p class="card-text">Data de Transferência: ' + require('./../../utilsCliente.js').formataDataHora(historico[i].dataTransferencia) + '</p>\
 						</div>\
 						</div>');
-					// console.log("Data sem formatar: " + historico[i].dataTransferencia);
-					// console.log("Data formatada: " + require('./../../utilsCliente.js').formataDataHora(historico[i].dataTransferencia))
 				}
 				$("#historicoModal").modal('show');
 			});

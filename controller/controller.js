@@ -34,7 +34,7 @@ module.exports = {
 
 		}
 		sql += campos + ") values (" + valores + ");"; //Finaliza a string de comando sql
-		console.log("Em controller:inserir, SQL = " + sql);
+		//console.log("Em controller:inserir, SQL = " + sql);
 		var dao = require('./../dao.js'); //Puxa o módulo DAO, responsável pela conexão com o BD
 		dao.inserir(sql, function(codRes, id){ //Executa o comando de inserção (sql com retorno apenas de status)
 			//console.log("Em controller:inserir, obtive o callback do DAO, com codigo " + codRes + "\n"); (Testando a conexão por pool)
@@ -83,12 +83,13 @@ module.exports = {
 	},
 
 	listar: function(alvo, cb, argumentos){ //Lista todos os registros da tabela;
-		console.log("Entrei em controler::listar");
+		//console.log("Entrei em controler::listar");
 		var sql;
 		if(!argumentos)
 			sql = "SELECT * FROM TB" + alvo;
 		else{
 			if(argumentos.campos && argumentos.joins){
+				//console.log("controller::listar, entrei no IF que indica que há campos e joins em argumentos")
 				sql = "SELECT " + argumentos.campos + " FROM TB" + alvo;
 				for(let i = 0; i < argumentos.joins.length; i++){
 					if(argumentos.joins[i].tipo){
@@ -181,16 +182,12 @@ module.exports = {
 			sql += ";";
 		}
 
-		console.log("Em controller::buscar, SQL:\n" + sql);
+		//console.log("Em controller::buscar, SQL:\n" + sql);
 
 		var dao = require('./../dao.js');
 		dao.buscar(sql, function(resultado){
 			cb(resultado);
 		});
-
-		//Acabar de inventar busca com todos os parâmetros possiveis (join, like, etc.)
-		//Para passar os valores para busca, usar algo como [{campo: nome, valor: 'Thales', operador: 'LIKE'}, {campo: idade, valor: 20, operador: >}, {campo: objetivo, valor: 'Ficar pobre', operador: <>}]
-		//Usar valores padrão, por exemplo se não especificar selectCampos usar *, se não especificar operador usar '=', etc.
 	},
 
 	proximoID: function(alvo, cb){
@@ -200,5 +197,16 @@ module.exports = {
 			let id = resultado[0].AUTO_INCREMENT;
 			cb(id);
 		});
+	},
+
+	ativar: function(alvo, objeto, tipo, cb){
+		if(tipo != '0' && tipo != '1'){
+			cb(400)
+		}
+		var sql = 'UPDATE TB' + alvo + ' SET ativo = ' + tipo + ' WHERE id = ' + objeto.id + ';';
+		var dao = require('./../dao.js');
+		dao.inserir(sql, function(codRes){
+			cb(codRes)
+		})
 	}
 }

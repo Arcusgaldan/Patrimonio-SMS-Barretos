@@ -6,6 +6,7 @@ module.exports = {
 		final.email = '';
 		final.senha = '';
 		final.senhaExpirada = 0;
+		final.ativo = 1;
 		return final;
 	},
 
@@ -22,6 +23,7 @@ module.exports = {
 		{"title": "Id", "data": "id"},
 		{"title": "Senha", "data": "senha"},
 		{"title": "SenhaExpirada", "data": "senhaExpirada"},
+		{"title": "Ativo", "data": "ativo"},
 		{"title": "Nome", "data": "nome"},
 		{"title": "E-mail", "data": "email"},
 		{"title": "Ações", "data": null}
@@ -30,7 +32,7 @@ module.exports = {
 	defColunas: function(){
 		return require('./model.js').colunasBotoes.concat([
 		{
-			"targets": [0, 1, 2],
+			"targets": [0, 1, 2, 3],
 			"visible": false,
 			"searchable": false
 		}

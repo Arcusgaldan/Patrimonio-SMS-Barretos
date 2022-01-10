@@ -119,7 +119,11 @@ function preencheTabela(listaItem){
 		data: listaItem,
 		columns: model.colunas,
 		scrollX: true,
-		columnDefs: model.defColunas()
+		columnDefs: model.defColunas(),
+		createdRow: function(row, data, dataIndex){
+			if(data.ativo == '0')
+				$(row).css('background-color', '#f07f7f');			
+		}
 	});
 	$('#tabelaItem tbody').on( 'click', '.btnEditar', function () {
         let data = table.row( $(this).parents('tr') ).data();
@@ -184,6 +188,13 @@ function preencheModalInfo(item){
 }
 
 function preencheModalExcluir(item){
+	if(item.ativo == 0){
+		document.getElementById('tipoAcaoItemExcluir').innerHTML = "reativar";
+		document.getElementById('btnInativar').innerHTML = "Reativar"
+	}else{
+		document.getElementById('tipoAcaoItemExcluir').innerHTML = "inativar";
+		document.getElementById('btnInativar').innerHTML = "Inativar"
+	}
 	document.getElementById('patrimonioItemExcluir').innerHTML = item.tipoNome + " - " + item.patrimonio;
 	document.getElementById('idItemExcluir').value = item.id;
 }

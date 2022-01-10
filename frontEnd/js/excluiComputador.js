@@ -1,4 +1,4 @@
-document.getElementById('btnExcluir').addEventListener('click', excluir, false);
+document.getElementById('btnInativar').addEventListener('click', inativar, false);
 
 document.getElementById('btnModalProcessadorExcluir').addEventListener('click', function(){
 	document.getElementById('nomeProcessadorExcluir').innerHTML = $('#selectProcessadorAlterar').children("option:selected").text()
@@ -13,7 +13,6 @@ document.getElementById('btnModalSOExcluir').addEventListener('click', function(
 	$("#excluirSOModal").modal('show');
 }, false);
 document.getElementById('btnExcluirSO').addEventListener('click', excluirSO, false);
-document.getElementById('btnDescartar').addEventListener('click', descartar, false);
 
 function preencheProcessador(){
 	require('./../../utilsCliente.js').enviaRequisicao("Processador", "LISTAR", {token: localStorage.token}, function(res){
@@ -130,28 +129,26 @@ function excluirSO(){
 	});
 }
 
-function descartar(){
-	let id = document.getElementById('idComputadorExcluir').value;
-	require('./../../utilsCliente.js').enviaRequisicao('Computador', 'BUSCAR', {token: localStorage.token, msg: {where: "id = " + id}}, function(res){
+function inativar(){
+	var utils = require('./../../utilsCliente.js');
+
+	if(document.getElementById('btnInativar').innerHTML != "Reativar" && document.getElementById('btnInativar').innerHTML != "Inativar"){
+		document.getElementById('msgErroModal').innerHTML = "Operação inválida. Favor contatar o administrador do sistema.";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	let operacao = document.getElementById('btnInativar').innerHTML == "Reativar" ? "REATIVAR" : "INATIVAR"
+
+	require('./../../utilsCliente.js').enviaRequisicao('Item', operacao, {token: localStorage.token, msg: {id: document.getElementById('idComputadorExcluir').value}}, function(res){
 		if(res.statusCode == 200){
-			var msg = "";
-			res.on('data', function(chunk){
-				msg += chunk;
-			});
-			res.on('end', function(){
-				var idItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg))[0].codItem;
-				require('./../../utilsCliente.js').enviaRequisicao('Item', 'DESCARTAR', {token: localStorage.token, msg: {id: idItem}}, function(res){
-					if(res.statusCode == 200){
-						$("#sucessoModal").modal('show');
-						$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
-				    	setTimeout(function(){location.reload();} , 2000);
-					}else{
-						document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
-						$("#erroModal").modal('show');
-						return;
-					}
-				});
-			});
+			$("#sucessoModal").modal('show');
+			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});
+			setTimeout(function(){location.reload();} , 2000);
+		}else{
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			$("#erroModal").modal('show');
+			return;
 		}
 	});
 }

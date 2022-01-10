@@ -128,15 +128,15 @@ module.exports = {
 					cb(resposta);
 				});
 				break;
-			case 'DESCARTAR':
-				this.descartar(msg.id, function(codRes){
+			case 'INATIVAR':
+				this.inativar(msg, function(codRes){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
 						let log = {
 							id: 0,
 							chave: msg.id,
 							tabela: "TBItem",
-							operacao: "DESCARTAR",
+							operacao: "INATIVAR",
 							mudanca: '-',
 							data: require('./cData.js').dataHoraAtual(),
 							codUsuario: usuario.id
@@ -157,6 +157,35 @@ module.exports = {
 					}
 				});
 				break;
+				case 'REATIVAR':
+					this.reativar(msg, function(codRes){
+						resposta.codigo = codRes;
+						if(resposta.codigo == 200){
+							let log = {
+								id: 0,
+								chave: msg.id,
+								tabela: "TBItem",
+								operacao: "REATIVAR",
+								mudanca: '-',
+								data: require('./cData.js').dataHoraAtual(),
+								codUsuario: usuario.id
+							}
+							require('./cLog.js').inserir(log, function(codRes){
+								if(codRes == 200){
+									cb(resposta);		
+									return;															
+								}else{
+									resposta.codigo = 416;
+									cb(resposta);
+									return;
+								}
+							});
+						}else{
+							cb(resposta);
+							return;
+						}
+					});
+					break;
 			default:
 				resposta.codigo = 410;
 				cb(resposta);
@@ -220,7 +249,7 @@ module.exports = {
 				{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
 				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 			], 
-		where: "lt.atual = 1 AND TBItem.ativo = 1",
+		where: "lt.atual = 1",// AND TBItem.ativo = 1",
 		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
 	},
 
@@ -230,11 +259,15 @@ module.exports = {
 		});		
 	},
 
-	descartar: function(id, cb){
-		sql = "UPDATE TBItem SET ativo = 0 WHERE id = " + id;
-		let dao = require('./../dao.js');
-		dao.inserir(dao.criaConexao(), sql, function(codRes){
-			cb(codRes);
+	inativar: function(usuario, cb){ //Inativa o registro cujo ID seja igual ao ID fornecido pelo servidor
+		require('./controller.js').ativar("Item", usuario, '0', function(codRes){
+			cb(codRes)
 		});
-	}
+	},
+
+	reativar: function(usuario, cb){ //Inativa o registro cujo ID seja igual ao ID fornecido pelo servidor
+		require('./controller.js').ativar("Item", usuario, '1', function(codRes){
+			cb(codRes)
+		});
+	},
 }

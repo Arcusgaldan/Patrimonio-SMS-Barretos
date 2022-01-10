@@ -10,6 +10,7 @@ module.exports = {
 		final.aposentado = 0;
 		final.codProcessador = 0;
 		final.codSO = 0;
+		final.ativo = 1;
 		return final;
 	},
 
@@ -31,6 +32,7 @@ module.exports = {
 		{"title": "Memória (GB)", "data": "qtdMemoria"},
 		{"title": "Armazenamento (GB)", "data": "armazenamento"},
 		{"title": "Sistema Operacional", "data": "sistemaNome"},
+		{"title": "Ativo", "data": "ativo"},
 		{"title": "Patrimonio", "data": "itemPatrimonio"},
 		{"title": "Local", "data": "localNome"},
 		{"title": "Setor", "data": "setorNome"},
@@ -43,7 +45,7 @@ module.exports = {
 		<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transfereModal'><i class='fas fa-exchange-alt'></i></button>" 
 		return colunasBotoes.concat([
 		{
-			"targets": [0, 1, 2, 3, 4, 5, 6, 7],
+			"targets": [0, 1, 2, 3, 4, 5, 6, 7, 8],
 			"visible": false,
 			"searchable": false
 		}
