@@ -110,6 +110,76 @@ module.exports = {
 					}
 				});
 				break;
+				case 'INATIVAR':
+					if(msg.id == 1){
+						resposta.codigo = 414;
+						cb(resposta);
+					}
+					if(!usuario){
+						resposta.codigo = 413;
+						cb(resposta);
+					}
+					this.inativar(msg, function(codRes){
+						resposta.codigo = codRes;
+						if(resposta.codigo == 200){
+							let log = {
+								id: 0,
+								chave: msg.id,
+								tabela: "TBUsuario",
+								operacao: "INATIVAR",
+								mudanca: '-',
+								data: require('./cData.js').dataHoraAtual(),
+								codUsuario: usuario.id
+							}
+							require('./cLog.js').inserir(log, function(codRes){
+								if(codRes == 200){
+									cb(resposta);		
+									return;															
+								}else{
+									resposta.codigo = 416;
+									cb(resposta);
+									return;
+								}
+							});
+						}else{
+							cb(resposta);
+							return;
+						}
+					});
+					break;
+					case 'REATIVAR':
+						if(!usuario){
+							resposta.codigo = 413;
+							cb(resposta);
+						}
+						this.reativar(msg, function(codRes){
+							resposta.codigo = codRes;
+							if(resposta.codigo == 200){
+								let log = {
+									id: 0,
+									chave: msg.id,
+									tabela: "TBUsuario",
+									operacao: "REATIVAR",
+									mudanca: '-',
+									data: require('./cData.js').dataHoraAtual(),
+									codUsuario: usuario.id
+								}
+								require('./cLog.js').inserir(log, function(codRes){
+									if(codRes == 200){
+										cb(resposta);		
+										return;															
+									}else{
+										resposta.codigo = 416;
+										cb(resposta);
+										return;
+									}
+								});
+							}else{
+								cb(resposta);
+								return;
+							}
+						});
+						break;
 			case 'LISTAR':
 				this.listar(function(res){
 					if(res){
@@ -174,7 +244,7 @@ module.exports = {
 		});
 	},
 
-	excluir: function(usuario, cb){ //Exclui o registro cujo ID seja igual o ID fornecido pelo servidor
+	excluir: function(usuario, cb){ //Exclui o registro cujo ID seja igual ao ID fornecido pelo servidor
 		if(!usuario)
 			cb(412);
 		else if(!usuario.id)
@@ -194,5 +264,17 @@ module.exports = {
 		require('./controller.js').buscar("Usuario", argumentos, function(res){
 			cb(res);
 		});		
-	}
+	},
+
+	inativar: function(usuario, cb){ //Inativa o registro cujo ID seja igual ao ID fornecido pelo servidor
+		require('./controller.js').ativar("Usuario", usuario, '0', function(codRes){
+			cb(codRes)
+		});
+	},
+	
+	reativar: function(usuario, cb){ //Reativa o registro cujo ID seja igual ao ID fornecido pelo servidor
+		require('./controller.js').ativar("Usuario", usuario, '1', function(codRes){
+			cb(codRes)
+		});
+	},
 }

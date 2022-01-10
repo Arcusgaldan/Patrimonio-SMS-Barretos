@@ -1,7 +1,7 @@
 document.getElementById('btnExcluir').addEventListener('click', excluir, false);
 document.getElementById('btnExcluirTipo').addEventListener('click', excluirTipo, false);
 document.getElementById('btnModalExcluir').addEventListener('click', trocaNome, false);
-document.getElementById('btnDescartar').addEventListener('click', descartar, false);
+document.getElementById('btnInativar').addEventListener('click', inativar, false);
 
 function preencheTipo(){
 	var utils = require('./../../utilsCliente.js');
@@ -94,9 +94,18 @@ function trocaNome(){
 	});
 }
 
-function descartar(){
+function inativar(){
 	let id = document.getElementById('idItemExcluir').value;
-	require('./../../utilsCliente.js').enviaRequisicao('Item', 'DESCARTAR', {token: localStorage.token, msg: {id: id}}, function(res){
+
+	if(document.getElementById('btnInativar').innerHTML != "Reativar" && document.getElementById('btnInativar').innerHTML != "Inativar"){
+		document.getElementById('msgErroModal').innerHTML = "Operação inválida. Favor contatar o administrador do sistema.";
+		$("#erroModal").modal('show');
+		return;
+	}
+
+	let operacao = document.getElementById('btnInativar').innerHTML == "Reativar" ? "REATIVAR" : "INATIVAR"
+
+	require('./../../utilsCliente.js').enviaRequisicao('Item', operacao, {token: localStorage.token, msg: {id: id}}, function(res){
 		if(res.statusCode == 200){
 			$("#sucessoModal").modal('show');
 			$('#sucessoModal').on('hide.bs.modal', function(){location.reload();});

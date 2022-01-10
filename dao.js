@@ -22,7 +22,7 @@ module.exports = {
 	}),
 
 	inserir: function(comando, cb){		
-		console.log("dao:inserir, comando = " + comando + "\n");
+		//console.log("dao:inserir, comando = " + comando + "\n");
 		this.pool.query(comando, function(err, res){
 			//console.log("Dentro de pool.query, comando = " + comando + "\n"); (Testando a conexão por pool)
 			if(err){ 
@@ -30,6 +30,10 @@ module.exports = {
 					case 1062:
 						console.log("Erro de entrada duplicada: " + err);
 						cb(418);
+						return;
+					case 1054:
+						console.log("Campo a alterar não encontrado: " + err);
+						cb(419);
 						return;
 					default:
 						console.log(err + "\nErrno: " + err.errno);
@@ -46,10 +50,10 @@ module.exports = {
 
 	buscar: function(comando, cb){
 		this.pool.query(comando, function(err, res){
-			console.log("Entrei em pool.query dentro de dao:buscar\n");
+			//console.log("Entrei em pool.query dentro de dao:buscar\n");
 			if(err){console.log("Erro " + err); cb(null); return;}
 			else{				
-				console.log("Deu bom buscando");
+				//console.log("Deu bom buscando");
 				cb(res);
 				return;
 			}
