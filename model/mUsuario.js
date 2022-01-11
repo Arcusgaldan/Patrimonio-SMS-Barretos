@@ -6,7 +6,6 @@ module.exports = {
 		final.email = '';
 		final.senha = '';
 		final.senhaExpirada = 0;
-		final.ativo = 1;
 		return final;
 	},
 

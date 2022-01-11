@@ -7,7 +7,6 @@ module.exports = {
 		final.modelo = '';
 		final.descricao = '';
 		final.codTipoItem = 0;
-		final.ativo = 1;
 		return final;
 	},
 
@@ -37,7 +36,7 @@ module.exports = {
 	defColunas: function(){
 		let colunasBotoes = require('./model.js').colunasBotoes
 		colunasBotoes[0]["defaultContent"] += "\
-		<button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transfereModal'><i class='fas fa-exchange-alt'></i></button>" 
+		<span data-toggle='tooltip' title='Transferir'><button class='btn btnTransferir btn-success' data-toggle='modal' data-target='#transfereModal'><i class='fas fa-exchange-alt'></i></button></span>" 
 		return colunasBotoes.concat([
 		{
 			"targets": [0, 1, 2, 3, 4, 5],
