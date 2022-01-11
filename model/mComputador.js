@@ -10,7 +10,6 @@ module.exports = {
 		final.aposentado = 0;
 		final.codProcessador = 0;
 		final.codSO = 0;
-		final.ativo = 1;
 		return final;
 	},
 
