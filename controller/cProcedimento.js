@@ -145,7 +145,7 @@ module.exports = {
 	},
 
 	validar: function(procedimento){ //Valida os campos necessários em seu formato ideal
-		let vetorPecas = ["Fonte", "Gabinete", "HD", "Memória", "Placa de Rede", "Placa de Vídeo", "Placa-Mãe", "Processador"];
+		let vetorPecas = ["Fonte", "Gabinete", "HD", "Manutenção Preventiva", "Memória", "Placa de Rede", "Placa de Vídeo", "Placa-Mãe", "Processador", "Sistema"];
 
 		if(!procedimento){
 			return false;
