@@ -183,7 +183,8 @@ function preencheModalInfo(item){
 		else
 			document.getElementById('setorItemInfo').value = '0';			
 	});
-	document.getElementById('setorItemInfo').disabled = true
+	document.getElementById('setorItemInfo').disabled = true	
+	$('#btnHistorico').off('click');
 	$('#btnHistorico').on('click', null, function(){preencheModalHistorico(item)});
 }
 
