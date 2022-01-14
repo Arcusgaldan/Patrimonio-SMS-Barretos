@@ -8,7 +8,7 @@ module.exports = {
 		var bytesCriptografados = aesCtr.encrypt(textoBytes);
 
 		var hexCriptografado = aes.utils.hex.fromBytes(bytesCriptografados);
-		console.log("utilsCripto::criptoAES, hexCriptografado = " + hexCriptografado);
+		//console.log("utilsCripto::criptoAES, hexCriptografado = " + hexCriptografado);
 		return hexCriptografado;
 	},
 

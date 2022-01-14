@@ -197,12 +197,13 @@ function preencheModalInfo(computador){
 		document.getElementById('aposentadoComputadorInfo').checked = true;
 	}
 
+	$('#btnHistorico').off('click');
 	$('#btnHistorico').on('click', null, function(){preencheModalHistorico(computador)});
 	$('#btnProcedimentos').on('click', null, function(){location.href = '/procedimento/' + computador.itemPatrimonio});
 }
 
 function preencheModalExcluir(computador){
-	console.log("Em listaComputador::preencheModalExcluir, ativo = " + computador.ativo)
+	//console.log("Em listaComputador::preencheModalExcluir, ativo = " + computador.ativo)
 	if(computador.ativo == 0){
 		document.getElementById('itemAcaoComputadorExcluir').innerHTML = "reativar"
 		document.getElementById('btnInativar').innerHTML = "Reativar"
@@ -226,6 +227,7 @@ function preencheModalTransferencia(computador){
 
 function preencheModalHistorico(computador){
 	document.getElementById('patrimonioHistorico').innerHTML = computador.itemPatrimonio;
+	console.log("Em listaComputador::preencheModalHistorico, meu contInc logo antes de enviar a requisição é " + localStorage.contInc)
 	require('./../../utilsCliente.js').enviaRequisicao('LogTransferencia', 'BUSCAR', {token: localStorage.token, msg: {aliasTabela: "lt", selectCampos: ["s.nome nomeSetor", "l.nome nomeLocal", "lt.data dataTransferencia"], joins: [{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"}, {tabela: "TBLocal l", on: "l.id = lt.codLocal"}], where: "codItem = " + computador.itemId, orderBy: [{campo: "data", sentido: "DESC"}]}}, function(res){
 		if(res.statusCode == 200){
 			var msg = "";

@@ -30,7 +30,7 @@ http.createServer(function(req, res) {
 
     var msgRqs = "";
     var jsonRqs;
-    console.log("Pacote recebido!");
+    //console.log("Pacote recebido!");
     req.on('readable', function(){
         var texto = req.read();
         //console.log("TEXTO: " + texto);
@@ -75,7 +75,7 @@ http.createServer(function(req, res) {
                                         chave: require('./utilsCripto.js').descriptoRSA(jsonRqs.chave),
                                         contInc: 1
                                     }
-                                    console.log("Chave descriptografada = " + dados.chave);                                   
+                                    //console.log("Chave descriptografada = " + dados.chave);                                   
                                     vetorTokens[token] = dados;
                                     res.statusCode = 200;
                                     res.write(token);
@@ -185,7 +185,7 @@ http.createServer(function(req, res) {
                         return;
                     }
                     if(jsonRqs.msg){
-                        console.log("O que chegou pela rede: " + jsonRqs.msg);                        
+                        //console.log("O que chegou pela rede: " + jsonRqs.msg);                        
                         jsonRqs.msg = JSON.parse(require('./utilsCripto.js').descriptoAES(vetorTokens[jsonRqs.token].chave, jsonRqs.msg));
                         console.log("O que foi descriptografado: " + JSON.stringify(jsonRqs.msg));
                         if(jsonRqs.msg.contInc == vetorTokens[jsonRqs.token].contInc){
