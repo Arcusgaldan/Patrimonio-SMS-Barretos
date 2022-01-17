@@ -6,7 +6,6 @@ module.exports = {
 		final.marca = '';
 		final.modelo = '';
 		final.descricao = '';
-		final.dataMovimentacao = '';
 		final.codTipoItem = 0;
 		return final;
 	},
