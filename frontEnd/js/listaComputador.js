@@ -2,6 +2,10 @@ document.getElementById('localItemTransferir').addEventListener('change', functi
 	preencheSetor(document.getElementById('localItemTransferir').value, "setorItemTransferir");
 }, false);
 
+const numSP = "000000"
+const strSP = "S/P"
+const strSemSetor = "Sem setor"
+
 function preencheCopiarComputador(listaComputador){
 	$("#copiarComputadorCadastrar > option").remove();
 	$("#copiarComputadorCadastrar").append("<option value='0'>Selecione um computador com as mesmas características (opcional)</option>");
@@ -76,6 +80,17 @@ function preencheTabela(listaComputador){
 	if(!listaComputador){
 		return;
 	}
+	listaComputador.forEach(function(obj){
+		if(obj['patrimonio'] == numSP){
+			obj['patrimonio'] = strSP
+		}
+		if(obj['setorNome'] == null){
+			obj['setorNome'] = strSemSetor
+		}
+		if(obj['dataMovimentacao']){
+			obj['dataMovimentacao'] = utils.formataDataHora(obj['dataMovimentacao'])
+		}
+	});
 	$("#tabelaComputador").empty();
 	model = require('./../../model/mComputador')
 	var table = $("#tabelaComputador").DataTable({
@@ -84,9 +99,10 @@ function preencheTabela(listaComputador){
 		columns: model.colunas,
 		scrollX: true,
 		columnDefs: model.defColunas(),
+		order: [[12, 'desc']],
 		createdRow: function(row, data, dataIndex){
 			if(data.ativo == '0')
-				$(row).css('background-color', '#f07f7f');			
+				$(row).css('background-color', '#f07f7f');
 		}
 	});
 	$('#tabelaComputador tbody').on( 'click', '.btnEditar', function () {

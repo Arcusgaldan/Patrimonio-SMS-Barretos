@@ -110,6 +110,9 @@ function preencheTabela(listaItem){
 		if(obj['setorNome'] == null){
 			obj['setorNome'] = strSemSetor
 		}
+		if(obj['dataMovimentacao']){
+			obj['dataMovimentacao'] = utils.formataDataHora(obj['dataMovimentacao'])
+		}
 	});
 	$("#tabelaItem").empty();
 	
@@ -120,9 +123,10 @@ function preencheTabela(listaItem){
 		columns: model.colunas,
 		scrollX: true,
 		columnDefs: model.defColunas(),
+		order: [[10, 'desc']],
 		createdRow: function(row, data, dataIndex){
 			if(data.ativo == '0')
-				$(row).css('background-color', '#f07f7f');			
+				$(row).css('background-color', '#f07f7f');
 		}
 	});
 	$('#tabelaItem tbody').on( 'click', '.btnEditar', function () {
@@ -456,6 +460,7 @@ utils.enviaRequisicao("Item", "LISTAR", {token: localStorage.token}, function(re
 		});
 		res.on('end', function(){
 			var vetorItem = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+			//console.log("Em listaItem::ITEM LISTAR, meu vetorItem[0].dataMovimentacao = " + vetorItem[0].dataMovimentacao)
 			preencheTabela(vetorItem);
 			preencheCopiarItem(vetorItem);
 		});
