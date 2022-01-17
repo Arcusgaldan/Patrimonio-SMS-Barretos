@@ -6,6 +6,7 @@ module.exports = {
 		final.marca = '';
 		final.modelo = '';
 		final.descricao = '';
+		final.dataMovimentacao = '';
 		final.codTipoItem = 0;
 		return final;
 	},
@@ -30,6 +31,7 @@ module.exports = {
 		{"title": "Tipo do Item", "data": "tipoNome"},
 		{"title": "Local", "data": "localNome"},
 		{"title": "Setor", "data": "setorNome"},
+		{"title": "Data da Última Movimentação", "data": "dataMovimentacao"},
 		{"title": "Ações", "data": null}
 	],
 

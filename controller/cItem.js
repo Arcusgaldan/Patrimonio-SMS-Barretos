@@ -241,7 +241,7 @@ module.exports = {
 		require('./controller.js').listar("Item", function(res){
 			cb(res);
 		}, 
-		{campos: "TBItem.*, ti.nome tipoNome, s.id setorId, s.nome setorNome, l.id localId, l.nome localNome", 
+		{campos: "TBItem.*, ti.nome tipoNome, s.id setorId, s.nome setorNome, l.id localId, l.nome localNome, lt.data dataMovimentacao", 
 		joins: 
 			[
 				{tabela: "TBTipoItem ti", on: "ti.id = TBItem.codTipoItem"}, 
@@ -250,7 +250,7 @@ module.exports = {
 				{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
 			], 
 		where: "lt.atual = 1",// AND TBItem.ativo = 1",
-		orderBy: [{campo: "patrimonio", sentido: "asc"}]});
+		orderBy: [{campo: "dataMovimentacao", sentido: "desc"}, {campo: "patrimonio", sentido: "asc"}]});
 	},
 
 	buscar: function(argumentos, cb){ //Busca registros na tabela baseado nos argumentos recebidos pelo servidor

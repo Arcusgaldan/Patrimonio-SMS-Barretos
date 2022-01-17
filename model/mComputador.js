@@ -35,6 +35,7 @@ module.exports = {
 		{"title": "Patrimonio", "data": "itemPatrimonio"},
 		{"title": "Local", "data": "localNome"},
 		{"title": "Setor", "data": "setorNome"},
+		{"title": "Data da Última Movimentação", "data": "dataMovimentacao"},
 		{"title": "Ações", "data": null}
 	],
 
