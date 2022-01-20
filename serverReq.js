@@ -63,6 +63,11 @@ http.createServer(function(req, res) {
                                     res.end();
                                     return;
                                 }else if(resposta.length > 0){ //Se houver resposta, entra aqui
+                                    if(resposta[0].ativo == '0'){//Se o usuário estiver inativo, entra aqui
+                                        res.statusCode = 420;
+                                        res.end();
+                                        return;
+                                    }
                                     var token;
                                     while(true){ //Gera o token para o usuário; o laço garante que não haverão dois tokens iguais ao mesmo tempo
                                         token = tokenAleatorio();

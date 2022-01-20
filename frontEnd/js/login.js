@@ -36,6 +36,9 @@ function login(){
 		}else if(res.statusCode == 411){
 			document.getElementById('msgErroModal').innerHTML = 'Email ou senha inválidos!';
 			$('#erroModal').modal('show');
+		}else if(res.statusCode == 420){
+			document.getElementById('msgErroModal').innerHTML = 'Usuário inativo, por favor contate o administrador do sistema';
+			$('#erroModal').modal('show');
 		}else{
 			document.getElementById('msgErroModal').innerHTML = 'Ocorreu algum erro (Erro ' + res.statusCode + '). Por favor, contate o suporte.';
 			$('#erroModal').modal('show');
