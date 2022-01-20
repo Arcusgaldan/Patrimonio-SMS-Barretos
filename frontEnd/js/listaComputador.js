@@ -162,10 +162,14 @@ function preencheModalAlterar(computador){
 
 	if(computador.reserva == 1){
 		document.getElementById('reservaComputadorAlterar').checked = true;
+	}else{
+		document.getElementById('reservaComputadorAlterar').checked = false;
 	}
 
 	if(computador.aposentado == 1){
 		document.getElementById('aposentadoComputadorAlterar').checked = true;
+	}else{
+		document.getElementById('aposentadoComputadorAlterar').checked = false;
 	}
 
 	document.getElementById('idComputadorAlterar').value = computador.id;
