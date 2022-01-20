@@ -114,10 +114,12 @@ module.exports = {
 					if(msg.id == 1){
 						resposta.codigo = 414;
 						cb(resposta);
+						return;
 					}
 					if(!usuario){
 						resposta.codigo = 413;
 						cb(resposta);
+						return;
 					}
 					this.inativar(msg, function(codRes){
 						resposta.codigo = codRes;
@@ -151,6 +153,7 @@ module.exports = {
 						if(!usuario){
 							resposta.codigo = 413;
 							cb(resposta);
+							return;
 						}
 						this.reativar(msg, function(codRes){
 							resposta.codigo = codRes;

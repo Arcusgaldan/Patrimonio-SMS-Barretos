@@ -8,4 +8,5 @@
 417: Falha na confiança ponto-a-ponto (contagem)
 418: Tentativa de inserir chave duplicada
 419: Campo a alterar não encontrado (normalmente ao tentar inativar objeto que não tem 'ativo')
+420: Usuário inativo
 444: Erro fatal com necessidade de contato urgente ao suporte

@@ -35,6 +35,8 @@
 [V] Alterar Local não funciona se só houver 1 local cadastrado
 [V] Alterar Local não atualiza automaticamente o dropdown
 [V] Corrigir Altera Local
+[V] Impedir que usuário inativado faça login
+[V] Alterar exclusões para Excluir ou Inativar (feito em Usuario, falta nos demais)
 
 -- PENDENTES
 [-] Fazer validação campo-a-campo em todos os formulários
@@ -47,11 +49,10 @@
 [-] Permitir undo de transferência/logTransferência (?)
 [-] Ao apertar enter no cadastro de SO dentro do cadastro de computador após cadastro de item, vai para 404 (?)
 [-] Implementar regra de "transferência para mesmo setor inválida" na tela de transferência de Computador
-[-] Impedir que usuário inativado faça login
 [-] Verificar por que quando o servidor inicia e o client já tem token, envia 5 requisições antes de solicitar novo login
+[-] Permitir filtrar por PCs reservas ou não, aposentados ou não
 
 -- EM ANDAMENTO
-[-] Alterar exclusões para Excluir ou Inativar (feito em Usuario, falta nos demais)
 
 -- ABORTADOS
 [X] Considerar criar um campo "motivo" em TBLogTransferencia //Ia ficar cansativo para várias transações em seguida
