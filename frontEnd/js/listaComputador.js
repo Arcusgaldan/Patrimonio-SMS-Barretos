@@ -103,6 +103,10 @@ function preencheTabela(listaComputador){
 		createdRow: function(row, data, dataIndex){
 			if(data.ativo == '0')
 				$(row).css('background-color', '#f07f7f');
+			else if(data.aposentado == '1')
+				$(row).css('background-color', '#ffc400');
+			else if(data.reserva == '1')
+				$(row).css('background-color', '#00a613');
 		}
 	});
 	$('#tabelaComputador tbody').on( 'click', '.btnEditar', function () {
