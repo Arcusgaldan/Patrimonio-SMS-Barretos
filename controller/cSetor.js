@@ -173,6 +173,11 @@ module.exports = {
 			cb(412);
 		else if(!setor.id)
 			cb(412);
+		nomeSetor = this.getNome(setor.id, function(nome){
+			if(nome === "Sem Setor"){
+				cb(414)
+			}
+		});
 		require('./controller.js').excluir("Setor", setor, function(codRes){
 			cb(codRes);
 		});
@@ -191,5 +196,12 @@ module.exports = {
 		require('./controller.js').buscar("Setor", argumentos, function(res){
 			cb(res);
 		});		
+	},
+
+	getNome: function(id, cb){
+		args = {campos: "TBSetor.nome", where: "TBSetor.id = " + id}
+		this.buscar(args, function(res){
+			cb(res[0].nome)
+		})
 	}
 }

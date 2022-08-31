@@ -81,6 +81,11 @@ function alterar(){
 	modelo.id = document.getElementById('idSetorAlterar').value;
 	modelo.nome = document.getElementById('nomeSetorAlterar').value;
 	modelo.codLocal = document.getElementById('localSetorAlterar').value;
+	if(modelo.nome === "Sem Setor"){
+		document.getElementById('msgErroModal').innerHTML = "Não é possível alterar o setor 'Sem Setor'";
+		$("#erroModal").modal('show');
+		return;
+	}
 
 	var controller = require('./../../controller/cSetor.js');
 

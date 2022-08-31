@@ -7,9 +7,10 @@ module.exports = {
 					resposta.codigo = 413;
 					cb(resposta);
 				}
-				this.inserir(msg, function(codRes){
+				this.inserir(msg, function(codRes, idCadastrado){
 					resposta.codigo = codRes;
 					if(resposta.codigo == 200){
+						resposta.msg = idCadastrado
 						require('./controller.js').proximoID("Local", function(id){						
 							msg.id = parseInt(id) - 1;
 							let log = {
@@ -152,8 +153,8 @@ module.exports = {
 			cb(412);
 			return;
 		}
-		require('./controller.js').inserir("Local", local, function(codRes){
-			cb(codRes);
+		require('./controller.js').inserir("Local", local, function(codRes, idCadastrado){
+			cb(codRes, idCadastrado);
 		});
 	},
 

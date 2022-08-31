@@ -37,6 +37,11 @@ function preencheLocal(){
 function cadastrar(){
 	var modelo = require('./../../model/mSetor.js').novo();
 	modelo.nome = document.getElementById('nomeSetorCadastrar').value;
+	// if(modelo.nome === "Sem Setor"){
+	// 	document.getElementById('msgErroModal').innerHTML = "Não é possível inserir setor chamado 'Sem Setor'";
+	// 	$("#erroModal").modal('show');
+	// 	return;
+	// }
 	modelo.codLocal = document.getElementById('localSetorCadastrar').value;
 
 	var controller = require('./../../controller/cSetor.js');
@@ -74,16 +79,40 @@ function cadastrarLocal(){
 
 	require('./../../utilsCliente.js').enviaRequisicao("Local", "INSERIR", {token: localStorage.token, msg: modelo}, function(res){
 		if(res.statusCode == 200){
-			preencheLocal();
-			$("#sucessoModal").modal('show');
-			$('#sucessoModal').on('hide.bs.modal', function(){$('#cadastraLocalModal').modal('hide')});
-	  		setTimeout(function(){$('#cadastraLocalModal').modal('hide')} , 2000);
+			var msg = "";
+			res.on('data', function(chunk){
+				msg += chunk;
+			});
+			res.on('end', function(){
+				let codLocalNovo = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
+				console.log("Em cadastraSetor::cadastrarLocal, meu codLocalNovo é " + codLocalNovo)
+				let modeloSetor = require('./../../model/mSetor.js').novo();
+				modeloSetor.nome = "Sem Setor"
+				modeloSetor.codLocal = parseInt(codLocalNovo)
+				require('./../../utilsCliente.js').enviaRequisicao("Setor", "INSERIR", {token: localStorage.token, msg: modeloSetor}, function(resposta){
+					if(resposta.statusCode == 200){
+						console.log("Criei o setor Sem Setor!")
+						preencheLocal();
+						$("#sucessoModal").modal('show');
+						$('#sucessoModal').on('hide.bs.modal', function(){$('#cadastraLocalModal').modal('hide')});
+						setTimeout(function(){$('#cadastraLocalModal').modal('hide')} , 2000);
+					}else if(resposta.statusCode == 412){
+						document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados do setor";
+						$("#erroModal").modal('show');
+						return;
+					}else{
+						document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + " ao inserir Setor 'Sem Setor'. Por favor contate o suporte.";
+						$("#erroModal").modal('show');
+						return;
+					}
+				})
+			})
 		}else if(res.statusCode == 412){
-			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados";
+			document.getElementById('msgErroModal').innerHTML = "Por favor, preencha corretamente os dados do local";
 			$("#erroModal").modal('show');
 			return;
 		}else{
-			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + ". Por favor contate o suporte.";
+			document.getElementById('msgErroModal').innerHTML = "Erro #" + res.statusCode + " ao inserir o local. Por favor contate o suporte.";
 			$("#erroModal").modal('show');
 			return;
 		}
