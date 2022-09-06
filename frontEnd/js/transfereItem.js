@@ -61,10 +61,8 @@ document.getElementById('btnTransferir').addEventListener('click', function(){
 						var logNovo = require('./../../model/mLogTransferencia.js').novo();
 						logNovo.codItem = document.getElementById('idItemTransferir').value;
 						logNovo.codLocal = document.getElementById('localItemTransferir').value;
-						if(document.getElementById('setorItemTransferir').value != '0')
-							logNovo.codSetor = document.getElementById('setorItemTransferir').value;
-						else
-							logNovo.codSetor = null;
+						logNovo.codSetor = document.getElementById('setorItemTransferir').value;
+						
 						utils.enviaRequisicao('LogTransferencia', 'INSERIR', {token: localStorage.token, msg: logNovo}, function(res){
 							if(res.statusCode == 200){								
 								$("#sucessoModal").modal('show');

@@ -6,6 +6,7 @@ module.exports = {
 		final.descricao = '';
 		final.data = '';
 		final.codComputador = 0;
+		final.setorOrigem = null;
 		return final;
 	},
 

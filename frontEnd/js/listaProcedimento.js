@@ -69,6 +69,7 @@ function preencheModalAlterar(procedimento){
 	document.getElementById('pecaProcedimentoAlterar').value = procedimento.peca;
 	document.getElementById('descricaoProcedimentoAlterar').value = procedimento.descricao;
 	document.getElementById('dataProcedimentoAlterar').value = utils.formataDataSimplesDataISO(procedimento.data);
+	document.getElementById('setorOrigemProcedimentoAlterar').value = procedimento.setorOrigem
 }
 
 function preencheModalInfo(procedimento){

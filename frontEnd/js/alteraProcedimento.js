@@ -40,6 +40,7 @@ function alterar(){
 		procedimento.data = null;
 
 	procedimento.peca = document.getElementById('pecaProcedimentoAlterar').value;
+	procedimento.setorOrigem = document.getElementById('setorOrigemProcedimentoAlterar').value;
 	if(procedimento.peca == '0'){
 		document.getElementById('msgErroModal').innerHTML = "Por favor, selecione uma peça";
 		$("#erroModal").modal('show');

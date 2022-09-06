@@ -344,8 +344,7 @@ function preencheSetor(local, select, cb){
 			res.on('end', function(){
 				var vetorSetor = JSON.parse(require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 				
-				$("#" + select + " > option").remove();				
-				$("#" + select).append("<option value='0'>Sem setor</option");
+				$("#" + select + " > option").remove();
 
 				for(let i = 0; i < vetorSetor.length; i++){
 					$("#" + select).append("<option value='"+vetorSetor[i].id+"'>" + vetorSetor[i].nome + "</option");					

@@ -154,7 +154,8 @@ module.exports = {
 		var validates = require('./../validates.js');
 
 		if(!validates.req(procedimento.id) || !validates.data(procedimento.data) || !validates.req(procedimento.peca) || 
-			!validates.req(procedimento.descricao) || !validates.req(procedimento.codComputador) || vetorPecas.indexOf(procedimento.peca) == -1){
+			!validates.req(procedimento.descricao) || !validates.req(procedimento.codComputador) || vetorPecas.indexOf(procedimento.peca) == -1 || 
+			!validates.req(procedimento.setorOrigem)){
 			return false;
 		}else{
 			return true;
@@ -162,6 +163,8 @@ module.exports = {
 	},
 
 	inserir: function(procedimento, cb){ //Insere as informações passadas pelo servidor
+		console.log("Em cProcedimento::Inserir, entrei no inicio da função")
+		funcValidar = this.validar
 		if(procedimento){
 			if(!procedimento.data){
 				procedimento.data = require('./cData.js').dataAtual();
@@ -174,13 +177,22 @@ module.exports = {
 				}
 			}
 		}
-		if(!this.validar(procedimento)){ //Se os dados não forem válidos, para a execução e retorna código de erro
-			cb(412);
-			return;
-		}
-		require('./controller.js').inserir("Procedimento", procedimento, function(codRes){
-			cb(codRes);
-		});
+		require('./cComputador').getSetor(procedimento.codComputador, function(codSetor){
+			console.log("Em cProcedimento::Inserir, requisitei o codSetor")
+			console.log("Em cProcedimento::Inserir, meu codSetor é " + codSetor)
+			if(codSetor == null){
+				cb(421)
+				return
+			}
+			procedimento.setorOrigem = codSetor
+			if(!funcValidar(procedimento)){ //Se os dados não forem válidos, para a execução e retorna código de erro
+				cb(412);
+				return;
+			}
+			require('./controller.js').inserir("Procedimento", procedimento, function(codRes){
+				cb(codRes);
+			});
+		});		
 	},
 
 	alterar: function(procedimento, cb){ //Altera as informações passadas por servidor

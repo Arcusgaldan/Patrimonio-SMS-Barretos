@@ -200,5 +200,27 @@ module.exports = {
 		require('./controller.js').buscar("Computador", argumentos, function(res){
 			cb(res);
 		});		
+	},
+
+	getSetor: function(id, cb){
+		console.log("Em cComputador::GetSetor, meu id é " + id)
+		argumentos = {campos: "TBComputador.*, p.nome processadorNome, so.nome sistemaNome, i.patrimonio itemPatrimonio, i.ativo ativo, i.id itemId, s.nome setorNome, l.nome localNome, s.id setorId, l.id localId, lt.data dataMovimentacao", 
+		joins: [
+			{tabela: "TBProcessador p", on: "p.id = TBComputador.codProcessador", tipo: "LEFT"}, 
+			{tabela: "TBSistemaOperacional so", on: "so.id = TBComputador.codSO", tipo: "LEFT"}, 
+			{tabela: "TBItem i", on: "i.id = TBComputador.codItem"}, 
+			{tabela: "TBLogTransferencia lt", on: "lt.codItem = i.id"}, 
+			{tabela: "TBSetor s", on: "s.id = lt.codSetor", tipo: "LEFT"},
+			{tabela: "TBLocal l", on: "l.id = lt.codLocal"}
+		], 
+		where: "lt.atual = 1 AND TBComputador.id = " + id}
+		this.buscar(argumentos, function(resposta){
+			if(resposta.length <= 0){
+				console.log("Em cComputador::GetSetor, não tive resposta na query (length <= 0)")
+				cb(null)
+			}
+			console.log("Em cComputador::GetSetor, tive resposta e foi ", resposta[0])
+			cb(resposta[0].codSetor)
+		})
 	}
 }
