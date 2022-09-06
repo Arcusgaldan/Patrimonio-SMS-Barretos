@@ -27,25 +27,24 @@ for x in tabelas:
   if not resultados:
       query.close()
       continue
-  
-  stringAtual = "INSERT INTO " + tabela + " VALUES\n"
 
   for resultado in resultados:
     resultadoList = list(resultado)
     for i in range(len(resultadoList)):
       if isinstance(resultadoList[i], datetime):
-        resultadoList[i] = resultadoList[i].strftime("%Y-%m-%dT%I%M%S") 
+        resultadoList[i] = resultadoList[i].strftime("%Y-%m-%dT%I:%M:%S") 
         print("Achei datetime")
       elif isinstance(resultadoList[i], date):
         resultadoList[i] = resultadoList[i].strftime("%Y-%m-%d")
         print("Achei date")
       
     resultadoFinal = tuple(resultadoList)
-    stringAtual += str(resultadoFinal) + ",\n"
+    
+    stringAtual = "INSERT INTO " + tabela + " VALUES "
+    stringAtual += str(resultadoFinal) + ";\n"
+    stringTotal += stringAtual
   
-  stringAtual = stringAtual[:-2]
-  stringAtual += ";\n\n"
-  stringTotal += stringAtual
+  stringTotal += "\n"
   query.close()
   
 stringTotal = stringTotal.replace('None', 'NULL')

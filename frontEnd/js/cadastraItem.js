@@ -149,12 +149,9 @@ function cadastrarItem(){
 							//console.log("DataHora = " + require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg));
 							logTransferencia.data = require('./../../utilsCliente.js').descriptoAES(localStorage.chave, msg);
 							logTransferencia.codItem = item.id;
-							logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;
-							if(document.getElementById('setorItemCadastrar').value != '0'){
-								logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
-							}else{
-								logTransferencia.codSetor = null;
-							}
+							logTransferencia.codLocal = document.getElementById('localItemCadastrar').value;							
+							logTransferencia.codSetor = document.getElementById('setorItemCadastrar').value;
+							
 							require('./../../utilsCliente.js').enviaRequisicao("LogTransferencia", "INSERIR", {token: localStorage.token, msg: logTransferencia}, function(res){
 								if(res.statusCode == 200){
 									console.log("Passo 4 - Inserir logTransferencia feito com sucesso!");

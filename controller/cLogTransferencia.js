@@ -184,7 +184,7 @@ module.exports = {
 
 		if(!validates.req(logTransferencia.id) || !validates.dataHora(logTransferencia.data) || 
 			!validates.req(logTransferencia.codLocal) || !validates.req(logTransferencia.codItem) || 
-			!validates.req(logTransferencia.atual)){
+			!validates.req(logTransferencia.atual) || !validates.req(logTransferencia.codSetor)){
 			console.log("Validar em cLogTransferencia: data teve resultado " + validates.dataHora(logTransferencia.data));
 			return false;
 		}else{

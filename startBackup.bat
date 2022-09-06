@@ -1,0 +1,1 @@
+python "C:\Users\admin\Documents\GitHub\Patrimonio-SMS-Barretos\backup 2.0.py"

@@ -246,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `DBPatrimonioSMS`.`TBProcedimento` (
   `descricao` TEXT NOT NULL,
   `data` DATE NOT NULL,
   `codComputador` INT NOT NULL,
+  `setorOrigem` INT NOT NULL,
   PRIMARY KEY (`id`, `codComputador`),
   INDEX `fk_TBProcedimento_TBComputador1_idx` (`codComputador` ASC) VISIBLE,
   CONSTRAINT `fk_TBProcedimento_TBComputador1`
